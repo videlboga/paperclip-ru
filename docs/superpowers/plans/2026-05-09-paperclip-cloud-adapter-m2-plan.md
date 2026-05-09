@@ -1095,14 +1095,16 @@ export function createGitCredentialsClient(input: {
 
 - [ ] **Step 3: `src/index.ts`**
 
+> **Revision (2026-05-09):** Aligned with the revised Phase A. Workspace-init consumes a `WorkspaceRealizationRequest` from `PAPERCLIP_WORKSPACE_REQUEST` env (JSON-encoded) and dispatches to `executeWorkspaceStrategy`. There is no parser helper — `JSON.parse` + a structural cast is enough since the type's shape is validated downstream by the executor (which throws on missing `repoUrl`).
+
 ```ts
 #!/usr/bin/env node
 import { writeFileSync } from "node:fs";
 import { join } from "node:path";
 import {
-  executeStrategy,
+  executeWorkspaceStrategy,
   realGitRunner,
-  parseWorkspaceStrategySpec,
+  type WorkspaceRealizationRequest,
 } from "@paperclipai/workspace-strategy";
 import { createGitCredentialsClient } from "./git-credentials.js";
 
@@ -1118,33 +1120,56 @@ async function exchangeBootstrapToken(input: { paperclipPublicUrl: string; boots
   return body.runJwt;
 }
 
+function parseRequest(json: string): WorkspaceRealizationRequest {
+  const parsed = JSON.parse(json) as WorkspaceRealizationRequest;
+  if (parsed.version !== 1) {
+    throw new Error(`PAPERCLIP_WORKSPACE_REQUEST: unsupported version ${parsed.version}`);
+  }
+  if (!parsed.source || typeof parsed.source.strategy !== "string") {
+    throw new Error("PAPERCLIP_WORKSPACE_REQUEST: missing source.strategy");
+  }
+  return parsed;
+}
+
 async function main() {
   const root = process.env.PAPERCLIP_WORKSPACE_ROOT ?? "/workspace";
-  const strategyJson = process.env.PAPERCLIP_WORKSPACE_STRATEGY;
+  const requestJson = process.env.PAPERCLIP_WORKSPACE_REQUEST;
   const bootstrapToken = process.env.BOOTSTRAP_TOKEN;
   const publicUrl = process.env.PAPERCLIP_PUBLIC_URL;
 
-  if (!strategyJson) throw new Error("PAPERCLIP_WORKSPACE_STRATEGY not set");
+  if (!requestJson) throw new Error("PAPERCLIP_WORKSPACE_REQUEST not set");
   if (!bootstrapToken) throw new Error("BOOTSTRAP_TOKEN not set");
   if (!publicUrl) throw new Error("PAPERCLIP_PUBLIC_URL not set");
 
-  const spec = parseWorkspaceStrategySpec(strategyJson);
-  const repoUrl = "url" in spec ? spec.url : "";
+  const request = parseRequest(requestJson);
   const runJwt = await exchangeBootstrapToken({ paperclipPublicUrl: publicUrl, bootstrapToken });
-  const creds = createGitCredentialsClient({ paperclipPublicUrl: publicUrl, runJwt, repoUrl });
-
-  await executeStrategy(spec, root, {
-    git: realGitRunner,
-    getGitCredentials: () => creds.fetch(),
-    allowExistingPath: false,
+  const creds = createGitCredentialsClient({
+    paperclipPublicUrl: publicUrl,
+    runJwt,
+    repoUrl: request.source.repoUrl ?? "",
   });
 
-  writeFileSync(join(root, ".paperclip-workspace-state.json"), JSON.stringify({
-    kind: spec.kind,
-    completedAt: new Date().toISOString(),
-  }, null, 2), { mode: 0o600 });
+  await executeWorkspaceStrategy(request, root, {
+    git: realGitRunner,
+    getGitCredentials: () => creds.fetch(),
+  });
 
-  console.log(`[workspace-init] ${spec.kind} completed at ${root}`);
+  writeFileSync(
+    join(root, ".paperclip-workspace-state.json"),
+    JSON.stringify(
+      {
+        strategy: request.source.strategy,
+        repoUrl: request.source.repoUrl,
+        repoRef: request.source.repoRef,
+        completedAt: new Date().toISOString(),
+      },
+      null,
+      2,
+    ),
+    { mode: 0o600 },
+  );
+
+  console.log(`[workspace-init] ${request.source.strategy} completed at ${root}`);
 }
 
 main().catch((err) => {
