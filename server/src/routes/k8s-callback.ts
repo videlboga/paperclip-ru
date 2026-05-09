@@ -1,7 +1,11 @@
 import { Router, type Request, type Response } from "express";
 import type { Db } from "@paperclipai/db";
-import { heartbeatRunEvents, heartbeatRuns } from "@paperclipai/db";
-import { eq, sql } from "drizzle-orm";
+import { clusterTenantPolicies, companySecrets, companySecretVersions, heartbeatRunEvents, heartbeatRuns } from "@paperclipai/db";
+import type { SecretProvider } from "@paperclipai/shared";
+import { and, eq, sql } from "drizzle-orm";
+import { getSecretProvider } from "../secrets/provider-registry.js";
+import { clusterTenantPoliciesService } from "../services/cluster-tenant-policies.js";
+import { issueGitCredentials, type SecretService } from "../services/git-credentials.js";
 import { logger } from "../middleware/logger.js";
 import { bootstrapTokensService } from "../services/bootstrap-tokens.js";
 import { runJwtService, type RunJwtService } from "../services/run-jwt.js";
@@ -121,12 +125,32 @@ async function appendShimRunEvent(
 }
 
 /**
- * Stub git-credentials issuer. M2 ships the route + auth contract; live
- * issuance (GitHub App installation tokens, per-tenant deploy tokens) is M3.
- * Documented in docs/k8s-execution/CHANGELOG.md.
+ * Resolve a per-company secret by UUID via the existing SecretProvider
+ * registry. Reads the secret's latest version row and delegates decryption
+ * to the matching provider. Throws if the secret or version is not found,
+ * or if the provider is unsupported. The caller (issueGitCredentials)
+ * maps any thrown error to `{ok: false, reason: "internal_error"}`.
  */
-async function issueGitCredentialsStub(): Promise<IssueGitCredentialsResult> {
-  return { ok: false, reason: "not_configured" };
+function createDbBackedSecretService(db: Db): SecretService {
+  return {
+    async resolve(secretId: string): Promise<string> {
+      const [secret] = await db.select().from(companySecrets).where(eq(companySecrets.id, secretId));
+      if (!secret) throw new Error(`secret not found: ${secretId}`);
+      const [versionRow] = await db
+        .select()
+        .from(companySecretVersions)
+        .where(and(
+          eq(companySecretVersions.secretId, secret.id),
+          eq(companySecretVersions.version, secret.latestVersion),
+        ));
+      if (!versionRow) throw new Error(`secret version not found: ${secretId} v${secret.latestVersion}`);
+      const provider = getSecretProvider(secret.provider as SecretProvider);
+      return provider.resolveVersion({
+        material: versionRow.material as Record<string, unknown>,
+        externalRef: secret.externalRef ?? null,
+      });
+    },
+  };
 }
 
 export interface K8sCallbackRoutesOptions {
@@ -164,9 +188,28 @@ export function k8sCallbackRoutes(db: Db, options: K8sCallbackRoutesOptions = {}
       }
     },
   });
+  const tenantPolicies = clusterTenantPoliciesService(db);
+  const secretService = createDbBackedSecretService(db);
   const gitCredentialsHandler = createWorkspaceGitCredentialsRoute({
     runJwt,
-    issueGitCredentials: issueGitCredentialsStub,
+    issueGitCredentials: async ({ companyId, repoUrl }) => {
+      // Resolve the cluster context from the company. The route surface (and
+      // the run-JWT it verifies) doesn't carry clusterConnectionId, and the
+      // tenant policy is keyed on (clusterConnectionId, companyId). For V1 we
+      // only support a single cluster connection per company; if there are
+      // zero or multiple matches we fail closed with not_configured.
+      const policies = await db
+        .select()
+        .from(clusterTenantPolicies)
+        .where(eq(clusterTenantPolicies.companyId, companyId));
+      if (policies.length !== 1) {
+        return { ok: false, reason: "not_configured" };
+      }
+      return issueGitCredentials(
+        { db, secretService, clusterTenantPolicies: tenantPolicies },
+        { companyId, clusterConnectionId: policies[0]!.clusterConnectionId, repoUrl },
+      );
+    },
   });
 
   // Rate limiters per spec note in the task plan.
