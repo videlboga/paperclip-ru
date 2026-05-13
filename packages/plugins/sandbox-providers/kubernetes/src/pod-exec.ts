@@ -153,7 +153,7 @@ export async function execInPod(
       websocketPromise
         .then((webSocket) => {
           ws = webSocket as WebSocketLike;
-          if (stdinStream && stdinPayload) {
+          if (!settled && stdinStream && stdinPayload) {
             stdinStream.end(stdinPayload);
           }
           ws.on("close", (code: number, reason: Buffer) => {
@@ -168,6 +168,7 @@ export async function execInPod(
         })
         .catch((err) => {
           if (settled) return;
+          if (timeout) clearTimeout(timeout);
           reject(err);
         });
     },

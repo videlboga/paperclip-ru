@@ -63,6 +63,17 @@ describe("execInPod", () => {
     expect(result.stderr).toContain("Kubernetes exec timed out after 5ms");
   });
 
+  it("clears the timeout when websocket setup rejects", async () => {
+    const clearTimeoutSpy = vi.spyOn(globalThis, "clearTimeout");
+    execMock.mockRejectedValue(new Error("network unreachable"));
+
+    await expect(
+      execInPod({} as never, "ns", "pod-1", "agent", ["echo", "ok"], undefined, 1000),
+    ).rejects.toThrow("network unreachable");
+    expect(clearTimeoutSpy).toHaveBeenCalled();
+    clearTimeoutSpy.mockRestore();
+  });
+
   it("wraps stdin commands with a byte-counted head prefix", async () => {
     let observedCommand: string[] | undefined;
     let observedStdin = "";
@@ -88,5 +99,32 @@ describe("execInPod", () => {
     expect(observedCommand).toEqual(["/bin/sh", "-c", "head -c 3 | 'base64' '-d'"]);
     expect(observedStdin).toBe("abc");
     expect(observedStdinFinished).toBe(true);
+  });
+
+  it("does not send stdin if the exec timed out before websocket setup completed", async () => {
+    let resolveWebsocket: ((ws: EventEmitter) => void) | undefined;
+    let observedStdin = "";
+    let observedStdinFinished = false;
+
+    execMock.mockImplementation((_namespace, _pod, _container, _command, _stdout, _stderr, stdin) => {
+      stdin?.on("data", (chunk: Buffer) => {
+        observedStdin += chunk.toString("utf8");
+      });
+      stdin?.on("finish", () => {
+        observedStdinFinished = true;
+      });
+      return new Promise<EventEmitter>((resolve) => {
+        resolveWebsocket = resolve;
+      });
+    });
+
+    const result = await execInPod({} as never, "ns", "pod-1", "agent", ["base64", "-d"], "abc", 5);
+    expect(result.timedOut).toBe(true);
+
+    resolveWebsocket?.(new EventEmitter());
+    await Promise.resolve();
+
+    expect(observedStdin).toBe("");
+    expect(observedStdinFinished).toBe(false);
   });
 });
