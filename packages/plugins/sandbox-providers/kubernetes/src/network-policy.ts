@@ -1,8 +1,12 @@
+import type { KubernetesProviderConfig } from "./types.js";
+
+type CidrAllowEntry = KubernetesProviderConfig["egressAllowCidrs"][number];
+
 export interface BuildNetworkPolicyInput {
   namespace: string;
   paperclipServerNamespace: string;
   egressAllowFqdns: string[];
-  egressAllowCidrs: string[];
+  egressAllowCidrs: CidrAllowEntry[];
 }
 
 const PUBLIC_IPV4_EXCEPTIONS = [
@@ -90,13 +94,22 @@ export function buildNetworkPolicyManifests(input: BuildNetworkPolicyInput): Rec
               },
             ]
           : []),
-        ...input.egressAllowCidrs.map((cidr) => ({
-          to: [{ ipBlock: { cidr } }],
-          ports: [{ protocol: "TCP", port: 443 }],
-        })),
+        ...input.egressAllowCidrs.map((entry) => {
+          const normalized = normalizeCidrEntry(entry);
+          return {
+            to: [{ ipBlock: { cidr: normalized.cidr } }],
+            ports: normalized.ports.map((port) => ({ protocol: "TCP", port })),
+          };
+        }),
       ],
     },
   };
 
   return [denyAll, egressAllow];
+}
+
+function normalizeCidrEntry(entry: CidrAllowEntry): { cidr: string; ports: number[] } {
+  return typeof entry === "string"
+    ? { cidr: entry, ports: [443] }
+    : { cidr: entry.cidr, ports: entry.ports };
 }

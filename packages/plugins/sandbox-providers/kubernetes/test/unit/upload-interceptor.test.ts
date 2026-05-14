@@ -114,7 +114,7 @@ describe("FastUploadInterceptor", () => {
     expect(interceptor.pendingCount).toBe(0);
   });
 
-  it("fails fast when init repeats for an in-progress upload", () => {
+  it("resets and acknowledges when init repeats for an in-progress upload", () => {
     const interceptor = new FastUploadInterceptor();
     const target = "/workspace/file.bin";
     const initCommand =
@@ -125,12 +125,19 @@ describe("FastUploadInterceptor", () => {
       interceptor.decide(`printf '%s' 'aGVsbG8=' >> '${target}.paperclip-upload.b64'`),
     ).toMatchObject({ action: "ack" });
 
-    const decision = interceptor.decide(initCommand);
-    expect(decision).toMatchObject({
-      action: "error",
-      message: expect.stringContaining("Fast upload already in progress"),
-    });
-    expect(interceptor.pendingCount).toBe(0);
+    expect(interceptor.decide(initCommand)).toMatchObject({ action: "ack" });
+    expect(interceptor.pendingCount).toBe(1);
+
+    expect(
+      interceptor.decide(`printf '%s' 'd29ybGQ=' >> '${target}.paperclip-upload.b64'`),
+    ).toMatchObject({ action: "ack" });
+
+    const decision = interceptor.decide(
+      `base64 -d < '${target}.paperclip-upload.b64' > '${target}' && rm -f '${target}.paperclip-upload.b64'`,
+    );
+    expect(decision.action).toBe("flush");
+    if (decision.action !== "flush") throw new Error("expected flush");
+    expect(decision.flush.payload.toString("utf8")).toBe("world");
   });
 
   it("clears buffered uploads on reset", () => {

@@ -85,7 +85,7 @@ describe("execInPod", () => {
     clearTimeoutSpy.mockRestore();
   });
 
-  it("wraps stdin commands with a byte-counted head prefix", async () => {
+  it("wraps stdin commands with a byte-counted reader prefix", async () => {
     let observedCommand: string[] | undefined;
     let observedStdin = "";
     let observedStdinFinished = false;
@@ -107,7 +107,11 @@ describe("execInPod", () => {
     await execInPod({} as never, "ns", "pod-1", "agent", ["base64", "-d"], "abc");
     await Promise.resolve();
 
-    expect(observedCommand).toEqual(["/bin/sh", "-c", "head -c 3 | 'base64' '-d'"]);
+    expect(observedCommand?.[0]).toBe("/bin/sh");
+    expect(observedCommand?.[1]).toBe("-c");
+    expect(observedCommand?.[2]).toContain("dd bs=1 count=3");
+    expect(observedCommand?.[2]).toContain("head -c 3");
+    expect(observedCommand?.[2]).toContain("| 'base64' '-d'");
     expect(observedStdin).toBe("abc");
     expect(observedStdinFinished).toBe(true);
   });

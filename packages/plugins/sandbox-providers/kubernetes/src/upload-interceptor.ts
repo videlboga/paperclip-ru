@@ -58,10 +58,6 @@ export class FastUploadInterceptor {
       const tempPath = `${targetPath}.paperclip-upload.b64`;
       if (this.buffers.has(tempPath)) {
         this.buffers.delete(tempPath);
-        return {
-          action: "error",
-          message: `Fast upload already in progress for ${targetPath}; retry the upload from the beginning.`,
-        };
       }
 
       this.buffers.set(tempPath, {

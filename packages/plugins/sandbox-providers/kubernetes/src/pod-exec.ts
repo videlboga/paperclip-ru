@@ -47,7 +47,7 @@ export async function execInPod(
     : null;
   const stdinStream: PassThrough | null = stdinPayload ? new PassThrough() : null;
   const effectiveCommand = stdinPayload
-    ? ["/bin/sh", "-c", `head -c ${stdinPayload.length} | ${command.map(shellQuoteArg).join(" ")}`]
+    ? ["/bin/sh", "-c", buildStdinCommand(stdinPayload.length, command.map(shellQuoteArg).join(" "))]
     : command;
 
   let stdoutData = "";
@@ -183,4 +183,19 @@ export async function execInPod(
         });
     },
   );
+}
+
+function buildStdinCommand(byteCount: number, commandText: string): string {
+  return [
+    "if command -v head >/dev/null 2>&1; then",
+    // byteCount is from the UTF-8 Buffer sent to stdin, so multibyte strings
+    // are still counted as bytes rather than JavaScript string characters.
+    `head -c ${byteCount} | ${commandText};`,
+    "elif command -v dd >/dev/null 2>&1; then",
+    `dd bs=1 count=${byteCount} 2>/dev/null | ${commandText};`,
+    "else",
+    "echo 'paperclip kubernetes exec stdin requires dd or head in the agent image' >&2;",
+    "exit 127;",
+    "fi",
+  ].join(" ");
 }

@@ -6,7 +6,7 @@ describe("buildNetworkPolicyManifests", () => {
     namespace: "paperclip-acme",
     paperclipServerNamespace: "paperclip",
     egressAllowFqdns: [] as string[],
-    egressAllowCidrs: [] as string[],
+    egressAllowCidrs: [] as Array<string | { cidr: string; ports?: number[] }>,
   };
 
   it("produces a deny-all + egress allow pair", () => {
@@ -44,6 +44,20 @@ describe("buildNetworkPolicyManifests", () => {
     );
     expect(cidrRule).toBeDefined();
     expect(cidrRule?.ports).toEqual([{ protocol: "TCP", port: 443 }]);
+  });
+
+  it("supports custom TCP ports for user-supplied CIDR entries", () => {
+    const [, egress] = buildNetworkPolicyManifests({
+      ...baseInput,
+      egressAllowCidrs: [{ cidr: "10.10.0.5/32", ports: [8080, 8443] }],
+    });
+    const cidrRule = egress.spec.egress.find((r: { to: { ipBlock?: { cidr: string } }[] }) =>
+      r.to.some((t) => t.ipBlock?.cidr === "10.10.0.5/32"),
+    );
+    expect(cidrRule?.ports).toEqual([
+      { protocol: "TCP", port: 8080 },
+      { protocol: "TCP", port: 8443 },
+    ]);
   });
 
   it("adds a public HTTPS fallback when standard mode receives FQDN allow-list entries", () => {

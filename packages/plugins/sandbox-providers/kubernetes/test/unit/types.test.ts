@@ -79,4 +79,20 @@ describe("kubernetesProviderConfigSchema", () => {
       ).toThrow(/CIDR/i);
     }
   });
+
+  it("accepts CIDR entries with custom TCP ports", () => {
+    const parsed = parseKubernetesProviderConfig({
+      inCluster: true,
+      egressAllowCidrs: [{ cidr: "10.10.0.5/32", ports: [8080] }],
+    });
+    expect(parsed.egressAllowCidrs).toEqual([{ cidr: "10.10.0.5/32", ports: [8080] }]);
+  });
+
+  it("defaults object CIDR entries to TCP 443", () => {
+    const parsed = parseKubernetesProviderConfig({
+      inCluster: true,
+      egressAllowCidrs: [{ cidr: "10.10.0.5/32" }],
+    });
+    expect(parsed.egressAllowCidrs).toEqual([{ cidr: "10.10.0.5/32", ports: [443] }]);
+  });
 });

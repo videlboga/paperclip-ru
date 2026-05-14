@@ -37,6 +37,24 @@ export class SandboxCrTimeoutError extends Error {
   }
 }
 
+export class SandboxCrReadinessError extends Error {
+  constructor(
+    readonly namespace: string,
+    readonly name: string,
+    readonly phase: "Failed" | "Terminating",
+    readonly reason?: string,
+    readonly detail?: string,
+  ) {
+    const detailSuffix = detail ? `: ${detail}` : "";
+    super(
+      phase === "Failed"
+        ? `Sandbox ${namespace}/${name} failed${reason ? ` (${reason})` : ""}${detailSuffix}`
+        : `Sandbox ${namespace}/${name} is terminating before it became ready`,
+    );
+    this.name = "SandboxCrReadinessError";
+  }
+}
+
 function sleep(ms: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
@@ -152,11 +170,10 @@ export async function findPodForSandbox(
     return podName;
   }
 
-  // Fallback: list pods with sandbox-name label (sandbox controller typically
-  // labels pods with the sandbox name)
+  // Fallback: list pods with the sandbox-name label from our pod template.
   const result = await clients.core.listNamespacedPod({
     namespace,
-    labelSelector: `paperclip.io/managed-by=paperclip-k8s-plugin`,
+    labelSelector: `paperclip.io/managed-by=paperclip-k8s-plugin,paperclip.io/sandbox-name=${name}`,
   });
   const items =
     (
@@ -170,16 +187,7 @@ export async function findPodForSandbox(
       ).items
     ) ?? [];
 
-  // Filter to pods that belong to this sandbox by name prefix or label
-  const matching = items.filter((p) => {
-    const podMeta = p.metadata ?? {};
-    const labels = podMeta.labels ?? {};
-    // The sandbox controller may label pods differently; try matching by name prefix
-    return (
-      podMeta.name?.startsWith(name) ||
-      labels["agents.x-k8s.io/sandbox-name"] === name
-    );
-  });
+  const matching = items.filter((p) => (p.metadata?.labels ?? {})["paperclip.io/sandbox-name"] === name);
 
   const running = matching.find((p) => p.status?.phase === "Running");
   return (running ?? matching[0])?.metadata?.name ?? null;
@@ -260,12 +268,10 @@ export async function waitForSandboxReady(
     }
     if (phase === "Failed") {
       const mapped = mapSandboxPhase(cr);
-      throw new Error(
-        `Sandbox ${namespace}/${name} failed: ${mapped.reason ?? "unknown reason"} — ${mapped.message ?? ""}`,
-      );
+      throw new SandboxCrReadinessError(namespace, name, "Failed", mapped.reason, mapped.message);
     }
     if (phase === "Terminating") {
-      throw new Error(`Sandbox ${namespace}/${name} is terminating before it became ready`);
+      throw new SandboxCrReadinessError(namespace, name, "Terminating");
     }
     // Pending or unknown — keep polling
     await sleep(pollMs);

@@ -29,6 +29,7 @@ import { FastUploadInterceptor } from "./upload-interceptor.js";
 import { jobOrchestrator, JobTimeoutError } from "./job-orchestrator.js";
 import {
   sandboxCrOrchestrator,
+  SandboxCrReadinessError,
   SandboxCrTimeoutError,
 } from "./sandbox-cr-orchestrator.js";
 import { execInPod } from "./pod-exec.js";
@@ -53,15 +54,53 @@ const DEFAULT_RESOURCE_QUOTA = {
   limitsMemory: "40Gi",
 };
 
-const uploadInterceptorsByLease = new Map<string, FastUploadInterceptor>();
+const UPLOAD_INTERCEPTOR_TTL_MS = 60 * 60 * 1000;
+const MAX_UPLOAD_INTERCEPTORS = 1000;
+
+interface UploadInterceptorEntry {
+  interceptor: FastUploadInterceptor;
+  lastTouchedAt: number;
+}
+
+const uploadInterceptorsByLease = new Map<string, UploadInterceptorEntry>();
 
 function getOrCreateUploadInterceptor(leaseId: string): FastUploadInterceptor {
-  let interceptor = uploadInterceptorsByLease.get(leaseId);
-  if (!interceptor) {
-    interceptor = new FastUploadInterceptor();
-    uploadInterceptorsByLease.set(leaseId, interceptor);
+  const now = Date.now();
+  sweepUploadInterceptors(now);
+
+  let entry = uploadInterceptorsByLease.get(leaseId);
+  if (!entry) {
+    entry = { interceptor: new FastUploadInterceptor(), lastTouchedAt: now };
+    uploadInterceptorsByLease.set(leaseId, entry);
+  } else {
+    entry.lastTouchedAt = now;
   }
-  return interceptor;
+
+  evictOldestUploadInterceptors();
+  return entry.interceptor;
+}
+
+function sweepUploadInterceptors(now = Date.now()): void {
+  for (const [leaseId, entry] of uploadInterceptorsByLease.entries()) {
+    if (now - entry.lastTouchedAt > UPLOAD_INTERCEPTOR_TTL_MS) {
+      uploadInterceptorsByLease.delete(leaseId);
+    }
+  }
+}
+
+function evictOldestUploadInterceptors(): void {
+  while (uploadInterceptorsByLease.size > MAX_UPLOAD_INTERCEPTORS) {
+    let oldestLeaseId: string | null = null;
+    let oldestTouchedAt = Number.POSITIVE_INFINITY;
+    for (const [leaseId, entry] of uploadInterceptorsByLease.entries()) {
+      if (entry.lastTouchedAt < oldestTouchedAt) {
+        oldestLeaseId = leaseId;
+        oldestTouchedAt = entry.lastTouchedAt;
+      }
+    }
+    if (!oldestLeaseId) return;
+    uploadInterceptorsByLease.delete(oldestLeaseId);
+  }
 }
 
 function extractShellScript(
@@ -504,6 +543,22 @@ const plugin = definePlugin({
               backend: "sandbox-cr",
               namespace,
               sandboxName: lease.providerLeaseId,
+            },
+          };
+        }
+        if (err instanceof SandboxCrReadinessError) {
+          return {
+            exitCode: 1,
+            timedOut: false,
+            stdout: "",
+            stderr: err.message,
+            metadata: {
+              provider: "kubernetes",
+              backend: "sandbox-cr",
+              namespace,
+              sandboxName: lease.providerLeaseId,
+              sandboxPhase: err.phase,
+              ...(err.reason ? { sandboxReason: err.reason } : {}),
             },
           };
         }

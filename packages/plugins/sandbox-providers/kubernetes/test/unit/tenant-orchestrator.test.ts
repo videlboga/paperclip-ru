@@ -216,4 +216,33 @@ describe("ensureTenant", () => {
       }),
     );
   });
+
+  it("retries stale replace conflicts with a fresh resourceVersion", async () => {
+    const clients = makeMockClients();
+    clients.core.readNamespace
+      .mockResolvedValueOnce({ metadata: { name: baseInput.namespace, resourceVersion: "rv-stale" } })
+      .mockResolvedValueOnce({ metadata: { name: baseInput.namespace, resourceVersion: "rv-fresh" } });
+    clients.core.replaceNamespace
+      .mockRejectedValueOnce({ code: 409 })
+      .mockResolvedValueOnce({ body: {} });
+
+    await ensureTenant(clients as never, baseInput);
+
+    expect(clients.core.replaceNamespace).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        body: expect.objectContaining({
+          metadata: expect.objectContaining({ resourceVersion: "rv-stale" }),
+        }),
+      }),
+    );
+    expect(clients.core.replaceNamespace).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        body: expect.objectContaining({
+          metadata: expect.objectContaining({ resourceVersion: "rv-fresh" }),
+        }),
+      }),
+    );
+  });
 });

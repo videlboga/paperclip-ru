@@ -118,6 +118,9 @@ describe("buildSandboxCrManifest", () => {
     expect(cr.spec.podTemplate.metadata.labels["paperclip.io/role"]).toBe(
       "agent",
     );
+    expect(cr.spec.podTemplate.metadata.labels["paperclip.io/sandbox-name"]).toBe(
+      baseInput.sandboxName,
+    );
   });
 
   it("applies imagePullSecrets when provided", () => {

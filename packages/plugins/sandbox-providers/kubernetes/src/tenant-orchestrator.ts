@@ -1,6 +1,7 @@
 import type { KubeClients } from "./kube-client.js";
 import { buildNetworkPolicyManifests } from "./network-policy.js";
 import { buildCiliumNetworkPolicyManifest } from "./cilium-network-policy.js";
+import type { KubernetesProviderConfig } from "./types.js";
 
 export interface EnsureTenantInput {
   namespace: string;
@@ -9,7 +10,7 @@ export interface EnsureTenantInput {
   serviceAccountAnnotations: Record<string, string>;
   egressMode: "standard" | "cilium";
   egressAllowFqdns: string[];
-  egressAllowCidrs: string[];
+  egressAllowCidrs: KubernetesProviderConfig["egressAllowCidrs"];
   resourceQuota: {
     pods: string;
     requestsCpu: string;
@@ -24,6 +25,7 @@ const ROLE_NAME = "paperclip-tenant-role";
 const ROLE_BINDING_NAME = "paperclip-tenant-rb";
 const RESOURCE_QUOTA_NAME = "paperclip-quota";
 const LIMIT_RANGE_NAME = "paperclip-limits";
+const MAX_REPLACE_ATTEMPTS = 3;
 
 /**
  * Tenant provisioning reconciles the resources this plugin owns. Existing
@@ -43,11 +45,13 @@ export async function ensureTenant(clients: KubeClients, input: EnsureTenantInpu
 async function ensureNamespace(clients: KubeClients, input: EnsureTenantInput): Promise<void> {
   const manifest = buildNamespaceManifest(input);
   try {
-    const existing = await clients.core.readNamespace({ name: input.namespace });
-    await clients.core.replaceNamespace({
-      name: input.namespace,
-      body: withResourceVersion(buildNamespaceManifest(input, existing), existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespace({ name: input.namespace }),
+      (existing) => clients.core.replaceNamespace({
+        name: input.namespace,
+        body: withResourceVersion(buildNamespaceManifest(input, existing), existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -56,11 +60,13 @@ async function ensureNamespace(clients: KubeClients, input: EnsureTenantInput): 
     await clients.core.createNamespace({ body: manifest });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.core.readNamespace({ name: input.namespace });
-    await clients.core.replaceNamespace({
-      name: input.namespace,
-      body: withResourceVersion(buildNamespaceManifest(input, existing), existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespace({ name: input.namespace }),
+      (existing) => clients.core.replaceNamespace({
+        name: input.namespace,
+        body: withResourceVersion(buildNamespaceManifest(input, existing), existing) as never,
+      }),
+    );
   }
 }
 
@@ -95,12 +101,14 @@ async function ensureServiceAccount(clients: KubeClients, input: EnsureTenantInp
     },
   };
   try {
-    const existing = await clients.core.readNamespacedServiceAccount({ name: SERVICE_ACCOUNT_NAME, namespace: input.namespace });
-    await clients.core.replaceNamespacedServiceAccount({
-      name: SERVICE_ACCOUNT_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespacedServiceAccount({ name: SERVICE_ACCOUNT_NAME, namespace: input.namespace }),
+      (existing) => clients.core.replaceNamespacedServiceAccount({
+        name: SERVICE_ACCOUNT_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -109,12 +117,14 @@ async function ensureServiceAccount(clients: KubeClients, input: EnsureTenantInp
     await clients.core.createNamespacedServiceAccount({ namespace: input.namespace, body: manifest });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.core.readNamespacedServiceAccount({ name: SERVICE_ACCOUNT_NAME, namespace: input.namespace });
-    await clients.core.replaceNamespacedServiceAccount({
-      name: SERVICE_ACCOUNT_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespacedServiceAccount({ name: SERVICE_ACCOUNT_NAME, namespace: input.namespace }),
+      (existing) => clients.core.replaceNamespacedServiceAccount({
+        name: SERVICE_ACCOUNT_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
   }
 }
 
@@ -128,12 +138,14 @@ async function ensureRole(clients: KubeClients, input: EnsureTenantInput): Promi
     ],
   };
   try {
-    const existing = await clients.rbac.readNamespacedRole({ name: ROLE_NAME, namespace: input.namespace });
-    await clients.rbac.replaceNamespacedRole({
-      name: ROLE_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.rbac.readNamespacedRole({ name: ROLE_NAME, namespace: input.namespace }),
+      (existing) => clients.rbac.replaceNamespacedRole({
+        name: ROLE_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -142,12 +154,14 @@ async function ensureRole(clients: KubeClients, input: EnsureTenantInput): Promi
     await clients.rbac.createNamespacedRole({ namespace: input.namespace, body: manifest });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.rbac.readNamespacedRole({ name: ROLE_NAME, namespace: input.namespace });
-    await clients.rbac.replaceNamespacedRole({
-      name: ROLE_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.rbac.readNamespacedRole({ name: ROLE_NAME, namespace: input.namespace }),
+      (existing) => clients.rbac.replaceNamespacedRole({
+        name: ROLE_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
   }
 }
 
@@ -160,12 +174,14 @@ async function ensureRoleBinding(clients: KubeClients, input: EnsureTenantInput)
     subjects: [{ kind: "ServiceAccount", name: SERVICE_ACCOUNT_NAME, namespace: input.namespace }],
   };
   try {
-    const existing = await clients.rbac.readNamespacedRoleBinding({ name: ROLE_BINDING_NAME, namespace: input.namespace });
-    await clients.rbac.replaceNamespacedRoleBinding({
-      name: ROLE_BINDING_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.rbac.readNamespacedRoleBinding({ name: ROLE_BINDING_NAME, namespace: input.namespace }),
+      (existing) => clients.rbac.replaceNamespacedRoleBinding({
+        name: ROLE_BINDING_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -174,12 +190,14 @@ async function ensureRoleBinding(clients: KubeClients, input: EnsureTenantInput)
     await clients.rbac.createNamespacedRoleBinding({ namespace: input.namespace, body: manifest });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.rbac.readNamespacedRoleBinding({ name: ROLE_BINDING_NAME, namespace: input.namespace });
-    await clients.rbac.replaceNamespacedRoleBinding({
-      name: ROLE_BINDING_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.rbac.readNamespacedRoleBinding({ name: ROLE_BINDING_NAME, namespace: input.namespace }),
+      (existing) => clients.rbac.replaceNamespacedRoleBinding({
+        name: ROLE_BINDING_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
   }
 }
 
@@ -199,12 +217,14 @@ async function ensureResourceQuota(clients: KubeClients, input: EnsureTenantInpu
     },
   };
   try {
-    const existing = await clients.core.readNamespacedResourceQuota({ name: RESOURCE_QUOTA_NAME, namespace: input.namespace });
-    await clients.core.replaceNamespacedResourceQuota({
-      name: RESOURCE_QUOTA_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespacedResourceQuota({ name: RESOURCE_QUOTA_NAME, namespace: input.namespace }),
+      (existing) => clients.core.replaceNamespacedResourceQuota({
+        name: RESOURCE_QUOTA_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -213,12 +233,14 @@ async function ensureResourceQuota(clients: KubeClients, input: EnsureTenantInpu
     await clients.core.createNamespacedResourceQuota({ namespace: input.namespace, body: manifest });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.core.readNamespacedResourceQuota({ name: RESOURCE_QUOTA_NAME, namespace: input.namespace });
-    await clients.core.replaceNamespacedResourceQuota({
-      name: RESOURCE_QUOTA_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespacedResourceQuota({ name: RESOURCE_QUOTA_NAME, namespace: input.namespace }),
+      (existing) => clients.core.replaceNamespacedResourceQuota({
+        name: RESOURCE_QUOTA_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
   }
 }
 
@@ -243,12 +265,14 @@ async function ensureLimitRange(clients: KubeClients, input: EnsureTenantInput):
     },
   };
   try {
-    const existing = await clients.core.readNamespacedLimitRange({ name: LIMIT_RANGE_NAME, namespace: input.namespace });
-    await clients.core.replaceNamespacedLimitRange({
-      name: LIMIT_RANGE_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespacedLimitRange({ name: LIMIT_RANGE_NAME, namespace: input.namespace }),
+      (existing) => clients.core.replaceNamespacedLimitRange({
+        name: LIMIT_RANGE_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -260,12 +284,14 @@ async function ensureLimitRange(clients: KubeClients, input: EnsureTenantInput):
     });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.core.readNamespacedLimitRange({ name: LIMIT_RANGE_NAME, namespace: input.namespace });
-    await clients.core.replaceNamespacedLimitRange({
-      name: LIMIT_RANGE_NAME,
-      namespace: input.namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.core.readNamespacedLimitRange({ name: LIMIT_RANGE_NAME, namespace: input.namespace }),
+      (existing) => clients.core.replaceNamespacedLimitRange({
+        name: LIMIT_RANGE_NAME,
+        namespace: input.namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
   }
 }
 
@@ -301,12 +327,14 @@ async function ensureNetworkPolicy(
 ): Promise<void> {
   const name = (manifest.metadata as { name: string }).name;
   try {
-    const existing = await clients.networking.readNamespacedNetworkPolicy({ name, namespace });
-    await clients.networking.replaceNamespacedNetworkPolicy({
-      name,
-      namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.networking.readNamespacedNetworkPolicy({ name, namespace }),
+      (existing) => clients.networking.replaceNamespacedNetworkPolicy({
+        name,
+        namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -315,12 +343,14 @@ async function ensureNetworkPolicy(
     await clients.networking.createNamespacedNetworkPolicy({ namespace, body: manifest as never });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.networking.readNamespacedNetworkPolicy({ name, namespace });
-    await clients.networking.replaceNamespacedNetworkPolicy({
-      name,
-      namespace,
-      body: withResourceVersion(manifest, existing) as never,
-    });
+    await replaceExistingResource(
+      () => clients.networking.readNamespacedNetworkPolicy({ name, namespace }),
+      (existing) => clients.networking.replaceNamespacedNetworkPolicy({
+        name,
+        namespace,
+        body: withResourceVersion(manifest, existing) as never,
+      }),
+    );
   }
 }
 
@@ -331,21 +361,23 @@ async function ensureCiliumNetworkPolicy(
 ): Promise<void> {
   const name = (manifest.metadata as { name: string }).name;
   try {
-    const existing = await clients.custom.getNamespacedCustomObject({
-      group: "cilium.io",
-      version: "v2",
-      namespace,
-      plural: "ciliumnetworkpolicies",
-      name,
-    });
-    await clients.custom.replaceNamespacedCustomObject({
-      group: "cilium.io",
-      version: "v2",
-      namespace,
-      plural: "ciliumnetworkpolicies",
-      name,
-      body: withResourceVersion(manifest, existing),
-    });
+    await replaceExistingResource(
+      () => clients.custom.getNamespacedCustomObject({
+        group: "cilium.io",
+        version: "v2",
+        namespace,
+        plural: "ciliumnetworkpolicies",
+        name,
+      }),
+      (existing) => clients.custom.replaceNamespacedCustomObject({
+        group: "cilium.io",
+        version: "v2",
+        namespace,
+        plural: "ciliumnetworkpolicies",
+        name,
+        body: withResourceVersion(manifest, existing),
+      }),
+    );
     return;
   } catch (err) {
     if (!isNotFound(err)) throw err;
@@ -360,21 +392,23 @@ async function ensureCiliumNetworkPolicy(
     });
   } catch (err) {
     if (!isAlreadyExists(err)) throw err;
-    const existing = await clients.custom.getNamespacedCustomObject({
-      group: "cilium.io",
-      version: "v2",
-      namespace,
-      plural: "ciliumnetworkpolicies",
-      name,
-    });
-    await clients.custom.replaceNamespacedCustomObject({
-      group: "cilium.io",
-      version: "v2",
-      namespace,
-      plural: "ciliumnetworkpolicies",
-      name,
-      body: withResourceVersion(manifest, existing),
-    });
+    await replaceExistingResource(
+      () => clients.custom.getNamespacedCustomObject({
+        group: "cilium.io",
+        version: "v2",
+        namespace,
+        plural: "ciliumnetworkpolicies",
+        name,
+      }),
+      (existing) => clients.custom.replaceNamespacedCustomObject({
+        group: "cilium.io",
+        version: "v2",
+        namespace,
+        plural: "ciliumnetworkpolicies",
+        name,
+        body: withResourceVersion(manifest, existing),
+      }),
+    );
   }
 }
 
@@ -412,6 +446,24 @@ function withResourceVersion<T extends Record<string, unknown>>(manifest: T, exi
   };
 }
 
+async function replaceExistingResource(
+  readExisting: () => Promise<unknown>,
+  replaceExisting: (existing: unknown) => Promise<unknown>,
+): Promise<void> {
+  let existing = await readExisting();
+  for (let attempt = 1; attempt <= MAX_REPLACE_ATTEMPTS; attempt += 1) {
+    try {
+      await replaceExisting(existing);
+      return;
+    } catch (err) {
+      if (!isConflict(err) || attempt === MAX_REPLACE_ATTEMPTS) {
+        throw err;
+      }
+      existing = await readExisting();
+    }
+  }
+}
+
 function isNotFound(err: unknown): boolean {
   if (typeof err !== "object" || err === null) return false;
   const e = err as { code?: number; statusCode?: number };
@@ -419,6 +471,10 @@ function isNotFound(err: unknown): boolean {
 }
 
 function isAlreadyExists(err: unknown): boolean {
+  return isConflict(err);
+}
+
+function isConflict(err: unknown): boolean {
   if (typeof err !== "object" || err === null) return false;
   const e = err as { code?: number; statusCode?: number };
   return e.code === 409 || e.statusCode === 409;

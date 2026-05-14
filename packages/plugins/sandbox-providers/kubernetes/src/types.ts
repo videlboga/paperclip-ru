@@ -23,6 +23,14 @@ function isIpv4Cidr(value: string): boolean {
   });
 }
 
+const egressAllowCidrSchema = z.union([
+  z.string().refine(isIpv4Cidr, "Invalid CIDR"),
+  z.object({
+    cidr: z.string().refine(isIpv4Cidr, "Invalid CIDR"),
+    ports: z.array(z.number().int().min(1).max(65535)).min(1).default([443]),
+  }),
+]);
+
 export const kubernetesProviderConfigSchema = z
   .object({
     inCluster: z.boolean().default(false),
@@ -42,7 +50,7 @@ export const kubernetesProviderConfigSchema = z
     imagePullSecrets: z.array(z.string()).default([]),
 
     egressAllowFqdns: z.array(z.string()).default([]),
-    egressAllowCidrs: z.array(z.string().refine(isIpv4Cidr, "Invalid CIDR")).default([]),
+    egressAllowCidrs: z.array(egressAllowCidrSchema).default([]),
     egressMode: z.enum(["cilium", "standard"]).default("standard"),
 
     defaultResources: z

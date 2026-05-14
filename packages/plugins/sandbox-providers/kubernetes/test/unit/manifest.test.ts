@@ -28,7 +28,8 @@ describe("manifest", () => {
     expect(configSchema.anyOf).toContainEqual({ required: ["kubeconfig"] });
   });
 
-  it("documents that CIDR egress is HTTPS-only", () => {
-    expect(configSchema.properties.egressAllowCidrs.description).toContain("TCP port 443");
+  it("documents CIDR egress port behavior", () => {
+    expect(configSchema.properties.egressAllowCidrs.description).toContain("String entries allow TCP 443");
+    expect(configSchema.properties.egressAllowCidrs.description).toContain("ports");
   });
 });

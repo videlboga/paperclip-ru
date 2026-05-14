@@ -5,6 +5,7 @@ import {
   getSandboxCrStatus,
   findPodForSandbox,
   SandboxCrTimeoutError,
+  SandboxCrReadinessError,
   waitForSandboxReady,
 } from "../../src/sandbox-cr-orchestrator.js";
 
@@ -114,7 +115,13 @@ describe("findPodForSandbox", () => {
     const list = vi.fn().mockResolvedValue({
       items: [
         {
-          metadata: { name: "pc-abc-001", labels: { "paperclip.io/managed-by": "paperclip-k8s-plugin" } },
+          metadata: {
+            name: "controller-owned-name",
+            labels: {
+              "paperclip.io/managed-by": "paperclip-k8s-plugin",
+              "paperclip.io/sandbox-name": "pc-abc",
+            },
+          },
           status: { phase: "Running" },
         },
       ],
@@ -124,8 +131,11 @@ describe("findPodForSandbox", () => {
       core: { listNamespacedPod: list },
     };
     const podName = await findPodForSandbox(clients as never, "ns", "pc-abc");
-    // name starts with "pc-abc" → matched by prefix heuristic
-    expect(podName).toBe("pc-abc-001");
+    expect(list).toHaveBeenCalledWith({
+      namespace: "ns",
+      labelSelector: "paperclip.io/managed-by=paperclip-k8s-plugin,paperclip.io/sandbox-name=pc-abc",
+    });
+    expect(podName).toBe("controller-owned-name");
   });
 
   it("returns null when no pod is found in fallback", async () => {
@@ -211,7 +221,7 @@ describe("waitForSandboxReady", () => {
         timeoutMs: 5000,
         pollMs: 10,
       }),
-    ).rejects.toThrow(/failed.*OOMKilled/i);
+    ).rejects.toBeInstanceOf(SandboxCrReadinessError);
   });
 
   it("fails fast when Sandbox starts terminating before it is ready", async () => {
@@ -222,7 +232,7 @@ describe("waitForSandboxReady", () => {
         timeoutMs: 5000,
         pollMs: 10,
       }),
-    ).rejects.toThrow(/terminating before it became ready/i);
+    ).rejects.toBeInstanceOf(SandboxCrReadinessError);
     expect(get).toHaveBeenCalledTimes(1);
   });
 });

@@ -1,8 +1,12 @@
+import type { KubernetesProviderConfig } from "./types.js";
+
+type CidrAllowEntry = KubernetesProviderConfig["egressAllowCidrs"][number];
+
 export interface BuildCiliumNetworkPolicyInput {
   namespace: string;
   paperclipServerNamespace: string;
   egressAllowFqdns: string[];
-  egressAllowCidrs: string[];
+  egressAllowCidrs: CidrAllowEntry[];
 }
 
 // Design note: no ingress rules are defined here. Paperclip-server does NOT
@@ -47,10 +51,19 @@ export function buildCiliumNetworkPolicyManifest(input: BuildCiliumNetworkPolicy
   });
 
   if (input.egressAllowCidrs.length > 0) {
-    egress.push({
-      toCIDRSet: input.egressAllowCidrs.map((cidr) => ({ cidr })),
-      toPorts: [{ ports: [{ port: "443", protocol: "TCP" }] }],
-    });
+    egress.push(
+      ...input.egressAllowCidrs.map((entry) => {
+        const normalized = normalizeCidrEntry(entry);
+        return {
+          toCIDRSet: [{ cidr: normalized.cidr }],
+          toPorts: [
+            {
+              ports: normalized.ports.map((port) => ({ port: String(port), protocol: "TCP" })),
+            },
+          ],
+        };
+      }),
+    );
   }
 
   return {
@@ -66,4 +79,10 @@ export function buildCiliumNetworkPolicyManifest(input: BuildCiliumNetworkPolicy
       egress,
     },
   };
+}
+
+function normalizeCidrEntry(entry: CidrAllowEntry): { cidr: string; ports: number[] } {
+  return typeof entry === "string"
+    ? { cidr: entry, ports: [443] }
+    : { cidr: entry.cidr, ports: entry.ports };
 }
