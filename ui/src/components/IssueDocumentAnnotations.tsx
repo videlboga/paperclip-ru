@@ -1,6 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useQuery } from "@tanstack/react-query";
-import type { DocumentAnnotationThreadWithComments, IssueDocument } from "@paperclipai/shared";
+import type { Agent, DocumentAnnotationThreadWithComments, IssueDocument } from "@paperclipai/shared";
 import { MessageSquare } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
@@ -9,6 +9,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { parseDocumentAnnotationHash } from "@/lib/document-annotation-hash";
 import { DocumentAnnotationLayer, type PendingAnchor } from "./DocumentAnnotationLayer";
 import { DocumentAnnotationPanel } from "./DocumentAnnotationPanel";
+import type { CompanyUserProfile } from "@/lib/company-members";
 
 export interface IssueDocumentAnnotationsProps {
   issueId: string;
@@ -25,6 +26,13 @@ export interface IssueDocumentAnnotationsProps {
   children: ReactNode;
   /** Current location hash so we can resolve deep-link targets. */
   locationHash: string;
+  /** Controlled panel state. Caller owns this so the count chip can live in the doc header. */
+  panelOpen: boolean;
+  onPanelOpenChange: (open: boolean) => void;
+  agentMap?: ReadonlyMap<string, Pick<Agent, "id" | "name">>;
+  userProfileMap?: ReadonlyMap<string, CompanyUserProfile>;
+  /** Seed which thread is focused on mount. Used by Storybook/screenshot harness. */
+  defaultFocusedThreadId?: string;
 }
 
 export function IssueDocumentAnnotations({
@@ -36,14 +44,20 @@ export function IssueDocumentAnnotations({
   historicalPreview,
   children,
   locationHash,
+  panelOpen,
+  onPanelOpenChange,
+  agentMap,
+  userProfileMap,
+  defaultFocusedThreadId,
 }: IssueDocumentAnnotationsProps) {
   const containerRef = useRef<HTMLElement | null>(null);
-  const [panelOpen, setPanelOpen] = useState(false);
-  const [focusedThreadId, setFocusedThreadId] = useState<string | null>(null);
+  const [focusedThreadId, setFocusedThreadId] = useState<string | null>(defaultFocusedThreadId ?? null);
   const [focusedCommentId, setFocusedCommentId] = useState<string | null>(null);
   const [pendingAnchor, setPendingAnchor] = useState<PendingAnchor | null>(null);
   const [isMobile, setIsMobile] = useState(false);
   const hashHandledRef = useRef<string | null>(null);
+  // Bus token to ask the body layer to capture the current selection into a pendingAnchor.
+  const [captureSelectionRequestId, setCaptureSelectionRequestId] = useState(0);
 
   useEffect(() => {
     if (typeof window === "undefined" || typeof window.matchMedia !== "function") return;
@@ -64,11 +78,6 @@ export function IssueDocumentAnnotations({
   });
   const allThreads = annotationsQuery.data ?? [];
 
-  const openCount = useMemo(
-    () => allThreads.filter((thread) => thread.status === "open" && thread.anchorState !== "orphaned").length,
-    [allThreads],
-  );
-
   // Resolve deep link `#document-<key>&thread=...&comment=...` once per change.
   useEffect(() => {
     if (!locationHash) return;
@@ -77,10 +86,10 @@ export function IssueDocumentAnnotations({
     if (!target || target.documentKey !== doc.key) return;
     if (!target.threadId) return;
     hashHandledRef.current = locationHash;
-    setPanelOpen(true);
+    onPanelOpenChange(true);
     setFocusedThreadId(target.threadId);
     setFocusedCommentId(target.commentId);
-  }, [doc.key, locationHash]);
+  }, [doc.key, locationHash, onPanelOpenChange]);
 
   const newCommentDisabled = draftDirty || draftConflicted || historicalPreview || !doc.latestRevisionId;
   const newCommentDisabledReason = historicalPreview
@@ -96,16 +105,38 @@ export function IssueDocumentAnnotations({
   const handleRequestComment = useCallback((anchor: PendingAnchor) => {
     if (newCommentDisabled) return;
     setPendingAnchor(anchor);
-    setPanelOpen(true);
-  }, [newCommentDisabled]);
+    onPanelOpenChange(true);
+  }, [newCommentDisabled, onPanelOpenChange]);
 
   const handleThreadFocus = useCallback((threadId: string | null) => {
     setFocusedThreadId(threadId);
     if (threadId) {
-      setPanelOpen(true);
+      onPanelOpenChange(true);
       setFocusedCommentId(null);
     }
-  }, []);
+  }, [onPanelOpenChange]);
+
+  const handleRequestCommentFromSelection = useCallback(() => {
+    if (newCommentDisabled) return;
+    // Trigger the layer to re-read the current selection and emit a pendingAnchor.
+    setCaptureSelectionRequestId((current) => current + 1);
+  }, [newCommentDisabled]);
+
+  // ⌘⇧M / Ctrl+Shift+M global shortcut while the panel is open.
+  useEffect(() => {
+    if (!panelOpen) return;
+    if (typeof window === "undefined") return;
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented) return;
+      const isMeta = event.metaKey || event.ctrlKey;
+      if (!isMeta || !event.shiftKey) return;
+      if (event.key.toLowerCase() !== "m") return;
+      event.preventDefault();
+      handleRequestCommentFromSelection();
+    };
+    window.addEventListener("keydown", onKeyDown);
+    return () => window.removeEventListener("keydown", onKeyDown);
+  }, [panelOpen, handleRequestCommentFromSelection]);
 
   const focusedThread = useMemo(() => {
     if (!focusedThreadId) return null;
@@ -125,27 +156,6 @@ export function IssueDocumentAnnotations({
   return (
     <div className="paperclip-doc-annotation-host flex flex-col gap-3 lg:flex-row lg:items-start">
       <div className="relative min-w-0 flex-1">
-        <div className="mb-2 flex items-center justify-end gap-1.5">
-          <Button
-            type="button"
-            size="sm"
-            variant={openCount > 0 ? "secondary" : "ghost"}
-            className={cn(
-              "h-7 gap-1 rounded-full px-2 text-[11px] font-medium",
-              openCount === 0 && "text-muted-foreground",
-            )}
-            onClick={() => setPanelOpen((current) => !current)}
-            data-testid={`document-annotation-count-${doc.key}`}
-            aria-label={openCount === 0
-              ? `Open comments on ${doc.key}`
-              : `Open ${openCount} unresolved comments on ${doc.key}`}
-            aria-expanded={panelOpen}
-          >
-            <MessageSquare className="h-3 w-3" aria-hidden="true" />
-            <span aria-hidden="true">{openCount}</span>
-            <span className="hidden sm:inline">{openCount === 1 ? " comment" : " comments"}</span>
-          </Button>
-        </div>
         <section
           ref={(element) => {
             containerRef.current = element;
@@ -167,6 +177,7 @@ export function IssueDocumentAnnotations({
               newCommentDisabled={newCommentDisabled}
               newCommentDisabledReason={newCommentDisabledReason}
               hideResolved
+              captureSelectionRequestId={captureSelectionRequestId}
             />
           ) : null}
         </section>
@@ -175,7 +186,7 @@ export function IssueDocumentAnnotations({
         <DocumentAnnotationPanel
           open={panelOpen}
           onOpenChange={(open) => {
-            setPanelOpen(open);
+            onPanelOpenChange(open);
             if (!open) {
               setPendingAnchor(null);
               setFocusedThreadId(null);
@@ -196,12 +207,70 @@ export function IssueDocumentAnnotations({
           }}
           pendingAnchor={pendingAnchor}
           onClearPendingAnchor={() => setPendingAnchor(null)}
+          onRequestCommentFromSelection={handleRequestCommentFromSelection}
           newCommentDisabled={newCommentDisabled}
           newCommentDisabledReason={newCommentDisabledReason}
           isMobile={isMobile}
           className={isMobile ? undefined : "lg:w-[360px] lg:max-w-[360px]"}
+          agentMap={agentMap}
+          userProfileMap={userProfileMap}
         />
       ) : null}
     </div>
+  );
+}
+
+export interface DocumentAnnotationsCountChipProps {
+  issueId: string;
+  docKey: string;
+  panelOpen: boolean;
+  onToggle: () => void;
+}
+
+/**
+ * Renders the unresolved-count chip for a document. Lives in the document header row
+ * (next to `rev N ▾`) so it stays visible when the document is folded.
+ */
+export function DocumentAnnotationsCountChip({
+  issueId,
+  docKey,
+  panelOpen,
+  onToggle,
+}: DocumentAnnotationsCountChipProps) {
+  const annotationsQuery = useQuery({
+    queryKey: queryKeys.issues.documentAnnotations(issueId, docKey, "all"),
+    queryFn: () => documentAnnotationsApi.list(issueId, docKey, { status: "all", includeComments: true }),
+    staleTime: 30_000,
+  });
+  const threads = annotationsQuery.data ?? [];
+  const openCount = useMemo(
+    () => threads.filter((thread) => thread.status === "open" && thread.anchorState !== "orphaned").length,
+    [threads],
+  );
+
+  return (
+    <Button
+      type="button"
+      size="sm"
+      variant="ghost"
+      data-state={panelOpen ? "open" : "closed"}
+      className={cn(
+        "h-auto gap-1 rounded-md px-1.5 py-0 text-[11px] font-normal text-muted-foreground hover:text-foreground",
+        panelOpen && "bg-muted text-foreground",
+        openCount > 0 && "text-foreground",
+      )}
+      onClick={onToggle}
+      data-testid={`document-annotation-count-${docKey}`}
+      aria-label={openCount === 0
+        ? `Open comments on ${docKey}`
+        : `Open ${openCount} unresolved comments on ${docKey}`}
+      aria-expanded={panelOpen}
+    >
+      <MessageSquare className="h-3 w-3" aria-hidden="true" />
+      <span className="tabular-nums">{openCount}</span>
+      <span className="hidden sm:inline">
+        {openCount === 1 ? "comment" : "comments"}
+      </span>
+    </Button>
   );
 }

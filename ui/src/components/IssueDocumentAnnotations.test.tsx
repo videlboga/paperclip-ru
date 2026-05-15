@@ -1,6 +1,6 @@
 // @vitest-environment jsdom
 
-import { act } from "react";
+import { act, useState } from "react";
 import { createRoot } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import type {
@@ -8,7 +8,10 @@ import type {
   IssueDocument,
 } from "@paperclipai/shared";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
-import { IssueDocumentAnnotations } from "./IssueDocumentAnnotations";
+import {
+  DocumentAnnotationsCountChip,
+  IssueDocumentAnnotations,
+} from "./IssueDocumentAnnotations";
 
 const mockAnnotationsApi = vi.hoisted(() => ({
   list: vi.fn(),
@@ -124,6 +127,47 @@ function makeThread(
   };
 }
 
+function Harness({
+  doc,
+  draftDirty = false,
+  draftConflicted = false,
+  historicalPreview = false,
+  locationHash = "",
+  initialPanelOpen = false,
+}: {
+  doc: IssueDocument;
+  draftDirty?: boolean;
+  draftConflicted?: boolean;
+  historicalPreview?: boolean;
+  locationHash?: string;
+  initialPanelOpen?: boolean;
+}) {
+  const [open, setOpen] = useState(initialPanelOpen);
+  return (
+    <>
+      <DocumentAnnotationsCountChip
+        issueId="issue-1"
+        docKey={doc.key}
+        panelOpen={open}
+        onToggle={() => setOpen((current) => !current)}
+      />
+      <IssueDocumentAnnotations
+        issueId="issue-1"
+        doc={doc}
+        bodyMarkdown={doc.body}
+        draftDirty={draftDirty}
+        draftConflicted={draftConflicted}
+        historicalPreview={historicalPreview}
+        locationHash={locationHash}
+        panelOpen={open}
+        onPanelOpenChange={setOpen}
+      >
+        <p>Body content</p>
+      </IssueDocumentAnnotations>
+    </>
+  );
+}
+
 describe("IssueDocumentAnnotations", () => {
   let container: HTMLDivElement;
 
@@ -146,17 +190,7 @@ describe("IssueDocumentAnnotations", () => {
     await act(async () => {
       root.render(
         <QueryClientProvider client={queryClient}>
-          <IssueDocumentAnnotations
-            issueId="issue-1"
-            doc={doc}
-            bodyMarkdown={doc.body}
-            draftDirty={false}
-            draftConflicted={false}
-            historicalPreview={false}
-            locationHash=""
-          >
-            <p>Body content</p>
-          </IssueDocumentAnnotations>
+          <Harness doc={doc} />
         </QueryClientProvider>,
       );
     });
@@ -184,17 +218,7 @@ describe("IssueDocumentAnnotations", () => {
     await act(async () => {
       root.render(
         <QueryClientProvider client={queryClient}>
-          <IssueDocumentAnnotations
-            issueId="issue-1"
-            doc={doc}
-            bodyMarkdown={doc.body}
-            draftDirty={false}
-            draftConflicted={false}
-            historicalPreview={false}
-            locationHash="#document-plan&thread=thread-99"
-          >
-            <p>Body</p>
-          </IssueDocumentAnnotations>
+          <Harness doc={doc} locationHash="#document-plan&thread=thread-99" />
         </QueryClientProvider>,
       );
     });
@@ -216,30 +240,11 @@ describe("IssueDocumentAnnotations", () => {
     await act(async () => {
       root.render(
         <QueryClientProvider client={queryClient}>
-          <IssueDocumentAnnotations
-            issueId="issue-1"
-            doc={doc}
-            bodyMarkdown={doc.body}
-            draftDirty
-            draftConflicted={false}
-            historicalPreview={false}
-            locationHash=""
-          >
-            <p>Body</p>
-          </IssueDocumentAnnotations>
+          <Harness doc={doc} draftDirty initialPanelOpen />
         </QueryClientProvider>,
       );
     });
     await flush();
-    await flush();
-
-    const chip = container.querySelector(
-      '[data-testid="document-annotation-count-plan"]',
-    ) as HTMLButtonElement | null;
-    expect(chip).not.toBeNull();
-    await act(async () => {
-      chip!.click();
-    });
     await flush();
 
     const reason = container.querySelector(
@@ -261,27 +266,11 @@ describe("IssueDocumentAnnotations", () => {
     await act(async () => {
       root.render(
         <QueryClientProvider client={queryClient}>
-          <IssueDocumentAnnotations
-            issueId="issue-1"
-            doc={doc}
-            bodyMarkdown={doc.body}
-            draftDirty={false}
-            draftConflicted={false}
-            historicalPreview={false}
-            locationHash=""
-          >
-            <p>Body</p>
-          </IssueDocumentAnnotations>
+          <Harness doc={doc} initialPanelOpen />
         </QueryClientProvider>,
       );
     });
     await flush();
-    await flush();
-
-    const chip = container.querySelector(
-      '[data-testid="document-annotation-count-plan"]',
-    ) as HTMLButtonElement;
-    await act(async () => chip.click());
     await flush();
 
     // Open filter shows only open
@@ -297,5 +286,113 @@ describe("IssueDocumentAnnotations", () => {
     await flush();
 
     expect(container.querySelector('[data-thread-id="resolved-1"]')).not.toBeNull();
+  });
+
+  it("renders author name + role from agent and user maps", async () => {
+    mockAnnotationsApi.list.mockResolvedValue([
+      makeThread({
+        id: "open-1",
+        comments: [
+          {
+            id: "comment-board",
+            companyId: "co-1",
+            threadId: "open-1",
+            issueId: "issue-1",
+            documentId: "doc-1",
+            body: "From the board.",
+            authorType: "user",
+            authorAgentId: null,
+            authorUserId: "user-1",
+            createdByRunId: null,
+            createdAt: new Date("2026-04-01T00:01:00Z"),
+            updatedAt: new Date("2026-04-01T00:01:00Z"),
+          },
+          {
+            id: "comment-agent",
+            companyId: "co-1",
+            threadId: "open-1",
+            issueId: "issue-1",
+            documentId: "doc-1",
+            body: "From the agent.",
+            authorType: "agent",
+            authorAgentId: "agent-uxdesigner",
+            authorUserId: null,
+            createdByRunId: "run-1",
+            createdAt: new Date("2026-04-01T00:02:00Z"),
+            updatedAt: new Date("2026-04-01T00:02:00Z"),
+          },
+        ],
+      }),
+    ]);
+    const root = createRoot(container);
+    const queryClient = makeQueryClient();
+    const doc = makeDoc();
+
+    const agentMap = new Map([["agent-uxdesigner", { id: "agent-uxdesigner", name: "UXDesigner" }]]);
+    const userProfileMap = new Map([["user-1", { label: "Dotta", image: null }]]);
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <DocumentAnnotationsCountChip
+            issueId="issue-1"
+            docKey={doc.key}
+            panelOpen
+            onToggle={() => {}}
+          />
+          <IssueDocumentAnnotations
+            issueId="issue-1"
+            doc={doc}
+            bodyMarkdown={doc.body}
+            draftDirty={false}
+            draftConflicted={false}
+            historicalPreview={false}
+            locationHash=""
+            panelOpen
+            onPanelOpenChange={() => {}}
+            agentMap={agentMap}
+            userProfileMap={userProfileMap}
+          >
+            <p>Body</p>
+          </IssueDocumentAnnotations>
+        </QueryClientProvider>,
+      );
+    });
+    await flush();
+    await flush();
+
+    // Click the open thread to expand it.
+    const threadCard = container.querySelector('[data-thread-id="open-1"]') as HTMLElement | null;
+    expect(threadCard).not.toBeNull();
+    await act(async () => threadCard!.click());
+    await flush();
+
+    const expandedText = container.querySelector('[data-thread-id="open-1"]')?.textContent ?? "";
+    expect(expandedText).toContain("Dotta");
+    expect(expandedText).toContain("· board");
+    expect(expandedText).toContain("UXDesigner");
+    expect(expandedText).toContain("· agent");
+  });
+
+  it("exposes a persistent + New comment on selection CTA when panel is open", async () => {
+    mockAnnotationsApi.list.mockResolvedValue([]);
+    const root = createRoot(container);
+    const queryClient = makeQueryClient();
+    const doc = makeDoc();
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <Harness doc={doc} initialPanelOpen />
+        </QueryClientProvider>,
+      );
+    });
+    await flush();
+    await flush();
+
+    const cta = container.querySelector('[data-testid="document-annotation-new-comment-cta"]');
+    expect(cta).not.toBeNull();
+    expect(cta!.textContent).toMatch(/New comment on selection/i);
+    expect(cta!.textContent).toMatch(/⌘⇧M/);
   });
 });

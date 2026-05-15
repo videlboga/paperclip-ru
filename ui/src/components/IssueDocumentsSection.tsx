@@ -1,6 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import type {
+  Agent,
   DocumentRevision,
   FeedbackDataSharingPreference,
   FeedbackVote,
@@ -14,10 +15,11 @@ import { ApiError } from "../api/client";
 import { issuesApi } from "../api/issues";
 import { useAutosaveIndicator } from "../hooks/useAutosaveIndicator";
 import { deriveDocumentRevisionState } from "../lib/document-revisions";
+import type { CompanyUserProfile } from "../lib/company-members";
 import { queryKeys } from "../lib/queryKeys";
 import { cn, relativeTime } from "../lib/utils";
 import { FoldCurtain } from "./FoldCurtain";
-import { IssueDocumentAnnotations } from "./IssueDocumentAnnotations";
+import { DocumentAnnotationsCountChip, IssueDocumentAnnotations } from "./IssueDocumentAnnotations";
 import { MarkdownBody } from "./MarkdownBody";
 import { MarkdownEditor, type MentionOption } from "./MarkdownEditor";
 import { OutputFeedbackButtons } from "./OutputFeedbackButtons";
@@ -144,6 +146,11 @@ export function IssueDocumentsSection({
   imageUploadHandler,
   onVote,
   extraActions,
+  agentMap,
+  userProfileMap,
+  defaultAnnotationPanelOpenKeys,
+  defaultAnnotationFocusedThreadIds,
+  forceEditDocumentKey,
 }: {
   issue: Issue;
   canDeleteDocuments: boolean;
@@ -158,6 +165,17 @@ export function IssueDocumentsSection({
     options?: { allowSharing?: boolean; reason?: string },
   ) => Promise<void>;
   extraActions?: ReactNode;
+  agentMap?: ReadonlyMap<string, Pick<Agent, "id" | "name">>;
+  userProfileMap?: ReadonlyMap<string, CompanyUserProfile>;
+  /**
+   * Seed which document annotation panels are open on first render. Mostly useful
+   * for Storybook / screenshot harnesses; runtime callers usually omit this.
+   */
+  defaultAnnotationPanelOpenKeys?: string[];
+  /** Per-doc seed for the focused annotation thread id (Storybook-only). */
+  defaultAnnotationFocusedThreadIds?: Readonly<Record<string, string>>;
+  /** Force a doc into edit mode on mount (Storybook-only). */
+  forceEditDocumentKey?: string | null;
 }) {
   const queryClient = useQueryClient();
   const location = useLocation();
@@ -166,6 +184,9 @@ export function IssueDocumentsSection({
   const [draft, setDraft] = useState<DraftState | null>(null);
   const [documentConflict, setDocumentConflict] = useState<DocumentConflictState | null>(null);
   const [foldedDocumentKeys, setFoldedDocumentKeys] = useState<string[]>(() => loadFoldedDocumentKeys(issue.id));
+  const [annotationPanelOpenKeys, setAnnotationPanelOpenKeys] = useState<string[]>(
+    () => (defaultAnnotationPanelOpenKeys ?? []),
+  );
   const [autosaveDocumentKey, setAutosaveDocumentKey] = useState<string | null>(null);
   const [copiedDocumentKey, setCopiedDocumentKey] = useState<string | null>(null);
   const [highlightDocumentKey, setHighlightDocumentKey] = useState<string | null>(null);
@@ -345,6 +366,17 @@ export function IssueDocumentsSection({
     });
     setError(null);
   };
+
+  const initialEditAppliedRef = useRef(false);
+  useEffect(() => {
+    if (!forceEditDocumentKey) return;
+    if (initialEditAppliedRef.current) return;
+    const target = (documents ?? []).find((entry) => entry.key === forceEditDocumentKey);
+    if (!target) return;
+    initialEditAppliedRef.current = true;
+    beginEdit(forceEditDocumentKey);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [forceEditDocumentKey, documents]);
 
   const cancelDraft = () => {
     if (autosaveDebounceRef.current) {
@@ -689,6 +721,24 @@ export function IssueDocumentsSection({
         : [...current, key],
     );
   };
+  const setAnnotationPanelOpen = useCallback((key: string, nextOpen: boolean) => {
+    setAnnotationPanelOpenKeys((current) => {
+      const isOpen = current.includes(key);
+      if (nextOpen && !isOpen) return [...current, key];
+      if (!nextOpen && isOpen) return current.filter((entry) => entry !== key);
+      return current;
+    });
+    if (nextOpen) {
+      setFoldedDocumentKeys((current) => current.filter((entry) => entry !== key));
+    }
+  }, []);
+  const toggleAnnotationPanel = useCallback((key: string) => {
+    setAnnotationPanelOpenKeys((current) => {
+      if (current.includes(key)) return current.filter((entry) => entry !== key);
+      setFoldedDocumentKeys((folded) => folded.filter((entry) => entry !== key));
+      return [...current, key];
+    });
+  }, []);
 
   return (
     <div className="space-y-3">
@@ -897,6 +947,14 @@ export function IssueDocumentsSection({
                     >
                       updated {relativeTime(displayedUpdatedAt)}
                     </a>
+                    {!isSystemIssueDocumentKey(doc.key) ? (
+                      <DocumentAnnotationsCountChip
+                        issueId={issue.id}
+                        docKey={doc.key}
+                        panelOpen={annotationPanelOpenKeys.includes(doc.key)}
+                        onToggle={() => toggleAnnotationPanel(doc.key)}
+                      />
+                    ) : null}
                   </div>
                   {showTitle && <p className="mt-2 text-sm font-medium">{displayedTitle}</p>}
                 </div>
@@ -1103,6 +1161,11 @@ export function IssueDocumentsSection({
                       draftConflicted={Boolean(activeConflict)}
                       historicalPreview={isHistoricalPreview}
                       locationHash={location.hash}
+                      panelOpen={annotationPanelOpenKeys.includes(doc.key)}
+                      onPanelOpenChange={(next) => setAnnotationPanelOpen(doc.key, next)}
+                      agentMap={agentMap}
+                      userProfileMap={userProfileMap}
+                      defaultFocusedThreadId={defaultAnnotationFocusedThreadIds?.[doc.key]}
                     >
                       {isHistoricalPreview ? (
                         renderFoldableBody(displayedBody, documentBodyContentClassName)

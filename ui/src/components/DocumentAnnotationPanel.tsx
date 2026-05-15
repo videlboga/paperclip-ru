@@ -5,14 +5,30 @@ import type {
   DocumentAnnotationThreadStatus,
   DocumentAnnotationThreadWithComments,
 } from "@paperclipai/shared";
-import { Check, Copy, RotateCcw, X } from "lucide-react";
+import {
+  Check,
+  Copy,
+  MessageSquarePlus,
+  MoreHorizontal,
+  RotateCcw,
+  X,
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import { Sheet, SheetContent, SheetTitle } from "@/components/ui/sheet";
 import { Textarea } from "@/components/ui/textarea";
 import { cn, relativeTime } from "@/lib/utils";
 import { documentAnnotationsApi } from "@/api/document-annotations";
 import { MarkdownBody } from "./MarkdownBody";
 import type { PendingAnchor } from "./DocumentAnnotationLayer";
+import type { Agent } from "@paperclipai/shared";
+import type { CompanyUserProfile } from "@/lib/company-members";
 
 type AnnotationFilter = "open" | "resolved" | "stale" | "orphan";
 
@@ -38,19 +54,62 @@ export interface AnnotationPanelProps {
   /** External pending anchor captured from the layer for the composer. */
   pendingAnchor: PendingAnchor | null;
   onClearPendingAnchor: () => void;
+  /** Request the body layer to start a comment from the current text selection (⌘⇧M). */
+  onRequestCommentFromSelection?: () => void;
   newCommentDisabled?: boolean;
   newCommentDisabledReason?: string | null;
-  /** When mobile is true, render as a bottom sheet style panel instead of side panel. */
+  /** When mobile is true, render via shadcn Sheet at the bottom instead of side panel. */
   isMobile?: boolean;
   className?: string;
+  /** Resolve `<authorAgentId>` to a display name. */
+  agentMap?: ReadonlyMap<string, Pick<Agent, "id" | "name">>;
+  /** Resolve `<authorUserId>` to a display name. */
+  userProfileMap?: ReadonlyMap<string, CompanyUserProfile>;
 }
 
 export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
+  if (props.isMobile) {
+    return (
+      <Sheet open={props.open} onOpenChange={props.onOpenChange}>
+        <SheetContent
+          side="bottom"
+          showCloseButton={false}
+          className="paperclip-doc-annotation-sheet flex max-h-[88vh] flex-col rounded-t-xl border-t border-border bg-background p-0"
+        >
+          <SheetTitle className="sr-only">
+            Comments on {props.documentKey} revision {props.documentRevisionNumber}
+          </SheetTitle>
+          <div className="mx-auto mt-2 h-1.5 w-12 shrink-0 rounded-full bg-muted-foreground/30" aria-hidden="true" />
+          <AnnotationPanelBody {...props} />
+        </SheetContent>
+      </Sheet>
+    );
+  }
+
+  if (!props.open) return null;
+
+  return (
+    <aside
+      role="complementary"
+      aria-label={`Annotations for ${props.documentKey.toUpperCase()}, revision ${props.documentRevisionNumber}`}
+      data-testid="document-annotation-panel"
+      className={cn(
+        "sticky top-4 z-30 flex h-full max-h-[80vh] w-[360px] shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-card shadow-md",
+        props.className,
+      )}
+    >
+      <AnnotationPanelBody {...props} />
+    </aside>
+  );
+}
+
+function AnnotationPanelBody(props: AnnotationPanelProps) {
   const queryClient = useQueryClient();
   const [filter, setFilter] = useState<AnnotationFilter>("open");
   const [composerValue, setComposerValue] = useState("");
   const [replyDrafts, setReplyDrafts] = useState<Record<string, string>>({});
   const composerRef = useRef<HTMLTextAreaElement | null>(null);
+  const bodyTestId = props.isMobile ? "document-annotation-panel" : undefined;
 
   const filteredThreads = useMemo(() => {
     return props.threads.filter((thread) => {
@@ -72,6 +131,17 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
     }
     return result;
   }, [props.threads]);
+
+  const invalidateAll = useCallback(() => {
+    queryClient.invalidateQueries({
+      predicate: (query) =>
+        Array.isArray(query.queryKey)
+        && query.queryKey[0] === "issues"
+        && query.queryKey[1] === "document-annotations"
+        && query.queryKey[2] === props.issueId
+        && query.queryKey[3] === props.documentKey,
+    });
+  }, [props.documentKey, props.issueId, queryClient]);
 
   const createThread = useMutation({
     mutationFn: async (body: string) => {
@@ -107,17 +177,6 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
     onSuccess: () => invalidateAll(),
   });
 
-  const invalidateAll = useCallback(() => {
-    queryClient.invalidateQueries({
-      predicate: (query) =>
-        Array.isArray(query.queryKey)
-        && query.queryKey[0] === "issues"
-        && query.queryKey[1] === "document-annotations"
-        && query.queryKey[2] === props.issueId
-        && query.queryKey[3] === props.documentKey,
-    });
-  }, [props.documentKey, props.issueId, queryClient]);
-
   useEffect(() => {
     if (!props.open) {
       setComposerValue("");
@@ -140,24 +199,25 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
     else setFilter("open");
   }, [props.focusedThreadId, props.threads]);
 
-  if (!props.open) return null;
-
-  const baseClasses = props.isMobile
-    ? "fixed inset-x-0 bottom-0 z-40 max-h-[80vh] rounded-t-xl border-t border-border bg-background shadow-2xl"
-    : "sticky top-4 z-30 flex h-full max-h-[80vh] w-[360px] shrink-0 flex-col rounded-lg border border-border bg-card shadow-md";
+  const startNewCommentFromSelection = useCallback(() => {
+    if (props.newCommentDisabled) return;
+    if (props.pendingAnchor) {
+      composerRef.current?.focus();
+      return;
+    }
+    props.onRequestCommentFromSelection?.();
+  }, [props]);
 
   return (
-    <aside
-      role="complementary"
-      aria-label={`Annotations for ${props.documentKey.toUpperCase()}, revision ${props.documentRevisionNumber}`}
-      data-testid="document-annotation-panel"
-      className={cn(baseClasses, "flex flex-col overflow-hidden", props.className)}
-    >
-      <header className="flex items-start justify-between gap-2 border-b border-border px-3 py-2.5">
-        <div className="min-w-0">
+    <>
+      <header
+        data-testid={bodyTestId}
+        className="flex items-start justify-between gap-2 border-b border-border px-3 py-2.5"
+      >
+        <div className="min-w-0 leading-tight">
           <p className="text-sm font-medium">Comments</p>
-          <p className="text-[11px] uppercase tracking-[0.16em] text-muted-foreground">
-            {props.documentKey} · rev {props.documentRevisionNumber}
+          <p className="text-[11px] text-muted-foreground">
+            rev {props.documentRevisionNumber}
           </p>
         </div>
         <Button
@@ -174,22 +234,28 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
           <X className="h-4 w-4" />
         </Button>
       </header>
-      <div className="flex flex-wrap gap-1.5 border-b border-border px-3 py-2">
+      <div className="flex flex-wrap gap-1 border-b border-border px-3 py-2">
         {FILTERS.map((entry) => {
           const count = counts[entry.id];
           const isActive = filter === entry.id;
           return (
-            <Button
+            <button
               key={entry.id}
               type="button"
-              size="sm"
-              variant={isActive ? "default" : "secondary"}
-              className="h-7 gap-1 px-2 text-[11px] font-medium"
               onClick={() => setFilter(entry.id)}
+              data-active={isActive || undefined}
+              className={cn(
+                "inline-flex items-center gap-1 rounded-full border px-2 py-0.5 text-[11px] transition-colors",
+                isActive
+                  ? "border-border bg-muted text-foreground"
+                  : "border-transparent bg-transparent text-muted-foreground hover:bg-muted/60 hover:text-foreground",
+              )}
             >
-              {entry.label}
-              <span className="opacity-70">{count}</span>
-            </Button>
+              <span>{entry.label}</span>
+              <span className={cn("tabular-nums", isActive ? "text-muted-foreground" : "text-muted-foreground/70")}>
+                {count}
+              </span>
+            </button>
           );
         })}
       </div>
@@ -235,6 +301,8 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
                 onCopyLink={() => copyAnnotationLink(props.documentKey, thread.id)}
                 pendingReply={addReply.isPending && addReply.variables?.threadId === thread.id}
                 pendingStatus={updateStatus.isPending && updateStatus.variables?.threadId === thread.id}
+                agentMap={props.agentMap}
+                userProfileMap={props.userProfileMap}
               />
             ))}
           </ul>
@@ -290,8 +358,29 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
             </Button>
           </div>
         </div>
-      ) : null}
-    </aside>
+      ) : (
+        <div className="border-t border-border bg-card/60 px-3 py-2">
+          <Button
+            type="button"
+            size="sm"
+            variant="secondary"
+            className="w-full justify-start gap-2 text-[12px]"
+            onClick={startNewCommentFromSelection}
+            disabled={props.newCommentDisabled}
+            title={props.newCommentDisabled
+              ? props.newCommentDisabledReason ?? undefined
+              : "Select text in the document, then click here (⌘⇧M)"}
+            data-testid="document-annotation-new-comment-cta"
+          >
+            <MessageSquarePlus className="h-3.5 w-3.5" />
+            <span className="flex-1 text-left">New comment on selection</span>
+            <kbd className="rounded border border-border/80 bg-background px-1 py-0.5 font-mono text-[10px] text-muted-foreground">
+              ⌘⇧M
+            </kbd>
+          </Button>
+        </div>
+      )}
+    </>
   );
 }
 
@@ -307,6 +396,8 @@ function ThreadCard(props: {
   onCopyLink: () => void;
   pendingReply: boolean;
   pendingStatus: boolean;
+  agentMap?: ReadonlyMap<string, Pick<Agent, "id" | "name">>;
+  userProfileMap?: ReadonlyMap<string, CompanyUserProfile>;
 }) {
   const { thread } = props;
   const statusVariant: { variant: "default" | "outline" | "secondary"; label: string } =
@@ -329,8 +420,8 @@ function ThreadCard(props: {
         data-focused={props.expanded || undefined}
         aria-labelledby={`thread-quote-${thread.id}`}
         className={cn(
-          "rounded-md border bg-card transition-colors",
-          props.expanded ? "border-primary/60" : "border-border",
+          "rounded-md border border-border bg-card transition-colors",
+          props.expanded && "ring-1 ring-ring/70",
           thread.status === "resolved" && "bg-muted/30",
         )}
         tabIndex={0}
@@ -360,6 +451,8 @@ function ThreadCard(props: {
                 key={comment.id}
                 comment={comment}
                 focused={props.focusedCommentId === comment.id}
+                agentMap={props.agentMap}
+                userProfileMap={props.userProfileMap}
               />
             ))}
             <Textarea
@@ -371,21 +464,11 @@ function ThreadCard(props: {
               className="resize-y text-sm"
               disabled={props.pendingReply}
             />
-            <div className="flex flex-wrap items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2">
               <Button
                 type="button"
                 size="sm"
-                variant="ghost"
-                onClick={props.onCopyLink}
-                className="gap-1"
-                title="Copy link"
-              >
-                <Copy className="h-3 w-3" /> Copy link
-              </Button>
-              <Button
-                type="button"
-                size="sm"
-                variant="outline"
+                variant="secondary"
                 onClick={props.onResolveToggle}
                 disabled={props.pendingStatus}
                 className="gap-1"
@@ -408,6 +491,31 @@ function ThreadCard(props: {
               >
                 {props.pendingReply ? "Sending…" : "Reply"}
               </Button>
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-xs"
+                    className="text-muted-foreground"
+                    title="More actions"
+                    aria-label="More thread actions"
+                  >
+                    <MoreHorizontal className="h-3.5 w-3.5" />
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={(event) => {
+                      event.preventDefault();
+                      props.onCopyLink();
+                    }}
+                  >
+                    <Copy className="h-3.5 w-3.5" />
+                    Copy link
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
         ) : (
@@ -426,10 +534,15 @@ function ThreadCard(props: {
 function CommentRow({
   comment,
   focused,
+  agentMap,
+  userProfileMap,
 }: {
   comment: DocumentAnnotationComment;
   focused: boolean;
+  agentMap?: ReadonlyMap<string, Pick<Agent, "id" | "name">>;
+  userProfileMap?: ReadonlyMap<string, CompanyUserProfile>;
 }) {
+  const author = resolveAuthor(comment, { agentMap, userProfileMap });
   return (
     <div
       id={`comment-${comment.id}`}
@@ -439,13 +552,40 @@ function CommentRow({
         focused && "ring-2 ring-primary/40",
       )}
     >
-      <div className="mb-0.5 flex items-center justify-between text-[10px] uppercase tracking-[0.12em] text-muted-foreground">
-        <span>{comment.authorType === "user" ? "Board" : "Agent"}</span>
-        <span>{relativeTime(comment.createdAt)}</span>
+      <div className="mb-0.5 flex items-center justify-between gap-2 text-[11px]">
+        <span className="min-w-0 truncate">
+          <span className="font-medium text-foreground">{author.name}</span>
+          <span className="ml-1 text-muted-foreground">· {author.role}</span>
+        </span>
+        <span className="text-muted-foreground">{relativeTime(comment.createdAt)}</span>
       </div>
       <MarkdownBody className="text-sm leading-6">{comment.body}</MarkdownBody>
     </div>
   );
+}
+
+function resolveAuthor(
+  comment: DocumentAnnotationComment,
+  maps: {
+    agentMap?: ReadonlyMap<string, Pick<Agent, "id" | "name">>;
+    userProfileMap?: ReadonlyMap<string, CompanyUserProfile>;
+  },
+): { name: string; role: "board" | "agent" } {
+  if (comment.authorAgentId) {
+    const agent = maps.agentMap?.get(comment.authorAgentId);
+    return {
+      name: agent?.name ?? comment.authorAgentId.slice(0, 8),
+      role: "agent",
+    };
+  }
+  if (comment.authorUserId) {
+    const profile = maps.userProfileMap?.get(comment.authorUserId);
+    return {
+      name: profile?.label ?? comment.authorUserId.slice(0, 8),
+      role: "board",
+    };
+  }
+  return { name: comment.authorType === "agent" ? "Agent" : "Board", role: comment.authorType === "agent" ? "agent" : "board" };
 }
 
 function truncate(value: string, limit: number) {

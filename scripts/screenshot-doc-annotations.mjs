@@ -54,29 +54,41 @@ async function main() {
   const browser = await chromium.launch();
   try {
     const stories = [
-      { id: "product-documents-annotations--desktop-open-focused", file: "01-desktop-open-focused.png", width: 1280, height: 900 },
-      { id: "product-documents-annotations--desktop-resolved-focused", file: "02-desktop-resolved-focused.png", width: 1280, height: 900 },
-      { id: "product-documents-annotations--desktop-stale-focused", file: "03-desktop-stale-focused.png", width: 1280, height: 900 },
-      { id: "product-documents-annotations--desktop-orphaned-focused", file: "04-desktop-orphaned-focused.png", width: 1280, height: 900 },
-      { id: "product-documents-annotations--dirty-draft-disables-new-comments", file: "05-dirty-draft-disabled.png", width: 720, height: 720 },
-      { id: "product-documents-annotations--mobile-bottom-sheet-view", file: "06-mobile-bottom-sheet.png", width: 375, height: 812 },
+      // INTEGRATED — these are the captures the UX gate requires. They render
+      // IssueDocumentsSection chrome (count chip in header row, body + side panel
+      // wired together, edit mode wrapping the layer, real shadcn Sheet on mobile).
+      { id: "product-documents-annotations--integrated-desktop-open", file: "01-integrated-desktop-open.png", width: 1440, height: 900 },
+      { id: "product-documents-annotations--integrated-desktop-zero-comments", file: "02-integrated-desktop-zero-count.png", width: 1440, height: 900 },
+      { id: "product-documents-annotations--integrated-desktop-edit-mode", file: "03-integrated-desktop-edit-mode.png", width: 1440, height: 900 },
+      { id: "product-documents-annotations--integrated-desktop-dirty-draft", file: "04-integrated-desktop-dirty-draft.png", width: 1440, height: 900 },
+      { id: "product-documents-annotations--integrated-mobile-bottom-sheet", file: "05-integrated-mobile-sheet.png", width: 390, height: 844 },
+      // ISOLATED — kept around for visual debugging of state pieces.
+      { id: "product-documents-annotations--desktop-open-focused", file: "10-states-open-focused.png", width: 1280, height: 900 },
+      { id: "product-documents-annotations--desktop-resolved-focused", file: "11-states-resolved-focused.png", width: 1280, height: 900 },
+      { id: "product-documents-annotations--desktop-stale-focused", file: "12-states-stale-focused.png", width: 1280, height: 900 },
+      { id: "product-documents-annotations--desktop-orphaned-focused", file: "13-states-orphaned-focused.png", width: 1280, height: 900 },
     ];
+
+    const themeArg = (process.env.SCREENSHOT_THEME || "dark").toLowerCase();
+    const theme = themeArg === "light" ? "light" : "dark";
 
     for (const story of stories) {
       const ctx = await browser.newContext({
         viewport: { width: story.width, height: story.height },
         deviceScaleFactor: 2,
-        colorScheme: "light",
+        colorScheme: theme,
       });
       const page = await ctx.newPage();
-      const url = `${baseUrl}?id=${story.id}&viewMode=story`;
+      const url = `${baseUrl}?id=${story.id}&viewMode=story&globals=theme:${theme}`;
       await page.goto(url, { waitUntil: "networkidle" });
-      await page.evaluate(() => {
-        document.documentElement.style.colorScheme = "light";
-      });
-      await page.waitForTimeout(700);
+      await page.evaluate((appliedTheme) => {
+        document.documentElement.classList.toggle("dark", appliedTheme === "dark");
+        document.documentElement.style.colorScheme = appliedTheme;
+      }, theme);
+      // Allow async query prefill + the layer's interval-driven layout pass to settle.
+      await page.waitForTimeout(900);
       const out = path.join(outDir, story.file);
-      await page.screenshot({ path: out, fullPage: true });
+      await page.screenshot({ path: out, fullPage: false });
       console.log("wrote", out);
       await ctx.close();
     }

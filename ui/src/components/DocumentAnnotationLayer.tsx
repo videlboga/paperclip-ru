@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import { MessageSquarePlus } from "lucide-react";
+import { AlertTriangle, MessageSquarePlus } from "lucide-react";
 import type {
   DocumentAnnotationAnchorState,
   DocumentAnnotationThreadStatus,
@@ -43,6 +43,11 @@ export interface AnnotationLayerProps {
   hideResolved?: boolean;
   /** Test-only: override window object for layout calculations. */
   testWindow?: { innerWidth: number; innerHeight: number };
+  /**
+   * When this number changes, re-read the current document selection and emit a
+   * pending anchor (used by the panel's "+ New comment on selection" / ⌘⇧M CTA).
+   */
+  captureSelectionRequestId?: number;
 }
 
 interface HighlightRect {
@@ -53,6 +58,8 @@ interface HighlightRect {
   left: number;
   width: number;
   height: number;
+  /** True for the last rect of this thread (used to anchor a glyph at the run end). */
+  isTail: boolean;
 }
 
 interface ToolbarPosition {
@@ -74,6 +81,7 @@ export function DocumentAnnotationLayer({
   newCommentDisabled = false,
   newCommentDisabledReason = null,
   hideResolved = true,
+  captureSelectionRequestId,
 }: AnnotationLayerProps) {
   const [highlightRects, setHighlightRects] = useState<HighlightRect[]>([]);
   const [toolbarPosition, setToolbarPosition] = useState<ToolbarPosition | null>(null);
@@ -100,6 +108,7 @@ export function DocumentAnnotationLayer({
         container,
         selectedText: thread.selectedText,
       });
+      const startIndex = next.length;
       for (const range of ranges) {
         for (const rect of Array.from(range.getClientRects())) {
           if (rect.width === 0 || rect.height === 0) continue;
@@ -111,8 +120,12 @@ export function DocumentAnnotationLayer({
             left: rect.left - overlayRect.left,
             width: rect.width,
             height: rect.height,
+            isTail: false,
           });
         }
+      }
+      if (next.length > startIndex) {
+        next[next.length - 1].isTail = true;
       }
     }
     setHighlightRects(next);
@@ -141,53 +154,53 @@ export function DocumentAnnotationLayer({
     };
   }, [computeHighlightRects]);
 
+  const captureSelection = useCallback((): PendingAnchor | null => {
+    const container = containerRef.current;
+    const overlay = overlayRef.current;
+    if (!container || !overlay) return null;
+    const selection = window.getSelection();
+    if (!selection || selection.rangeCount === 0 || selection.isCollapsed) return null;
+    const range = selection.getRangeAt(0);
+    if (!container.contains(range.commonAncestorContainer)) return null;
+    const containerOffset = getContainerTextOffset(container, range);
+    if (!containerOffset) return null;
+    const anchor = buildAnchorFromContainerSelection({ markdown, containerOffset });
+    if (!anchor) return null;
+    const overlayRect = overlay.getBoundingClientRect();
+    const rect = range.getBoundingClientRect();
+    const top = Math.max(0, rect.top - overlayRect.top - 36);
+    const left = Math.max(0, rect.left - overlayRect.left + rect.width / 2 - 80);
+    setToolbarPosition({ top, left });
+    return {
+      selector: anchor.selector,
+      selectedText: containerOffset.selectedText,
+    };
+  }, [containerRef, markdown]);
+
   useEffect(() => {
     if (typeof document === "undefined") return;
     const handleSelectionChange = () => {
-      const container = containerRef.current;
-      const overlay = overlayRef.current;
-      if (!container || !overlay) return;
-      const selection = window.getSelection();
-      if (!selection || selection.rangeCount === 0 || selection.isCollapsed) {
-        onPendingAnchorChange(null);
-        setToolbarPosition(null);
-        return;
-      }
-      const range = selection.getRangeAt(0);
-      if (!container.contains(range.commonAncestorContainer)) {
-        onPendingAnchorChange(null);
-        setToolbarPosition(null);
-        return;
-      }
-      const containerOffset = getContainerTextOffset(container, range);
-      if (!containerOffset) {
-        onPendingAnchorChange(null);
-        setToolbarPosition(null);
-        return;
-      }
-      const anchor = buildAnchorFromContainerSelection({
-        markdown,
-        containerOffset,
-      });
+      const anchor = captureSelection();
       if (!anchor) {
         onPendingAnchorChange(null);
         setToolbarPosition(null);
         return;
       }
-      onPendingAnchorChange({
-        selector: anchor.selector,
-        selectedText: containerOffset.selectedText,
-      });
-
-      const overlayRect = overlay.getBoundingClientRect();
-      const rect = range.getBoundingClientRect();
-      const top = Math.max(0, rect.top - overlayRect.top - 36);
-      const left = Math.max(0, rect.left - overlayRect.left + rect.width / 2 - 80);
-      setToolbarPosition({ top, left });
+      onPendingAnchorChange(anchor);
     };
     document.addEventListener("selectionchange", handleSelectionChange);
     return () => document.removeEventListener("selectionchange", handleSelectionChange);
-  }, [containerRef, markdown, onPendingAnchorChange]);
+  }, [captureSelection, onPendingAnchorChange]);
+
+  useEffect(() => {
+    if (captureSelectionRequestId === undefined) return;
+    if (captureSelectionRequestId === 0) return;
+    const anchor = captureSelection();
+    if (anchor) {
+      onPendingAnchorChange(anchor);
+      onRequestComment(anchor);
+    }
+  }, [captureSelectionRequestId, captureSelection, onPendingAnchorChange, onRequestComment]);
 
   const handleAddComment = () => {
     if (pendingAnchor) onRequestComment(pendingAnchor);
@@ -202,6 +215,8 @@ export function DocumentAnnotationLayer({
       <div ref={overlayRef} className="relative h-full w-full">
         {highlightRects.map((rect, index) => {
           const isFocused = rect.threadId === focusedThreadId;
+          const isStale = rect.anchorState === "stale";
+          const isResolved = rect.status === "resolved";
           return (
             <button
               key={`${rect.threadId}-${index}`}
@@ -210,16 +225,17 @@ export function DocumentAnnotationLayer({
               data-anchor-state={rect.anchorState}
               data-status={rect.status}
               data-focused={isFocused || undefined}
-              aria-label={`Open annotation thread`}
+              aria-label="Open annotation thread"
               className={cn(
-                "paperclip-doc-annotation-highlight pointer-events-auto absolute cursor-pointer rounded-sm border-b-2 transition-colors",
-                rect.status === "resolved"
-                  ? "border-dashed border-muted-foreground/40 hover:bg-muted/40"
-                  : rect.anchorState === "stale"
-                    ? "border-dashed border-amber-500/60 hover:bg-amber-500/10"
+                "paperclip-doc-annotation-highlight pointer-events-auto absolute cursor-pointer rounded-sm transition-colors",
+                // base box treatment (replaces the previous baseline border)
+                isResolved
+                  ? "bg-muted-foreground/8 outline outline-1 outline-dashed outline-offset-0 outline-muted-foreground/45 hover:bg-muted-foreground/15"
+                  : isStale
+                    ? "bg-amber-500/12 outline outline-2 outline-dashed outline-offset-0 outline-amber-500/70 hover:bg-amber-500/20 dark:bg-amber-500/18 dark:outline-amber-400/80"
                     : isFocused
-                      ? "border-primary bg-primary/10"
-                      : "border-muted-foreground/50 hover:bg-muted/30",
+                      ? "bg-primary/20 outline outline-2 outline-offset-0 outline-primary/90 shadow-[0_0_0_1px_var(--color-primary-foreground)] dark:shadow-[0_0_0_1px_color-mix(in_oklab,var(--color-background)_60%,transparent)]"
+                      : "bg-muted-foreground/15 hover:bg-muted-foreground/25",
               )}
               style={{
                 top: rect.top,
@@ -234,6 +250,25 @@ export function DocumentAnnotationLayer({
             />
           );
         })}
+        {highlightRects.map((rect, index) =>
+          rect.isTail && rect.anchorState === "stale" ? (
+            <span
+              key={`tail-${rect.threadId}-${index}`}
+              aria-hidden="true"
+              data-thread-id={rect.threadId}
+              className="paperclip-doc-annotation-tail pointer-events-none absolute inline-flex items-center justify-center rounded-sm bg-amber-500/95 text-amber-50 shadow-sm dark:bg-amber-500/90 dark:text-amber-50"
+              style={{
+                top: rect.top + Math.max(0, rect.height / 2 - 8),
+                left: rect.left + rect.width + 2,
+                width: 16,
+                height: 16,
+              }}
+              title="Anchor moved — needs review"
+            >
+              <AlertTriangle className="h-3 w-3" />
+            </span>
+          ) : null,
+        )}
         {pendingAnchor && toolbarPosition ? (
           <div
             data-testid="document-annotation-selection-toolbar"
