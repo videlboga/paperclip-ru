@@ -187,7 +187,15 @@ describe("document annotation routes", () => {
     });
     mockIssueService.assertCheckoutOwner.mockResolvedValue({});
     mockDocumentService.getIssueDocumentByKey.mockResolvedValue(documentPayload);
-    mockAnnotationService.listThreadsForIssueDocument.mockResolvedValue([{ ...annotationThread, comments: [annotationComment] }]);
+    mockAnnotationService.listThreadsForIssueDocument.mockImplementation(async (
+      _issueId: string,
+      _key: string,
+      options?: { includeComments?: boolean },
+    ) => (
+      options?.includeComments
+        ? [{ ...annotationThread, comments: [annotationComment] }]
+        : [annotationThread]
+    ));
     mockAnnotationService.getThreadForIssueDocument.mockResolvedValue({ ...annotationThread, comments: [annotationComment] });
     mockAnnotationService.createThread.mockResolvedValue({ ...annotationThread, comments: [annotationComment] });
     mockAnnotationService.addComment.mockResolvedValue(annotationComment);
@@ -195,12 +203,25 @@ describe("document annotation routes", () => {
     mockAnnotationService.remapOpenThreadsForDocument.mockResolvedValue([]);
   });
 
-  it("includes compact open annotations by default for agent document reads", async () => {
+  it("includes compact open annotations without comment bodies by default for agent document reads", async () => {
     const res = await request(await createApp("agent"))
       .get(`/api/issues/${issueId}/documents/plan`)
       .expect(200);
 
     expect(res.body.annotations).toHaveLength(1);
+    expect(res.body.annotations[0].comments).toBeUndefined();
+    expect(mockAnnotationService.listThreadsForIssueDocument).toHaveBeenCalledWith(issueId, "plan", {
+      status: "open",
+      includeComments: false,
+    });
+  });
+
+  it("includes annotation comment bodies on document reads only when explicitly requested", async () => {
+    const res = await request(await createApp("agent"))
+      .get(`/api/issues/${issueId}/documents/plan?includeAnnotationComments=true`)
+      .expect(200);
+
+    expect(res.body.annotations[0].comments[0].body).toBe("Please review PAP-1");
     expect(mockAnnotationService.listThreadsForIssueDocument).toHaveBeenCalledWith(issueId, "plan", {
       status: "open",
       includeComments: true,

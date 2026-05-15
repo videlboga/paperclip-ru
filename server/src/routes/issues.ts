@@ -878,6 +878,10 @@ export function issueRoutes(
     return req.actor.type === "agent" || parseBooleanQuery(req.query.includeAnnotations);
   }
 
+  function shouldIncludeDocumentAnnotationComments(req: Request) {
+    return parseBooleanQuery(req.query.includeAnnotationComments);
+  }
+
   function annotationActorInput(req: Request) {
     const actor = getActorInfo(req);
     return {
@@ -2071,7 +2075,7 @@ export function issueRoutes(
     }
     const annotations = await documentAnnotationsSvc.listThreadsForIssueDocument(issue.id, keyParsed.data, {
       status: "open",
-      includeComments: true,
+      includeComments: shouldIncludeDocumentAnnotationComments(req),
     });
     res.json({ ...doc, annotations });
   });

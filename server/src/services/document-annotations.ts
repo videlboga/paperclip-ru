@@ -1,4 +1,4 @@
-import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { and, asc, desc, eq, inArray, sql } from "drizzle-orm";
 import type { Db } from "@paperclipai/db";
 import {
   documentAnnotationAnchorSnapshots,
@@ -187,6 +187,13 @@ export function documentAnnotationService(db: Db) {
       input: CreateDocumentAnnotationThread,
       actor: ActorInput,
     ) => db.transaction(async (tx) => {
+      await tx.execute(sql`
+        select ${documents.id}
+        from ${issueDocuments}
+        inner join ${documents} on ${issueDocuments.documentId} = ${documents.id}
+        where ${and(eq(issueDocuments.issueId, issueId), eq(issueDocuments.key, key))}
+        for update of ${documents}
+      `);
       const doc = await getIssueDocument(issueId, key, tx);
       if (!doc) throw notFound("Document not found");
       if (
