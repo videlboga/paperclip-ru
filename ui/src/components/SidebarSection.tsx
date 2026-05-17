@@ -151,7 +151,7 @@ function SidebarSectionHeader({
   );
 
   return (
-    <div className="group/sidebar-section px-3 py-1.5">
+    <div className="group/sidebar-section px-3 py-1.5 pointer-coarse:py-1">
       <div className="relative flex min-h-6 min-w-0 items-center gap-1">
         {collapsible ? (
           <CollapsibleTrigger asChild>
