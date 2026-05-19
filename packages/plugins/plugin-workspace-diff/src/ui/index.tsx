@@ -57,6 +57,11 @@ function readInitialView(): DiffViewMode {
   return new URLSearchParams(window.location.search).get("diffView") === "head" ? "head" : "working-tree";
 }
 
+function hasInitialViewParam() {
+  if (typeof window === "undefined") return false;
+  return new URLSearchParams(window.location.search).has("diffView");
+}
+
 function readInitialBaseRef() {
   if (typeof window === "undefined") return "";
   return new URLSearchParams(window.location.search).get("baseRef") ?? "";
@@ -346,22 +351,25 @@ export function ChangesTab({ context }: PluginDetailTabProps) {
   const [view, setView] = useState<DiffViewMode>(() => readInitialView());
   const [baseRef, setBaseRef] = useState(() => readInitialBaseRef());
   const baseRefTouchedRef = useRef(Boolean(baseRef.trim()));
+  const viewTouchedRef = useRef(hasInitialViewParam());
   const [includeUntracked, setIncludeUntracked] = useState(false);
   const [expandedFiles, setExpandedFiles] = useState<Set<string>>(() => new Set());
   const [selectedPath, setSelectedPath] = useState<string | null>(null);
   const fileSectionRefs = useRef(new Map<string, HTMLElement>());
   const diffScrollRef = useRef<HTMLElement | null>(null);
   const scrollSyncFrameRef = useRef<number | null>(null);
+  const requestedBaseRef = baseRef.trim();
+  const effectiveView = view === "head" && !requestedBaseRef ? "working-tree" : view;
 
   const params = useMemo(() => ({
     workspaceId: context.entityId,
     companyId: context.companyId ?? "",
     projectId: context.projectId ?? "",
     entityType: context.entityType,
-    view,
-    baseRef: baseRef.trim() || null,
+    view: effectiveView,
+    baseRef: requestedBaseRef || null,
     includeUntracked,
-  }), [baseRef, context.companyId, context.entityId, context.entityType, context.projectId, includeUntracked, view]);
+  }), [context.companyId, context.entityId, context.entityType, context.projectId, effectiveView, includeUntracked, requestedBaseRef]);
 
   const { data, loading, error, refresh } = usePluginData<WorkspaceDiffData>("workspace-diff", params);
   const files = useMemo(() => toFileViewModels(data), [data]);
@@ -416,9 +424,14 @@ export function ChangesTab({ context }: PluginDetailTabProps) {
 
   useEffect(() => {
     const defaultBaseRef = data?.defaultBaseRef?.trim();
-    if (!defaultBaseRef || baseRef.trim() || baseRefTouchedRef.current) return;
-    setBaseRef(defaultBaseRef);
-  }, [baseRef, data?.defaultBaseRef]);
+    if (!defaultBaseRef) return;
+    if (!baseRef.trim() && !baseRefTouchedRef.current) {
+      setBaseRef(defaultBaseRef);
+    }
+    if (view === "working-tree" && !viewTouchedRef.current) {
+      setView("head");
+    }
+  }, [baseRef, data?.defaultBaseRef, view]);
 
   useEffect(() => {
     if (files.length === 0) {
@@ -476,10 +489,26 @@ export function ChangesTab({ context }: PluginDetailTabProps) {
             </button>
           </div>
           <div key="view" className="inline-flex gap-1" aria-label="Diff comparison">
-            <button key="working-tree" type="button" className={buttonClass(view === "working-tree")} onClick={() => setView("working-tree")}>
+            <button
+              key="working-tree"
+              type="button"
+              className={buttonClass(view === "working-tree")}
+              onClick={() => {
+                viewTouchedRef.current = true;
+                setView("working-tree");
+              }}
+            >
               Working tree
             </button>
-            <button key="head" type="button" className={buttonClass(view === "head")} onClick={() => setView("head")}>
+            <button
+              key="head"
+              type="button"
+              className={buttonClass(view === "head")}
+              onClick={() => {
+                viewTouchedRef.current = true;
+                setView("head");
+              }}
+            >
               Against ref
             </button>
           </div>
