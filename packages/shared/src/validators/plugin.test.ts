@@ -8,6 +8,37 @@ describe("plugin capability constants", () => {
   });
 });
 
+describe("plugin manifest validators", () => {
+  it("accepts existing-style plugins that do not request access or authorization capabilities", () => {
+    const parsed = pluginManifestV1Schema.parse({
+      id: "paperclip.compat-dashboard",
+      apiVersion: 1,
+      version: "0.1.0",
+      displayName: "Compat Dashboard",
+      description: "Dashboard-only plugin without access or authorization host APIs.",
+      author: "Paperclip",
+      categories: ["ui"],
+      capabilities: ["ui.dashboardWidget.register"],
+      entrypoints: {
+        worker: "./dist/worker.js",
+        ui: "./dist/ui.js",
+      },
+      ui: {
+        slots: [
+          {
+            type: "dashboardWidget",
+            id: "compat-dashboard",
+            displayName: "Compat Dashboard",
+            exportName: "CompatDashboard",
+          },
+        ],
+      },
+    });
+
+    expect(parsed.capabilities).toEqual(["ui.dashboardWidget.register"]);
+  });
+});
+
 describe("plugin managed routine validators", () => {
   it("accepts core issue surface visibility values in routine templates", () => {
     const parsed = pluginManagedRoutineDeclarationSchema.parse({

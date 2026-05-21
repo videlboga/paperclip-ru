@@ -257,4 +257,63 @@ describeEmbeddedPostgres("plugin access and authorization host services", () => 
     });
     services.dispose();
   });
+
+  it("sanitizes plugin authorization policy updates and records audit activity", async () => {
+    const company = await createCompany(db, "PAS");
+    const targetAgent = await db
+      .insert(agents)
+      .values({
+        companyId: company.id,
+        name: "Policy target",
+        role: "engineer",
+        adapterType: "process",
+        adapterConfig: {},
+        permissions: {},
+      })
+      .returning()
+      .then((rows) => rows[0]!);
+    const services = buildHostServices(db, pluginId, "permissions-extension", createEventBusStub());
+
+    const updatedPolicy = await services.authorization.updatePolicy({
+      companyId: company.id,
+      resourceType: "agent",
+      resourceId: targetAgent.id,
+      policy: {
+        assignmentPolicy: { mode: "protected" },
+        apiKey: "sk-test-secret",
+        nested: {
+          authorization: "Bearer should-not-persist",
+          safeLabel: "kept",
+        },
+      },
+    });
+
+    expect(updatedPolicy.policy).toMatchObject({
+      assignmentPolicy: { mode: "protected" },
+      apiKey: "***REDACTED***",
+      nested: {
+        authorization: "***REDACTED***",
+        safeLabel: "kept",
+      },
+    });
+
+    const rows = await db.select().from(activityLog);
+    expect(rows).toHaveLength(1);
+    expect(rows[0]).toMatchObject({
+      companyId: company.id,
+      actorType: "plugin",
+      actorId: pluginId,
+      action: "authorization.policy_updated_by_plugin",
+      entityType: "agent",
+      entityId: targetAgent.id,
+    });
+    expect(rows[0]!.details).toMatchObject({
+      hasPolicy: true,
+      sourcePluginId: pluginId,
+      sourcePluginKey: "permissions-extension",
+    });
+    expect(JSON.stringify(rows[0]!.details)).not.toContain("sk-test-secret");
+    expect(JSON.stringify(rows[0]!.details)).not.toContain("should-not-persist");
+    services.dispose();
+  });
 });
