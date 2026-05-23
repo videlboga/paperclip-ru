@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>PAP-9432 — Document Annotations UX</title>
+<style>
+  :root {
+    --bg: #fafaf8;
+    --panel: #ffffff;
+    --ink: #111111;
+    --muted: #666666;
+    --line: #e5e5e0;
+    --accent: #d33;
+    --maxw: 1200px;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    font: 15px/1.55 -apple-system, system-ui, "Segoe UI", sans-serif;
+    background: var(--bg);
+    color: var(--ink);
+    -webkit-font-smoothing: antialiased;
+  }
+  a { color: inherit; }
+
+  .shell { display: grid; grid-template-columns: 240px 1fr; min-height: 100vh; }
+
+  .toc {
+    position: sticky; top: 0; align-self: start;
+    height: 100vh; overflow: auto;
+    padding: 24px 16px 24px 24px;
+    border-right: 1px solid var(--line);
+    background: var(--panel);
+    font-size: 13px;
+    z-index: 20;
+  }
+  .toc h1 { font-size: 14px; margin: 0 0 4px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  .toc h2 { font-size: 12px; margin: 24px 0 6px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); font-weight: 700; }
+  .toc a { display: block; text-decoration: none; padding: 6px 8px; margin-left: -8px; border-radius: 4px; color: var(--ink); }
+  .toc a:hover { background: var(--bg); }
+  .toc .num { display: inline-block; width: 22px; color: var(--muted); }
+  .toc .toc-summary { display: none; }
+  .toc .toc-body { display: block; }
+
+  main { padding: 48px 56px 96px; max-width: 1300px; min-width: 0; }
+
+  header.hero { max-width: var(--maxw); margin-bottom: 64px; }
+  header.hero .crumb { color: var(--muted); font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; }
+  header.hero h1 { font-size: 36px; line-height: 1.15; margin: 8px 0 16px; }
+  header.hero p { color: var(--muted); max-width: 720px; font-size: 16px; }
+  header.hero .pills { margin-top: 20px; display: flex; gap: 8px; flex-wrap: wrap; }
+  header.hero .pill { font-size: 12px; padding: 4px 10px; border: 1px solid var(--line); border-radius: 999px; background: var(--panel); color: var(--muted); }
+
+  section { scroll-margin-top: 24px; max-width: var(--maxw); margin-bottom: 96px; }
+  section .lede { color: var(--muted); margin: 0 0 12px; font-size: 12px; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
+  section h2 { font-size: 28px; line-height: 1.2; margin: 0 0 8px; }
+  section h2 .step-num { display: inline-block; width: 40px; color: var(--muted); }
+  section h3 { font-size: 16px; margin: 24px 0 8px; }
+  section .desc { color: var(--muted); margin: 0 0 24px; max-width: 760px; }
+
+  .grid {
+    display: grid; gap: 24px;
+    grid-template-columns: minmax(0, 1.4fr) 220px minmax(0, 0.9fr);
+    align-items: start;
+  }
+  @media (max-width: 1180px) {
+    .grid { grid-template-columns: minmax(0, 1fr) 200px; }
+    .grid > .notes-col { grid-column: 1 / -1; }
+  }
+  @media (max-width: 980px) { .grid { grid-template-columns: 1fr; } .grid > .mobile-col { max-width: 280px; } }
+
+  @media (max-width: 900px) {
+    .shell { grid-template-columns: 1fr; }
+    .toc {
+      position: sticky; top: 0;
+      height: auto; max-height: 60vh;
+      padding: 12px 16px;
+      border-right: none;
+      border-bottom: 1px solid var(--line);
+    }
+    .toc .toc-summary {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+      list-style: none;
+      padding: 4px 0;
+    }
+    .toc .toc-summary::-webkit-details-marker { display: none; }
+    .toc .toc-summary .title { font-size: 13px; font-weight: 600; }
+    .toc .toc-summary .crumb { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; }
+    .toc .toc-summary .chevron {
+      width: 10px; height: 10px;
+      border-right: 1.5px solid var(--ink);
+      border-bottom: 1.5px solid var(--ink);
+      transform: rotate(45deg);
+      transition: transform 120ms ease;
+      margin-right: 4px;
+    }
+    .toc[open] .toc-summary .chevron { transform: rotate(225deg) translate(-2px, -2px); }
+    .toc .toc-body { display: none; padding-top: 8px; border-top: 1px solid var(--line); margin-top: 8px; }
+    .toc[open] .toc-body { display: block; }
+    main { padding: 24px 20px 64px; }
+    header.hero { margin-bottom: 40px; }
+    header.hero h1 { font-size: 28px; }
+    header.hero p { font-size: 15px; }
+    section { margin-bottom: 64px; scroll-margin-top: 80px; }
+    section h2 { font-size: 24px; }
+    section h2 .step-num { width: 32px; }
+    .flow-section { padding: 20px; margin-bottom: 40px; scroll-margin-top: 80px; }
+  }
+
+  @media (max-width: 560px) {
+    main { padding: 16px 14px 56px; }
+    header.hero { margin-bottom: 32px; }
+    header.hero h1 { font-size: 24px; line-height: 1.2; }
+    header.hero p { font-size: 14px; }
+    section { margin-bottom: 48px; }
+    section h2 { font-size: 20px; line-height: 1.25; }
+    section h2 .step-num { width: 28px; }
+    section h3 { font-size: 15px; margin: 20px 0 6px; }
+    section .desc { font-size: 14px; }
+    .grid { gap: 16px; }
+    .flow-section { padding: 16px; border-radius: 8px; }
+    .wire .label { padding: 8px 10px; font-size: 11px; gap: 8px; }
+    body { font-size: 14px; }
+  }
+
+  .wire {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: zoom-in;
+    transition: transform 80ms ease, box-shadow 80ms ease;
+  }
+  .wire:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .wire .label {
+    padding: 10px 14px;
+    font-size: 12px;
+    color: var(--muted);
+    border-bottom: 1px solid var(--line);
+    display: flex; justify-content: space-between; align-items: center;
+  }
+  .wire img { display: block; width: 100%; height: auto; background: #fff; }
+  .wire.mobile-wire img { max-width: 220px; margin: 0 auto; }
+
+  .notes ul { padding-left: 20px; margin: 8px 0; }
+  .notes li { margin-bottom: 6px; }
+  .notes .why {
+    background: var(--panel);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--ink);
+    padding: 14px 18px;
+    border-radius: 4px;
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  .flow-section { background: var(--panel); border: 1px solid var(--line); border-radius: 12px; padding: 32px; margin-bottom: 64px; max-width: var(--maxw); }
+  .flow-section h2 { margin-top: 0; }
+  .flow-section .wire { margin-top: 16px; }
+
+  .lightbox {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.86);
+    display: none;
+    align-items: center; justify-content: center;
+    z-index: 100;
+    cursor: zoom-out;
+    padding: 32px;
+  }
+  .lightbox.open { display: flex; }
+  .lightbox img { max-width: 100%; max-height: 100%; background: #fff; box-shadow: 0 30px 80px rgba(0,0,0,0.4); border-radius: 4px; }
+  .lightbox .close { position: absolute; top: 16px; right: 24px; font-size: 28px; color: #fff; cursor: pointer; }
+  .lightbox .caption { position: absolute; bottom: 16px; left: 50%; transform: translateX(-50%); color: #fff; font-size: 13px; opacity: 0.9; }
+
+  @media (max-width: 560px) {
+    .lightbox { padding: 12px; overflow: auto; touch-action: pinch-zoom; }
+    .lightbox.open { display: block; }
+    .lightbox img { display: block; width: 100%; max-width: none; max-height: none; height: auto; margin: 40px auto 56px; box-shadow: none; }
+    .lightbox .close { position: fixed; top: 8px; right: 12px; font-size: 32px; }
+    .lightbox .caption { position: fixed; left: 50%; transform: translateX(-50%); font-size: 12px; bottom: 12px; text-align: center; background: rgba(0,0,0,0.7); border-radius: 4px; padding: 6px 12px; }
+  }
+
+  .footer { color: var(--muted); font-size: 12px; max-width: var(--maxw); border-top: 1px solid var(--line); padding-top: 24px; }
+</style>
+</head>
+<body>
+  <div class="shell">
+    <details class="toc">
+      <summary class="toc-summary">
+        <span>
+          <span class="crumb">PAP-9432 · Doc Annotations</span><br>
+          <span class="title">Jump to a screen</span>
+        </span>
+        <span class="chevron" aria-hidden="true"></span>
+      </summary>
+      <nav class="toc-body" aria-label="Section navigation">
+        <h1>PAP-9432</h1>
+        <div style="font-size: 13px; color: var(--muted); margin-bottom: 16px;">Phase 1 UX spec</div>
+
+        <h2>Flow</h2>
+        <a href="#flow"><span class="num">&#10547;</span>Annotation lifecycle</a>
+
+        <h2>Screens</h2>
+        <a href="#s1"><span class="num">1</span>Rendered mode &mdash; selection</a>
+        <a href="#s2"><span class="num">2</span>Side panel / bottom sheet</a>
+        <a href="#s3"><span class="num">3</span>Edit mode</a>
+        <a href="#s4"><span class="num">4</span>State matrix</a>
+        <a href="#s5"><span class="num">5</span>Deep link</a>
+
+        <h2>Notes</h2>
+        <a href="#a11y"><span class="num">a</span>Accessibility</a>
+        <a href="#open"><span class="num">?</span>Open questions</a>
+      </nav>
+    </details>
+
+    <main>
+      <header class="hero">
+        <div class="crumb">PAP-9432 &middot; Phase 1 UX spec</div>
+        <h1>Document annotations &mdash; UX spec</h1>
+        <p>Document-native highlights and comment threads on Paperclip issue documents (primary target: the <code>plan</code> document). Paired desktop/mobile wireframes for rendered mode, edit mode, side panel, state matrix, and deep-link behaviour. Pair this with the <code>spec</code> document on PAP-9432.</p>
+        <div class="pills">
+          <span class="pill">6 screens</span>
+          <span class="pill">Desktop + mobile</span>
+          <span class="pill">Lo-fi &middot; monochrome</span>
+          <span class="pill">Click any wireframe to zoom</span>
+        </div>
+      </header>
+
+      <section id="flow" class="flow-section">
+        <div class="lede">Flow</div>
+        <h2>Annotation lifecycle across revisions</h2>
+        <p class="desc">Single thread followed through select &rarr; compose &rarr; resolve &rarr; revision &rarr; re-anchor outcomes. Dashed arrows are side effects (e.g. assignee wake).</p>
+        <div class="wire" data-zoom data-caption="Annotation lifecycle">
+          <div class="label"><span>flow.svg</span><span>1280&times;720</span></div>
+          <img src="wireframes/flow.svg" alt="Annotation lifecycle flow" />
+        </div>
+      </section>
+
+      <section id="s1">
+        <div class="lede">Step 1 &middot; Capture</div>
+        <h2><span class="step-num">1.</span>Rendered mode &mdash; selection</h2>
+        <p class="desc">User selects body text; floating toolbar offers Comment + Copy link. <code>&#8984;&#8679;M</code> is the keyboard equivalent.</p>
+        <div class="grid">
+          <div class="wire" data-zoom data-caption="Rendered selection (desktop)">
+            <div class="label"><span>rendered-selection.svg</span><span>1280&times;800 &middot; desktop</span></div>
+            <img src="wireframes/rendered-selection.svg" alt="Rendered-mode selection &mdash; desktop" />
+          </div>
+          <div class="wire mobile-wire mobile-col" data-zoom data-caption="Rendered selection (mobile)">
+            <div class="label"><span>mobile</span><span>375&times;812</span></div>
+            <img src="wireframes/rendered-selection-mobile.svg" alt="Rendered-mode selection &mdash; mobile" />
+          </div>
+          <div class="notes-col">
+            <div class="notes">
+              <h3>Annotations</h3>
+              <ul>
+                <li><b>1</b> &mdash; floating selection toolbar anchored above the range (flips below if &lt;48px from card top).</li>
+                <li><b>2</b> &mdash; active highlight: solid mid-grey underline.</li>
+                <li><b>3</b> &mdash; resolved highlight: dashed underline, only visible when &quot;Show resolved&quot; is on.</li>
+                <li><b>4</b> &mdash; unresolved-count chip lives between rev menu and right-actions.</li>
+                <li><b>5</b> &mdash; <code>&#8984;&#8679;M</code> opens the comment composer for the current selection.</li>
+                <li><i>Mobile</i> &mdash; selection sheet &rarr; <code>&#43; Comment</code> opens the bottom sheet directly; native platform sheet is preferred when extensible.</li>
+              </ul>
+              <div class="why"><b>Why this changes:</b> document-native capture matches Google Docs / Notion mental models; agents and reviewers already think in &quot;select text &rarr; comment&quot; rather than &quot;open a chat&quot;.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="s2">
+        <div class="lede">Step 2 &middot; Read &amp; reply</div>
+        <h2><span class="step-num">2.</span>Side panel &middot; bottom sheet</h2>
+        <p class="desc">Annotation panel is bound to one document. Desktop = right slide-in (380px), mobile = bottom sheet with peek/half/full snap points.</p>
+        <div class="grid">
+          <div class="wire" data-zoom data-caption="Side panel (desktop)">
+            <div class="label"><span>side-panel.svg</span><span>1280&times;800 &middot; desktop</span></div>
+            <img src="wireframes/side-panel.svg" alt="Side panel &mdash; desktop" />
+          </div>
+          <div class="wire mobile-wire mobile-col" data-zoom data-caption="Bottom sheet (mobile)">
+            <div class="label"><span>mobile</span><span>375&times;812</span></div>
+            <img src="wireframes/side-panel-mobile.svg" alt="Bottom sheet &mdash; mobile" />
+          </div>
+          <div class="notes-col">
+            <div class="notes">
+              <h3>Annotations</h3>
+              <ul>
+                <li><b>1</b> &mdash; filter chips (Open / Resolved / Stale / Orphan); active chip is filled.</li>
+                <li><b>2</b> &mdash; focused thread auto-expands with composer; others collapse to 2-line summary.</li>
+                <li><b>3</b> &mdash; focused anchor in body gets a 2px border + soft fill; bi-directional click linkage.</li>
+                <li><i>Mobile</i> &mdash; single thread at a time; prev/next steps through current filter. Composer collapses to a pill at rest.</li>
+              </ul>
+              <div class="why"><b>Why this changes:</b> right-rail Properties is rarely read while reviewing comments &mdash; collapsing it for the panel buys 380px without a new layout. On mobile, single-thread focus + prev/next avoids horizontal cramming that kills usability in narrow viewports.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="s3">
+        <div class="lede">Step 3 &middot; Edit mode</div>
+        <h2><span class="step-num">3.</span>Edit-mode capture + dirty-draft guardrails</h2>
+        <p class="desc">MDXEditor/Lexical hosts selection capture via a plugin; existing thread anchors render as read-only decorations. Dirty/conflicted drafts disable new-anchor creation with explicit reason text.</p>
+        <div class="grid">
+          <div class="wire" data-zoom data-caption="Edit mode (desktop)">
+            <div class="label"><span>edit-mode.svg</span><span>1280&times;800 &middot; desktop</span></div>
+            <img src="wireframes/edit-mode.svg" alt="Edit mode &mdash; desktop" />
+          </div>
+          <div class="wire mobile-wire mobile-col" data-zoom data-caption="Edit mode (mobile)">
+            <div class="label"><span>mobile</span><span>375&times;812</span></div>
+            <img src="wireframes/edit-mode-mobile.svg" alt="Edit mode &mdash; mobile" />
+          </div>
+          <div class="notes-col">
+            <div class="notes">
+              <h3>Annotations</h3>
+              <ul>
+                <li><b>1</b> &mdash; toolbar primary action uses current Lexical <code>RangeSelection</code>; same <code>&#8984;&#8679;M</code> shortcut.</li>
+                <li><b>2</b> &mdash; dirty-draft banner names the reason; resolves the second autosave commits.</li>
+                <li><b>3</b> &mdash; side-panel footer CTA mirrors the disabled state; existing threads remain readable.</li>
+                <li><i>Mobile</i> &mdash; keyboard accessory bar shows the disabled state inline so it isn&apos;t a surprise.</li>
+              </ul>
+              <div class="why"><b>Why this changes:</b> anchors are tied to a saved revision baseline. Allowing creation against a dirty draft either fabricates revisions or risks anchors into never-saved text. The explicit disabled-with-reason pattern is preferable to silent allow-then-fail.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="s4">
+        <div class="lede">Step 4 &middot; State matrix</div>
+        <h2><span class="step-num">4.</span>Open &middot; Resolved &middot; Stale &middot; Orphaned</h2>
+        <p class="desc">Identical data layout, distinct chrome. Resolved hidden by default; stale highlights remain but flagged; orphaned have no in-body anchor.</p>
+        <div class="grid">
+          <div class="wire" data-zoom data-caption="State matrix (desktop)">
+            <div class="label"><span>states.svg</span><span>1280&times;800 &middot; desktop</span></div>
+            <img src="wireframes/states.svg" alt="Annotation states &mdash; desktop" />
+          </div>
+          <div class="wire mobile-wire mobile-col" data-zoom data-caption="State matrix (mobile)">
+            <div class="label"><span>mobile</span><span>375&times;812</span></div>
+            <img src="wireframes/states-mobile.svg" alt="Annotation states &mdash; mobile" />
+          </div>
+          <div class="notes-col">
+            <div class="notes">
+              <h3>Annotations</h3>
+              <ul>
+                <li><b>Open</b> &mdash; solid grey underline, primary &quot;Open&quot; pill, Reply / Resolve / Copy link.</li>
+                <li><b>Resolved</b> &mdash; dashed outline + dimmed card, hidden by default; Reopen + Copy link.</li>
+                <li><b>Stale</b> &mdash; dashed outline + <code>&#9888;</code>; Re-anchor (inline re-select), Show diff, Resolve.</li>
+                <li><b>Orphaned</b> &mdash; no in-body anchor; panel-only with &quot;View rev N&quot; link to the last valid revision.</li>
+              </ul>
+              <div class="why"><b>Why this changes:</b> distinguishing fuzzy vs. lost anchors avoids the binary &quot;vanished&quot; failure mode. Reviewers keep their thoughts even when prose changes, and stale state surfaces a path back to a clean anchor.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="s5">
+        <div class="lede">Step 5 &middot; Deep linking</div>
+        <h2><span class="step-num">5.</span>Folded &rarr; unfolded with focused thread + comment</h2>
+        <p class="desc">URL adds <code>&amp;thread=&hellip;&amp;comment=&hellip;</code> to the existing <code>#document-<i>key</i></code> anchor. Resolving forces unfold, scroll, pulse, panel auto-open, thread expand, comment focus.</p>
+        <div class="grid">
+          <div class="wire" data-zoom data-caption="Deep link (desktop)">
+            <div class="label"><span>deep-link.svg</span><span>1280&times;800 &middot; desktop</span></div>
+            <img src="wireframes/deep-link.svg" alt="Deep link &mdash; desktop" />
+          </div>
+          <div class="wire mobile-wire mobile-col" data-zoom data-caption="Deep link (mobile)">
+            <div class="label"><span>mobile</span><span>375&times;812</span></div>
+            <img src="wireframes/deep-link-mobile.svg" alt="Deep link &mdash; mobile" />
+          </div>
+          <div class="notes-col">
+            <div class="notes">
+              <h3>Annotations</h3>
+              <ul>
+                <li><b>1</b> &mdash; folded card auto-unfolds; count chip remains the only chrome on the folded header.</li>
+                <li><b>2</b> &mdash; URL grammar &mdash; three precision levels, each optional.</li>
+                <li><b>3</b> &mdash; body pulse ring (1.4s) on anchor; then steady focused border.</li>
+                <li><b>4</b> &mdash; panel auto-opens, expands target thread, comment-level focus ring.</li>
+              </ul>
+              <div class="why"><b>Why this changes:</b> agents quote-link inside comments today; without unambiguous deep-link resolution, a clicked link drops the reader into a generic doc view and forces them to scroll-hunt. Three precision levels (doc / thread / comment) means we don&apos;t have to invent a new scheme for each entry point.</div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="a11y">
+        <div class="lede">Accessibility</div>
+        <h2>Keyboard, focus, motion, ARIA</h2>
+        <div class="notes">
+          <ul>
+            <li><b>Shortcut</b> &mdash; <code>&#8984;&#8679;M</code> / <code>Ctrl&#8679;M</code> opens Comment for the current selection in both rendered and edit modes.</li>
+            <li><b>Tab order</b> &mdash; header filters &rarr; thread cards (<code>tabindex=0</code>) &rarr; expanded thread composer.</li>
+            <li><b>Focus on open</b> &mdash; composer textarea (compose) or first comment row (deep link).</li>
+            <li><b>Focus on close</b> &mdash; returns to the originating highlight or the count chip.</li>
+            <li><b>Escape semantics</b> &mdash; composer dirty &rarr; confirm-discard; otherwise collapse thread &rarr; close panel. Bottom sheet snaps down one step per <code>Esc</code> / scrim tap.</li>
+            <li><b>Visible focus</b> &mdash; <code>focus-visible:ring-2 ring-ring ring-offset-2</code>; 2px outline on highlight runs (never colour alone).</li>
+            <li><b>ARIA</b> &mdash; panel <code>role=&quot;complementary&quot;</code>, thread <code>role=&quot;article&quot;</code> + <code>aria-labelledby</code> on quote, hidden state text on highlights and thread headers.</li>
+            <li><b>Reduced motion</b> &mdash; pulse, slide, snap fall back to instant under <code>prefers-reduced-motion: reduce</code>; focus rings stay.</li>
+            <li><b>Contrast</b> &mdash; quote chip <code>bg-muted/40</code> on <code>bg-card</code> passes AA; <code>Stale</code> never relies on the <code>&#9888;</code> glyph alone.</li>
+          </ul>
+        </div>
+      </section>
+
+      <section id="open">
+        <div class="lede">For reviewer</div>
+        <h2>Open questions</h2>
+        <div class="notes">
+          <ul>
+            <li><b>Q1</b> &mdash; Selection on touch: inject into native selection sheet where supported (iOS Safari, Chrome Android), fall back to floating FAB anchored to selection rect. <i>Recommend platform-sheet-first with FAB fallback.</i></li>
+            <li><b>Q2</b> &mdash; Resolved visibility default: hidden with toggle (recommended) or visible with softer chrome. <i>Hidden by default &mdash; matches Google Docs and keeps long plan docs readable.</i></li>
+            <li><b>Q3</b> &mdash; Stale Re-anchor: inline re-select (recommended) vs. modal with two body previews. <i>Inline; &quot;Show diff&quot; covers the modal-style comparison need.</i></li>
+          </ul>
+        </div>
+      </section>
+
+      <div class="footer">
+        Wireframes follow the in-tree <code>wireframe</code> skill house style &mdash; black on white, 1.5pt strokes, 8px grid, type sizes 12/14/20/28. Red dashed annotations are the call-out layer only and not part of the proposed UI.
+      </div>
+    </main>
+  </div>
+
+  <div class="lightbox" id="lb" aria-hidden="true">
+    <span class="close" id="lbClose">&times;</span>
+    <img id="lbImg" alt="" />
+    <div class="caption" id="lbCap"></div>
+  </div>
+
+<script>
+  const lb = document.getElementById('lb');
+  const lbImg = document.getElementById('lbImg');
+  const lbCap = document.getElementById('lbCap');
+  const lbClose = document.getElementById('lbClose');
+
+  document.querySelectorAll('[data-zoom]').forEach((el) => {
+    el.addEventListener('click', () => {
+      const target = el.tagName === 'IMG' ? el : el.querySelector('img');
+      if (!target) return;
+      lbImg.src = target.src;
+      lbImg.alt = target.alt;
+      lbCap.textContent = el.dataset.caption || target.alt || '';
+      lb.classList.add('open');
+    });
+  });
+
+  function close() { lb.classList.remove('open'); }
+  lb.addEventListener('click', close);
+  lbClose.addEventListener('click', close);
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+
+  const toc = document.querySelector('details.toc');
+  if (toc) {
+    const mq = window.matchMedia('(max-width: 900px)');
+    const apply = () => { toc.open = !mq.matches; };
+    apply();
+    mq.addEventListener('change', apply);
+    toc.querySelectorAll('.toc-body a').forEach((a) => {
+      a.addEventListener('click', () => { if (mq.matches) toc.open = false; });
+    });
+  }
+</script>
+</body>
+</html>

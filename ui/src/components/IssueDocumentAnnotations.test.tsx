@@ -64,17 +64,30 @@ vi.mock("./DocumentAnnotationLayer", () => ({
     onPendingAnchorChange: (anchor: typeof mockPendingAnchor | null) => void;
     onRequestComment: (anchor: typeof mockPendingAnchor) => void;
   }) => (
-    <button
-      type="button"
-      data-testid="mock-annotation-selection"
-      disabled={props.newCommentDisabled}
-      onClick={() => {
-        props.onPendingAnchorChange(mockPendingAnchor);
-        props.onRequestComment(mockPendingAnchor);
-      }}
-    >
-      Mock selection
-    </button>
+    <>
+      <button
+        type="button"
+        data-testid="mock-annotation-selection"
+        disabled={props.newCommentDisabled}
+        onClick={() => {
+          props.onPendingAnchorChange(mockPendingAnchor);
+          props.onRequestComment(mockPendingAnchor);
+          props.onPendingAnchorChange(null);
+        }}
+      >
+        Mock selection
+      </button>
+      <button
+        type="button"
+        data-testid="mock-annotation-selection-only"
+        disabled={props.newCommentDisabled}
+        onClick={() => {
+          props.onPendingAnchorChange(mockPendingAnchor);
+        }}
+      >
+        Mock captured selection
+      </button>
+    </>
   ),
 }));
 
@@ -259,6 +272,9 @@ describe("IssueDocumentAnnotations", () => {
     await flush();
     const panel = container.querySelector('[data-testid="document-annotation-panel"]');
     expect(panel).not.toBeNull();
+    const anchor = container.querySelector('[data-testid="document-annotation-panel-anchor"]');
+    expect(anchor).not.toBeNull();
+    expect(anchor?.className).toContain("fixed");
   });
 
   it("auto-opens the panel and focuses the thread when deep-linked", async () => {
@@ -446,6 +462,49 @@ describe("IssueDocumentAnnotations", () => {
     expect(cta).not.toBeNull();
     expect(cta!.textContent).toMatch(/New comment on selection/i);
     expect(cta!.textContent).toMatch(/⌘⇧M/);
+  });
+
+  it("keeps a captured selection available for the panel CTA without opening the composer early", async () => {
+    mockAnnotationsApi.list.mockResolvedValue([]);
+    const root = createRoot(container);
+    const queryClient = makeQueryClient();
+    const doc = makeDoc();
+
+    await act(async () => {
+      root.render(
+        <QueryClientProvider client={queryClient}>
+          <Harness doc={doc} initialPanelOpen />
+        </QueryClientProvider>,
+      );
+    });
+    await flush();
+    await flush();
+
+    const selectOnlyButton = container.querySelector(
+      '[data-testid="mock-annotation-selection-only"]',
+    ) as HTMLButtonElement | null;
+    expect(selectOnlyButton).not.toBeNull();
+    await act(async () => {
+      selectOnlyButton!.click();
+    });
+    await flush();
+
+    expect(container.querySelector('[data-testid="document-annotation-composer"]')).toBeNull();
+
+    const cta = container.querySelector(
+      '[data-testid="document-annotation-new-comment-cta"]',
+    ) as HTMLButtonElement | null;
+    expect(cta).not.toBeNull();
+    await act(async () => {
+      cta!.click();
+    });
+    await flush();
+
+    const composer = container.querySelector(
+      '[data-testid="document-annotation-composer"]',
+    ) as HTMLTextAreaElement | null;
+    expect(composer).not.toBeNull();
+    expect(container.textContent).toContain(mockPendingAnchor.selectedText);
   });
 
   it("creates a thread from a captured selection and refreshes the shared annotations query", async () => {

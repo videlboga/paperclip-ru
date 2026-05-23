@@ -1,0 +1,121 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="1280" height="800" />
+
+  <!-- 1: app top bar -->
+  <g transform="translate(0,0)" data-region="topbar">
+    <rect x="0" y="0" width="1280" height="56" fill="#fff" />
+    <rect x="24" y="20" width="120" height="16" fill="#e6e6e6" stroke="none" />
+    <rect x="1080" y="16" width="80" height="24" rx="4" />
+    <rect x="1176" y="16" width="80" height="24" rx="4" />
+    <text x="1216" y="32" font-size="12" text-anchor="middle" stroke="none" fill="#000">Share</text>
+    <text x="1120" y="32" font-size="12" text-anchor="middle" stroke="none" fill="#000">⋯ More</text>
+  </g>
+
+  <!-- 2: issue header -->
+  <g transform="translate(48,72)" data-region="issue-header">
+    <text x="0" y="20" font-size="12" stroke="none" fill="#666">PAP / Issue</text>
+    <text x="0" y="56" font-size="28" font-weight="600" stroke="none" fill="#000">Phase 4: Document annotation UI</text>
+    <rect x="0" y="80" width="72" height="20" rx="10" />
+    <text x="36" y="94" font-size="12" text-anchor="middle" stroke="none" fill="#000">in progress</text>
+    <rect x="80" y="80" width="64" height="20" rx="10" />
+    <text x="112" y="94" font-size="12" text-anchor="middle" stroke="none" fill="#000">medium</text>
+  </g>
+
+  <!-- 3: document card -->
+  <g transform="translate(48,200)" data-region="document-card">
+    <rect x="0" y="0" width="800" height="544" rx="8" />
+    <!-- document chrome -->
+    <g transform="translate(16,16)">
+      <text x="0" y="14" font-size="12" stroke="none" fill="#666">▾</text>
+      <rect x="16" y="0" width="48" height="20" rx="10" />
+      <text x="40" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">PLAN</text>
+      <text x="76" y="14" font-size="12" stroke="none" fill="#666">rev 4 ▾</text>
+      <text x="128" y="14" font-size="12" stroke="none" fill="#666">updated 12m ago</text>
+      <!-- NEW: unresolved count chip -->
+      <rect x="248" y="0" width="96" height="20" rx="10" />
+      <circle cx="262" cy="10" r="3" fill="#000" stroke="none" />
+      <text x="272" y="14" font-size="12" stroke="none" fill="#000">3 comments</text>
+      <!-- right actions -->
+      <rect x="640" y="0" width="24" height="20" rx="4" />
+      <text x="652" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">⧉</text>
+      <rect x="672" y="0" width="24" height="20" rx="4" />
+      <text x="684" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">⋯</text>
+      <rect x="704" y="0" width="64" height="20" rx="10" />
+      <text x="736" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">Comments</text>
+    </g>
+
+    <!-- 4: rendered markdown body with selection -->
+    <g transform="translate(24,64)" data-region="markdown-body">
+      <!-- heading -->
+      <rect x="0" y="0" width="280" height="20" fill="#e6e6e6" stroke="none" />
+      <!-- paragraph 1 -->
+      <rect x="0" y="40" width="740" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="56" width="700" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="72" width="560" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- selected text run (annotated) -->
+      <rect x="0" y="104" width="740" height="10" fill="#000" stroke="none" />
+      <rect x="0" y="120" width="540" height="10" fill="#000" stroke="none" />
+      <!-- next paragraph -->
+      <rect x="0" y="152" width="720" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="168" width="680" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="184" width="520" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- existing highlighted run (open thread) -->
+      <rect x="0" y="216" width="320" height="10" fill="#bbb" stroke="none" />
+      <rect x="0" y="232" width="180" height="10" fill="#bbb" stroke="none" />
+      <!-- more body -->
+      <rect x="0" y="264" width="720" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="280" width="640" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- existing resolved highlight (lighter dashed underline) -->
+      <rect x="0" y="312" width="240" height="10" fill="#f2f2f2" stroke="#000" stroke-dasharray="2 3" />
+      <rect x="0" y="328" width="420" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- fold curtain hint -->
+      <line x1="0" y1="412" x2="740" y2="412" stroke-dasharray="4 4" />
+      <text x="370" y="436" font-size="12" text-anchor="middle" stroke="none" fill="#666">show more ▾</text>
+    </g>
+
+    <!-- 5: floating selection toolbar above selected range -->
+    <g transform="translate(96,232)" data-region="selection-toolbar">
+      <rect x="0" y="0" width="232" height="36" rx="18" fill="#fff" />
+      <text x="14" y="22" font-size="14" stroke="none" fill="#000">＋ Comment</text>
+      <line x1="112" y1="8" x2="112" y2="28" />
+      <text x="124" y="22" font-size="14" stroke="none" fill="#000">⎘ Copy link</text>
+      <text x="206" y="22" font-size="14" stroke="none" fill="#666">⌘⇧M</text>
+      <!-- pointer caret toward selection -->
+      <path d="M 24 36 L 32 44 L 40 36 Z" />
+    </g>
+  </g>
+
+  <!-- 6: right rail issue properties (collapses when panel opens) -->
+  <g transform="translate(880,200)" data-region="right-rail">
+    <rect x="0" y="0" width="352" height="544" rx="8" />
+    <text x="16" y="32" font-size="14" stroke="none" fill="#000">Properties</text>
+    <line x1="16" y1="48" x2="336" y2="48" />
+    <text x="16" y="80" font-size="12" stroke="none" fill="#666">Assignee</text>
+    <circle cx="312" cy="76" r="10" fill="#e6e6e6" stroke="none" />
+    <text x="16" y="120" font-size="12" stroke="none" fill="#666">Status</text>
+    <text x="328" y="120" font-size="12" text-anchor="end" stroke="none" fill="#000">in progress</text>
+    <text x="16" y="160" font-size="12" stroke="none" fill="#666">Priority</text>
+    <text x="328" y="160" font-size="12" text-anchor="end" stroke="none" fill="#000">medium</text>
+    <text x="16" y="200" font-size="12" stroke="none" fill="#666">Project</text>
+    <text x="328" y="200" font-size="12" text-anchor="end" stroke="none" fill="#000">Paperclip App</text>
+    <text x="16" y="240" font-size="12" stroke="none" fill="#666">Blockers</text>
+    <text x="328" y="240" font-size="12" text-anchor="end" stroke="none" fill="#000">0</text>
+  </g>
+
+  <!-- annotation callouts (red dashed) -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="60" y="208" width="784" height="40" />
+    <rect x="60" y="298" width="408" height="30" />
+    <rect x="60" y="368" width="408" height="30" />
+    <rect x="312" y="208" width="100" height="22" />
+    <rect x="136" y="424" width="248" height="44" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="60" y="200">1 selected range — floating toolbar anchors above selection (or below on near-top)</text>
+    <text x="60" y="294">2 active thread highlight — solid underline, hover/focus elevates</text>
+    <text x="60" y="364">3 resolved thread highlight — dashed underline, dimmed</text>
+    <text x="312" y="204">4 unresolved count chip in document chrome</text>
+    <text x="136" y="420">5 floating toolbar — "Comment" + "Copy link"; ⌘⇧M keyboard shortcut</text>
+  </g>
+</svg>

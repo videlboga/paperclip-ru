@@ -1,0 +1,152 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="1280" height="800" />
+
+  <!-- top bar -->
+  <g transform="translate(0,0)">
+    <rect x="0" y="0" width="1280" height="56" />
+    <rect x="24" y="20" width="120" height="16" fill="#e6e6e6" stroke="none" />
+  </g>
+
+  <!-- 1: document card (narrowed to make room for side panel) -->
+  <g transform="translate(48,80)" data-region="document-card">
+    <rect x="0" y="0" width="744" height="664" rx="8" />
+    <g transform="translate(16,16)">
+      <text x="0" y="14" font-size="12" stroke="none" fill="#666">▾</text>
+      <rect x="16" y="0" width="48" height="20" rx="10" />
+      <text x="40" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">PLAN</text>
+      <text x="76" y="14" font-size="12" stroke="none" fill="#666">rev 4 ▾</text>
+      <!-- count chip pressed/active -->
+      <rect x="200" y="0" width="96" height="20" rx="10" fill="#e6e6e6" />
+      <circle cx="214" cy="10" r="3" fill="#000" stroke="none" />
+      <text x="224" y="14" font-size="12" stroke="none" fill="#000">3 comments</text>
+      <!-- right actions -->
+      <rect x="592" y="0" width="24" height="20" rx="4" />
+      <text x="604" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">⧉</text>
+      <rect x="624" y="0" width="24" height="20" rx="4" />
+      <text x="636" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">⋯</text>
+    </g>
+
+    <!-- body, with the active thread anchor visibly focused -->
+    <g transform="translate(24,64)">
+      <rect x="0" y="0" width="280" height="20" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="40" width="680" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="56" width="640" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="72" width="540" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- focused thread (active selection echo) -->
+      <rect x="-4" y="100" width="668" height="34" fill="#fafafa" stroke="#000" />
+      <rect x="0" y="108" width="660" height="10" fill="#000" stroke="none" />
+      <rect x="0" y="124" width="500" height="10" fill="#000" stroke="none" />
+      <!-- following body -->
+      <rect x="0" y="160" width="660" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="176" width="620" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- second thread (open) -->
+      <rect x="0" y="216" width="300" height="10" fill="#bbb" stroke="none" />
+      <rect x="0" y="248" width="640" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- resolved thread highlight -->
+      <rect x="0" y="288" width="220" height="10" fill="#f2f2f2" stroke="#000" stroke-dasharray="2 3" />
+      <rect x="0" y="320" width="600" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="336" width="540" height="10" fill="#e6e6e6" stroke="none" />
+    </g>
+  </g>
+
+  <!-- 2: side annotation panel -->
+  <g transform="translate(808,80)" data-region="annotation-panel">
+    <rect x="0" y="0" width="424" height="664" rx="8" />
+    <!-- header -->
+    <g transform="translate(16,16)">
+      <text x="0" y="16" font-size="14" font-weight="600" stroke="none" fill="#000">Comments</text>
+      <text x="0" y="36" font-size="12" stroke="none" fill="#666">PLAN · rev 4</text>
+      <!-- filters -->
+      <g transform="translate(208,0)">
+        <rect x="0" y="0" width="72" height="24" rx="12" fill="#e6e6e6" />
+        <text x="36" y="16" font-size="12" text-anchor="middle" stroke="none" fill="#000">Open 2</text>
+        <rect x="80" y="0" width="88" height="24" rx="12" />
+        <text x="124" y="16" font-size="12" text-anchor="middle" stroke="none" fill="#666">Resolved 1</text>
+        <rect x="176" y="0" width="32" height="24" rx="12" />
+        <text x="192" y="16" font-size="12" text-anchor="middle" stroke="none" fill="#000">×</text>
+      </g>
+    </g>
+    <line x1="0" y1="56" x2="424" y2="56" />
+
+    <!-- thread 1 (focused) -->
+    <g transform="translate(16,72)" data-region="thread-focused">
+      <rect x="0" y="0" width="392" height="208" rx="6" stroke="#000" stroke-width="2" />
+      <rect x="12" y="12" width="368" height="32" fill="#fafafa" stroke="#e6e6e6" />
+      <text x="20" y="32" font-size="12" stroke="none" fill="#666">“selected quote from the document …”</text>
+      <!-- comment 1 -->
+      <g transform="translate(12,56)">
+        <circle cx="12" cy="12" r="10" fill="#e6e6e6" stroke="none" />
+        <text x="32" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">Dotta · board</text>
+        <text x="32" y="28" font-size="12" stroke="none" fill="#666">2m ago</text>
+        <rect x="32" y="40" width="320" height="10" fill="#e6e6e6" stroke="none" />
+        <rect x="32" y="56" width="280" height="10" fill="#e6e6e6" stroke="none" />
+      </g>
+      <!-- comment 2 (agent reply) -->
+      <g transform="translate(12,136)">
+        <rect x="0" y="0" width="20" height="20" fill="#e6e6e6" stroke="none" />
+        <text x="32" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">UXDesigner · agent</text>
+        <text x="32" y="28" font-size="12" stroke="none" fill="#666">just now</text>
+        <rect x="32" y="40" width="296" height="10" fill="#e6e6e6" stroke="none" />
+      </g>
+    </g>
+
+    <!-- reply composer -->
+    <g transform="translate(16,288)" data-region="reply-composer">
+      <rect x="0" y="0" width="392" height="80" rx="6" />
+      <text x="12" y="24" font-size="12" stroke="none" fill="#666">Reply…</text>
+      <line x1="0" y1="48" x2="392" y2="48" />
+      <text x="12" y="68" font-size="12" stroke="none" fill="#666">@ mention</text>
+      <rect x="248" y="52" width="64" height="24" rx="4" />
+      <text x="280" y="68" font-size="12" text-anchor="middle" stroke="none" fill="#000">Resolve</text>
+      <rect x="320" y="52" width="56" height="24" rx="4" fill="#000" />
+      <text x="348" y="68" font-size="12" text-anchor="middle" stroke="none" fill="#fff">Reply</text>
+    </g>
+
+    <!-- thread 2 (collapsed open) -->
+    <g transform="translate(16,384)" data-region="thread-2">
+      <rect x="0" y="0" width="392" height="88" rx="6" />
+      <rect x="12" y="12" width="368" height="20" fill="#fafafa" stroke="#e6e6e6" />
+      <text x="20" y="26" font-size="12" stroke="none" fill="#666">“another anchored quote…”</text>
+      <g transform="translate(12,44)">
+        <circle cx="10" cy="10" r="8" fill="#e6e6e6" stroke="none" />
+        <text x="28" y="10" font-size="12" font-weight="600" stroke="none" fill="#000">Senior PE</text>
+        <text x="28" y="26" font-size="12" stroke="none" fill="#666">1d ago · 2 replies</text>
+      </g>
+    </g>
+
+    <!-- thread 3 (resolved, dimmed) -->
+    <g transform="translate(16,488)" data-region="thread-3">
+      <rect x="0" y="0" width="392" height="80" rx="6" fill="#fafafa" />
+      <rect x="12" y="12" width="368" height="20" fill="#fff" stroke="#e6e6e6" stroke-dasharray="2 3" />
+      <text x="20" y="26" font-size="12" stroke="none" fill="#666">“resolved quote…”</text>
+      <g transform="translate(12,44)">
+        <circle cx="10" cy="10" r="8" fill="#e6e6e6" stroke="none" />
+        <text x="28" y="10" font-size="12" font-weight="600" stroke="none" fill="#666">CodexCoder</text>
+        <text x="28" y="26" font-size="12" stroke="none" fill="#666">Resolved · 3h ago</text>
+        <rect x="312" y="-6" width="68" height="20" rx="10" />
+        <text x="346" y="8" font-size="12" text-anchor="middle" stroke="none" fill="#000">Reopen</text>
+      </g>
+    </g>
+
+    <!-- footer / new thread CTA -->
+    <line x1="0" y1="604" x2="424" y2="604" />
+    <g transform="translate(16,612)">
+      <rect x="0" y="0" width="392" height="40" rx="20" />
+      <text x="16" y="24" font-size="12" stroke="none" fill="#000">＋ New comment on selection</text>
+      <text x="376" y="24" font-size="12" text-anchor="end" stroke="none" fill="#666">⌘⇧M</text>
+    </g>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="800" y="72" width="440" height="64" />
+    <rect x="800" y="280" width="440" height="80" />
+    <rect x="48" y="180" width="744" height="32" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="800" y="64">1 panel header — filter chips (Open / Resolved) + clear-focus ×</text>
+    <text x="800" y="272">2 expanded thread — quote chip, replies, mention picker, Resolve + Reply</text>
+    <text x="48" y="174">3 focused anchor — soft inset background, links pane ↔ body</text>
+  </g>
+</svg>

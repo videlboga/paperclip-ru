@@ -1,0 +1,141 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="1280" height="720" />
+
+  <text x="48" y="48" font-size="20" font-weight="600" stroke="none" fill="#000">Annotation lifecycle — single thread across revisions</text>
+  <text x="48" y="72" font-size="12" stroke="none" fill="#666">Each card is one state in the lifecycle of a single thread. Arrows show user/system events that drive transitions.</text>
+
+  <!-- Step thumbnails -->
+  <g font-size="12" stroke="none" fill="#000">
+    <!-- 1. Select -->
+    <g transform="translate(48,120)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">1. Select text</text>
+      <rect x="16" y="48" width="168" height="8" fill="#000" stroke="none" />
+      <rect x="16" y="64" width="120" height="8" fill="#000" stroke="none" />
+      <rect x="32" y="96" width="136" height="28" rx="14" stroke="#000" fill="#fff" />
+      <text x="100" y="114" text-anchor="middle">＋ Comment</text>
+      <text x="100" y="148" text-anchor="middle" fill="#666">selection toolbar</text>
+    </g>
+    <!-- 2. Compose -->
+    <g transform="translate(296,120)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">2. Compose</text>
+      <rect x="16" y="40" width="168" height="20" fill="#fafafa" stroke="#e6e6e6" />
+      <text x="24" y="54" font-size="11" fill="#666">“quote…”</text>
+      <rect x="16" y="68" width="168" height="48" stroke="#000" />
+      <text x="24" y="86" font-size="11" fill="#666">type comment…</text>
+      <rect x="120" y="124" width="64" height="22" rx="4" fill="#000" />
+      <text x="152" y="138" text-anchor="middle" fill="#fff">Send</text>
+    </g>
+    <!-- 3. Open thread -->
+    <g transform="translate(544,120)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">3. Open thread</text>
+      <rect x="16" y="40" width="168" height="20" fill="#fafafa" stroke="#e6e6e6" />
+      <rect x="16" y="68" width="168" height="14" fill="#bbb" stroke="none" />
+      <text x="100" y="106" text-anchor="middle">anchor + 2 replies</text>
+      <text x="100" y="132" text-anchor="middle" fill="#666">wakes agent on issue</text>
+    </g>
+    <!-- 4. Resolve -->
+    <g transform="translate(792,120)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">4. Resolve</text>
+      <rect x="16" y="48" width="168" height="14" stroke="#000" stroke-dasharray="2 3" fill="#fff" />
+      <rect x="64" y="80" width="72" height="20" rx="10" stroke="#000" />
+      <text x="100" y="94" text-anchor="middle">Resolved</text>
+      <text x="100" y="124" text-anchor="middle" fill="#666">hidden by default;</text>
+      <text x="100" y="138" text-anchor="middle" fill="#666">"Show resolved" reveals</text>
+    </g>
+
+    <!-- 5. Revision -->
+    <g transform="translate(48,360)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">5. Doc revised</text>
+      <text x="100" y="48" text-anchor="middle" fill="#666">rev 4 → rev 5</text>
+      <rect x="16" y="64" width="168" height="8" fill="#000" stroke="none" />
+      <rect x="16" y="80" width="168" height="8" fill="#000" stroke="none" />
+      <text x="100" y="116" text-anchor="middle">server remaps anchor</text>
+    </g>
+    <!-- 6. Exact remap -->
+    <g transform="translate(296,360)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">6a. Exact remap</text>
+      <rect x="16" y="48" width="168" height="14" fill="#bbb" stroke="none" />
+      <text x="100" y="92" text-anchor="middle" fill="#666">quote+prefix+suffix match</text>
+      <text x="100" y="116" text-anchor="middle" fill="#666">thread stays Open</text>
+    </g>
+    <!-- 7. Stale -->
+    <g transform="translate(544,360)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">6b. Stale</text>
+      <rect x="16" y="48" width="168" height="14" stroke="#000" stroke-dasharray="2 3" fill="#fafafa" />
+      <text x="100" y="92" text-anchor="middle" fill="#666">fuzzy match only</text>
+      <text x="100" y="116" text-anchor="middle" fill="#666">⚠ flag + Re-anchor action</text>
+    </g>
+    <!-- 8. Orphaned -->
+    <g transform="translate(792,360)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">6c. Orphaned</text>
+      <rect x="16" y="48" width="168" height="14" stroke="#000" stroke-dasharray="2 3" fill="#e6e6e6" />
+      <text x="100" y="92" text-anchor="middle" fill="#666">no match in body</text>
+      <text x="100" y="116" text-anchor="middle" fill="#666">view rev 3 to see original</text>
+    </g>
+
+    <!-- 9. Reopen -->
+    <g transform="translate(1040,120)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">4'. Reopen</text>
+      <rect x="16" y="48" width="168" height="14" fill="#bbb" stroke="none" />
+      <text x="100" y="92" text-anchor="middle" fill="#666">resolved → open</text>
+      <text x="100" y="116" text-anchor="middle" fill="#666">re-wakes assignee</text>
+    </g>
+
+    <!-- 10. Edit mode draft -->
+    <g transform="translate(1040,360)">
+      <rect width="200" height="160" rx="8" stroke="#000" fill="#fff" />
+      <text x="100" y="24" text-anchor="middle" font-weight="600">Edit-mode draft</text>
+      <text x="100" y="48" text-anchor="middle" fill="#666">dirty / conflicted</text>
+      <rect x="16" y="64" width="168" height="40" fill="#fafafa" />
+      <text x="100" y="86" text-anchor="middle" fill="#666">read-only panel</text>
+      <text x="100" y="100" text-anchor="middle" fill="#666">no new anchors</text>
+      <text x="100" y="132" text-anchor="middle" fill="#666">save → unlocks</text>
+    </g>
+  </g>
+
+  <!-- Arrows -->
+  <g stroke="#000" fill="none">
+    <!-- 1 → 2 -->
+    <path d="M 248 200 H 296" marker-end="url(#arrow)" />
+    <!-- 2 → 3 -->
+    <path d="M 496 200 H 544" marker-end="url(#arrow)" />
+    <!-- 3 → 4 -->
+    <path d="M 744 200 H 792" marker-end="url(#arrow)" />
+    <!-- 4 → 9 -->
+    <path d="M 992 200 H 1040" marker-end="url(#arrow)" />
+    <!-- 3 → 5 (revision happens) -->
+    <path d="M 644 280 V 320 H 148 V 360" marker-end="url(#arrow)" />
+    <!-- 5 → 6a/6b/6c -->
+    <path d="M 248 440 H 296" marker-end="url(#arrow)" />
+    <path d="M 248 440 H 280 V 480 H 644" marker-end="url(#arrow)" />
+    <path d="M 248 440 H 280 V 520 H 892" marker-end="url(#arrow)" />
+    <!-- edit-mode side connector -->
+    <path d="M 992 440 H 1040" stroke-dasharray="3 3" marker-end="url(#arrow)" />
+  </g>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#000" stroke="none" />
+    </marker>
+  </defs>
+
+  <!-- legend -->
+  <g transform="translate(48,584)" font-size="12" stroke="none" fill="#000">
+    <text x="0" y="0" font-weight="600">Legend</text>
+    <line x1="0" y1="20" x2="48" y2="20" stroke="#000" />
+    <text x="56" y="24" fill="#666">user/system event</text>
+    <line x1="240" y1="20" x2="288" y2="20" stroke="#000" stroke-dasharray="3 3" />
+    <text x="296" y="24" fill="#666">side-effect (e.g. wake)</text>
+    <rect x="480" y="12" width="14" height="14" stroke="#000" stroke-dasharray="2 3" fill="#fafafa" />
+    <text x="500" y="24" fill="#666">resolved / stale chrome</text>
+  </g>
+</svg>

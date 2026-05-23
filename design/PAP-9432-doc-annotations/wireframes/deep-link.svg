@@ -1,0 +1,102 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="1280" height="800" />
+
+  <g transform="translate(0,0)"><rect x="0" y="0" width="1280" height="56" /></g>
+
+  <!-- URL bar mockup -->
+  <g transform="translate(48,16)">
+    <rect x="0" y="0" width="864" height="24" rx="12" fill="#fafafa" />
+    <text x="12" y="16" font-size="12" stroke="none" fill="#666">/PAP/issues/PAP-9436#document-plan&amp;thread=docann_xyz&amp;comment=c_42</text>
+  </g>
+
+  <!-- before: folded document card -->
+  <g transform="translate(48,80)">
+    <text x="0" y="14" font-size="12" font-weight="600" stroke="none" fill="#000">Before deep link</text>
+    <g transform="translate(0,24)">
+      <rect x="0" y="0" width="568" height="56" rx="8" />
+      <text x="16" y="36" font-size="12" stroke="none" fill="#666">▸  PLAN  rev 4  updated 12m ago   3 comments</text>
+      <text x="552" y="36" text-anchor="end" font-size="12" stroke="none" fill="#666">⋯</text>
+    </g>
+  </g>
+
+  <!-- after: auto-opened, scrolled, focused -->
+  <g transform="translate(48,180)" data-region="after">
+    <text x="0" y="14" font-size="12" font-weight="600" stroke="none" fill="#000">After deep link — folded card auto-opens, scrolls to anchor, opens panel to thread</text>
+    <g transform="translate(0,24)">
+      <rect x="0" y="0" width="744" height="540" rx="8" stroke="#000" stroke-width="2" />
+      <g transform="translate(16,16)">
+        <text x="0" y="14" font-size="12" stroke="none" fill="#666">▾</text>
+        <rect x="16" y="0" width="48" height="20" rx="10" />
+        <text x="40" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">PLAN</text>
+        <text x="76" y="14" font-size="12" stroke="none" fill="#666">rev 4 ▾</text>
+        <rect x="200" y="0" width="96" height="20" rx="10" fill="#e6e6e6" />
+        <circle cx="214" cy="10" r="3" fill="#000" stroke="none" />
+        <text x="224" y="14" font-size="12" stroke="none" fill="#000">3 comments</text>
+      </g>
+
+      <g transform="translate(24,64)">
+        <rect x="0" y="0" width="280" height="20" fill="#e6e6e6" stroke="none" />
+        <rect x="0" y="40" width="680" height="10" fill="#e6e6e6" stroke="none" />
+        <rect x="0" y="56" width="640" height="10" fill="#e6e6e6" stroke="none" />
+        <!-- focused anchor — pulse ring -->
+        <rect x="-8" y="92" width="700" height="40" stroke="#000" stroke-width="2" fill="#fafafa" />
+        <rect x="0" y="104" width="660" height="10" fill="#000" stroke="none" />
+        <rect x="0" y="120" width="380" height="10" fill="#000" stroke="none" />
+        <!-- following body -->
+        <rect x="0" y="160" width="660" height="10" fill="#e6e6e6" stroke="none" />
+        <rect x="0" y="176" width="620" height="10" fill="#e6e6e6" stroke="none" />
+        <rect x="0" y="208" width="540" height="10" fill="#e6e6e6" stroke="none" />
+      </g>
+    </g>
+
+    <!-- side panel, scrolled to targeted comment -->
+    <g transform="translate(760,24)">
+      <rect x="0" y="0" width="424" height="540" rx="8" />
+      <g transform="translate(16,16)">
+        <text x="0" y="16" font-size="14" font-weight="600" stroke="none" fill="#000">Comments</text>
+        <text x="0" y="36" font-size="12" stroke="none" fill="#666">PLAN · rev 4</text>
+      </g>
+      <line x1="0" y1="56" x2="424" y2="56" />
+      <g transform="translate(16,72)">
+        <rect x="0" y="0" width="392" height="232" rx="6" stroke="#000" stroke-width="2" />
+        <rect x="12" y="12" width="368" height="28" fill="#fafafa" stroke="#e6e6e6" />
+        <text x="20" y="30" font-size="12" stroke="none" fill="#666">“selected quote …”</text>
+        <g transform="translate(12,52)">
+          <circle cx="12" cy="12" r="10" fill="#e6e6e6" stroke="none" />
+          <text x="32" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">Dotta · 2m ago</text>
+          <rect x="32" y="32" width="320" height="10" fill="#e6e6e6" stroke="none" />
+        </g>
+        <!-- targeted comment ring -->
+        <g transform="translate(12,124)">
+          <rect x="-4" y="-4" width="376" height="84" stroke="#000" stroke-width="2" fill="#fafafa" />
+          <circle cx="12" cy="12" r="10" fill="#e6e6e6" stroke="none" />
+          <text x="32" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">UXDesigner · just now</text>
+          <text x="32" y="28" font-size="12" stroke="none" fill="#666">[comment=c_42]</text>
+          <rect x="32" y="40" width="280" height="10" fill="#e6e6e6" stroke="none" />
+          <rect x="32" y="56" width="220" height="10" fill="#e6e6e6" stroke="none" />
+        </g>
+      </g>
+      <g transform="translate(16,316)">
+        <rect x="0" y="0" width="392" height="48" rx="6" />
+        <text x="12" y="20" font-size="12" stroke="none" fill="#666">Reply…</text>
+        <rect x="320" y="12" width="56" height="24" rx="4" fill="#000" />
+        <text x="348" y="28" text-anchor="middle" font-size="12" stroke="none" fill="#fff">Reply</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="40" y="76" width="592" height="80" />
+    <rect x="40" y="170" width="744" height="40" />
+    <rect x="40" y="312" width="744" height="48" />
+    <rect x="752" y="304" width="440" height="68" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="40" y="72">1 folded state — fold curtain still hides body. Deep link forces unfold + scroll + focus.</text>
+    <text x="40" y="164">2 URL grammar — `#document-{key}&amp;thread={id}&amp;comment={id}`; key alone scrolls to doc only</text>
+    <text x="40" y="308">3 body pulse — 1.4s ring on anchor, then steady focused border</text>
+    <text x="752" y="300">4 panel auto-opens on the right, expands target thread, scrolls to target comment, focus ring on comment</text>
+  </g>
+</svg>

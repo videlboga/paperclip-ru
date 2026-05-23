@@ -1,0 +1,125 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="1280" height="800" />
+
+  <g transform="translate(0,0)"><rect x="0" y="0" width="1280" height="56" /></g>
+
+  <!-- 1: edit-mode document card -->
+  <g transform="translate(48,80)" data-region="edit-card">
+    <rect x="0" y="0" width="744" height="664" rx="8" stroke="#000" stroke-width="2" />
+    <!-- chrome -->
+    <g transform="translate(16,16)">
+      <rect x="0" y="0" width="56" height="20" rx="10" fill="#e6e6e6" />
+      <text x="28" y="14" text-anchor="middle" font-size="12" stroke="none" fill="#000">EDIT</text>
+      <rect x="64" y="0" width="48" height="20" rx="10" />
+      <text x="88" y="14" text-anchor="middle" font-size="12" stroke="none" fill="#000">PLAN</text>
+      <text x="120" y="14" font-size="12" stroke="none" fill="#666">rev 4 ← editing</text>
+      <!-- save state -->
+      <text x="248" y="14" font-size="12" stroke="none" fill="#666">⟳ Saving…</text>
+      <!-- count chip remains visible -->
+      <rect x="376" y="0" width="96" height="20" rx="10" />
+      <circle cx="390" cy="10" r="3" fill="#000" stroke="none" />
+      <text x="400" y="14" font-size="12" stroke="none" fill="#000">3 comments</text>
+      <!-- right actions -->
+      <rect x="608" y="0" width="56" height="20" rx="4" />
+      <text x="636" y="14" text-anchor="middle" font-size="12" stroke="none" fill="#000">Cancel</text>
+      <rect x="672" y="0" width="40" height="20" rx="4" fill="#000" />
+      <text x="692" y="14" text-anchor="middle" font-size="12" stroke="none" fill="#fff">Done</text>
+    </g>
+
+    <!-- 2: MDXEditor toolbar -->
+    <g transform="translate(16,52)" data-region="editor-toolbar">
+      <rect x="0" y="0" width="712" height="40" rx="4" fill="#fafafa" />
+      <g font-size="14" stroke="none" fill="#000">
+        <text x="16" y="26">B</text>
+        <text x="40" y="26" font-style="italic">I</text>
+        <text x="64" y="26" text-decoration="line-through">S</text>
+        <line x1="88" y1="10" x2="88" y2="30" stroke="#ccc" />
+        <text x="104" y="26">H1</text>
+        <text x="136" y="26">H2</text>
+        <text x="168" y="26">•</text>
+        <text x="192" y="26">1.</text>
+        <line x1="220" y1="10" x2="220" y2="30" stroke="#ccc" />
+        <text x="236" y="26">⌧ Link</text>
+        <text x="292" y="26">⌗ Code</text>
+        <text x="352" y="26">⌹ Table</text>
+        <line x1="432" y1="10" x2="432" y2="30" stroke="#ccc" />
+        <!-- Annotation capture button -->
+        <rect x="448" y="6" width="184" height="28" rx="14" fill="#fff" stroke="#000" />
+        <text x="540" y="24" text-anchor="middle" font-size="12" fill="#000">＋ Comment on selection</text>
+        <text x="648" y="24" font-size="12" fill="#666">⌘⇧M</text>
+      </g>
+    </g>
+
+    <!-- 3: editor body with selection -->
+    <g transform="translate(24,108)" data-region="editor-body">
+      <rect x="0" y="0" width="280" height="20" fill="#e6e6e6" stroke="none" />
+      <!-- live caret/cursor indicator -->
+      <line x1="284" y1="0" x2="284" y2="20" stroke="#000" stroke-width="2" />
+      <rect x="0" y="40" width="680" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="56" width="640" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- selected range (lexical selection halo) -->
+      <rect x="-2" y="84" width="680" height="14" fill="#bbb" stroke="none" />
+      <rect x="0" y="88" width="676" height="10" fill="#000" stroke="none" />
+      <rect x="-2" y="100" width="480" height="14" fill="#bbb" stroke="none" />
+      <rect x="0" y="104" width="476" height="10" fill="#000" stroke="none" />
+      <rect x="0" y="136" width="660" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="152" width="600" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- existing thread anchor decoration in edit mode (renders as a soft underline) -->
+      <rect x="0" y="184" width="280" height="10" fill="#e6e6e6" stroke="none" />
+      <line x1="0" y1="198" x2="280" y2="198" stroke-dasharray="3 3" />
+      <rect x="0" y="216" width="540" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- floating selection action -->
+      <g transform="translate(48,68)">
+        <rect x="0" y="0" width="216" height="32" rx="16" fill="#fff" />
+        <text x="14" y="20" font-size="12" stroke="none" fill="#000">＋ Comment</text>
+        <line x1="100" y1="6" x2="100" y2="26" stroke="#ccc" />
+        <text x="116" y="20" font-size="12" stroke="none" fill="#666">⌘⇧M</text>
+        <path d="M 24 32 L 32 40 L 40 32 Z" fill="#fff" />
+      </g>
+    </g>
+
+    <!-- 4: dirty/conflict banner (alternative state shown small) -->
+    <g transform="translate(16,556)" data-region="dirty-banner">
+      <rect x="0" y="0" width="712" height="48" rx="4" fill="#fafafa" />
+      <text x="16" y="20" font-size="12" font-weight="600" stroke="none" fill="#000">Save draft to anchor new comments</text>
+      <text x="16" y="36" font-size="12" stroke="none" fill="#666">Existing threads remain readable. New anchors are disabled while the draft is unsaved.</text>
+      <rect x="600" y="12" width="96" height="24" rx="4" />
+      <text x="648" y="28" text-anchor="middle" font-size="12" stroke="none" fill="#000">Save now</text>
+    </g>
+  </g>
+
+  <!-- side panel (shrunk, read-only in dirty case) -->
+  <g transform="translate(808,80)" data-region="panel">
+    <rect x="0" y="0" width="424" height="664" rx="8" />
+    <g transform="translate(16,16)">
+      <text x="0" y="16" font-size="14" font-weight="600" stroke="none" fill="#000">Comments</text>
+      <text x="0" y="36" font-size="12" stroke="none" fill="#666">PLAN · rev 4 · read-only while draft is dirty</text>
+    </g>
+    <line x1="0" y1="56" x2="424" y2="56" />
+    <g transform="translate(16,72)">
+      <rect x="0" y="0" width="392" height="88" rx="6" fill="#fafafa" />
+      <rect x="12" y="12" width="368" height="20" fill="#fff" stroke="#e6e6e6" />
+      <text x="20" y="26" font-size="12" stroke="none" fill="#666">“existing quote …”</text>
+      <text x="20" y="56" font-size="12" stroke="none" fill="#000">Dotta · 1h ago</text>
+      <text x="20" y="72" font-size="12" stroke="none" fill="#666">2 replies</text>
+    </g>
+    <!-- disabled new-thread button -->
+    <g transform="translate(16,604)">
+      <rect x="0" y="0" width="392" height="40" rx="20" fill="#fafafa" stroke="#ccc" />
+      <text x="196" y="24" text-anchor="middle" font-size="12" stroke="none" fill="#999">New comment disabled — save draft first</text>
+    </g>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="488" y="120" width="208" height="40" />
+    <rect x="48" y="548" width="744" height="64" />
+    <rect x="808" y="596" width="424" height="56" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="488" y="114">1 toolbar primary action — uses current Lexical selection; same shortcut ⌘⇧M</text>
+    <text x="48" y="544">2 dirty-draft banner — explains why new anchors are disabled until save lands</text>
+    <text x="808" y="592">3 disabled "new comment" CTA mirrors banner reason</text>
+  </g>
+</svg>

@@ -94,7 +94,7 @@ export function DocumentAnnotationPanel(props: AnnotationPanelProps) {
       aria-label={`Annotations for ${props.documentKey.toUpperCase()}, revision ${props.documentRevisionNumber}`}
       data-testid="document-annotation-panel"
       className={cn(
-        "sticky top-4 z-30 flex h-full max-h-[80vh] w-[360px] shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-card shadow-md",
+        "flex h-full max-h-[80vh] w-[360px] shrink-0 flex-col overflow-hidden rounded-lg border border-border bg-card shadow-md",
         props.className,
       )}
     >
@@ -366,6 +366,9 @@ function AnnotationPanelBody(props: AnnotationPanelProps) {
             variant="secondary"
             className="w-full justify-start gap-2 text-[12px]"
             onClick={startNewCommentFromSelection}
+            onMouseDown={(event) => {
+              if (!props.newCommentDisabled) event.preventDefault();
+            }}
             disabled={props.newCommentDisabled}
             title={props.newCommentDisabled
               ? props.newCommentDisabledReason ?? undefined

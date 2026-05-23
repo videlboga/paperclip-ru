@@ -11,6 +11,10 @@ import { DocumentAnnotationLayer, type PendingAnchor } from "./DocumentAnnotatio
 import { DocumentAnnotationPanel } from "./DocumentAnnotationPanel";
 import type { CompanyUserProfile } from "@/lib/company-members";
 
+const DESKTOP_ANNOTATION_PANEL_WIDTH = 360;
+const DESKTOP_ANNOTATION_PANEL_GAP = 12;
+const DESKTOP_ANNOTATION_PANEL_VIEWPORT_MARGIN = 16;
+
 export interface IssueDocumentAnnotationsProps {
   issueId: string;
   doc: IssueDocument;
@@ -53,8 +57,14 @@ export function IssueDocumentAnnotations({
   const containerRef = useRef<HTMLElement | null>(null);
   const [focusedThreadId, setFocusedThreadId] = useState<string | null>(defaultFocusedThreadId ?? null);
   const [focusedCommentId, setFocusedCommentId] = useState<string | null>(null);
-  const [pendingAnchor, setPendingAnchor] = useState<PendingAnchor | null>(null);
+  const [selectionAnchor, setSelectionAnchor] = useState<PendingAnchor | null>(null);
+  const [composerAnchor, setComposerAnchor] = useState<PendingAnchor | null>(null);
   const [isMobile, setIsMobile] = useState(false);
+  const [desktopPanelFrame, setDesktopPanelFrame] = useState<{
+    left: number;
+    top: number;
+    maxHeight: number;
+  } | null>(null);
   const hashHandledRef = useRef<string | null>(null);
   // Bus token to ask the body layer to capture the current selection into a pendingAnchor.
   const [captureSelectionRequestId, setCaptureSelectionRequestId] = useState(0);
@@ -70,6 +80,42 @@ export function IssueDocumentAnnotations({
     }
     return undefined;
   }, []);
+
+  useEffect(() => {
+    if (!panelOpen || isMobile || typeof window === "undefined") {
+      setDesktopPanelFrame(null);
+      return;
+    }
+
+    const updatePanelFrame = () => {
+      const rect = containerRef.current?.getBoundingClientRect();
+      if (!rect) {
+        setDesktopPanelFrame(null);
+        return;
+      }
+      const top = Math.max(DESKTOP_ANNOTATION_PANEL_VIEWPORT_MARGIN, rect.top);
+      const desiredLeft = rect.right + DESKTOP_ANNOTATION_PANEL_GAP;
+      const maxVisibleLeft = window.innerWidth
+        - DESKTOP_ANNOTATION_PANEL_WIDTH
+        - DESKTOP_ANNOTATION_PANEL_VIEWPORT_MARGIN;
+      setDesktopPanelFrame({
+        left: Math.max(
+          DESKTOP_ANNOTATION_PANEL_VIEWPORT_MARGIN,
+          Math.min(desiredLeft, maxVisibleLeft),
+        ),
+        top,
+        maxHeight: Math.max(240, window.innerHeight - top - DESKTOP_ANNOTATION_PANEL_VIEWPORT_MARGIN),
+      });
+    };
+
+    updatePanelFrame();
+    window.addEventListener("resize", updatePanelFrame);
+    window.addEventListener("scroll", updatePanelFrame, true);
+    return () => {
+      window.removeEventListener("resize", updatePanelFrame);
+      window.removeEventListener("scroll", updatePanelFrame, true);
+    };
+  }, [doc.key, isMobile, panelOpen]);
 
   const annotationsQuery = useQuery({
     queryKey: queryKeys.issues.documentAnnotations(issueId, doc.key, "all"),
@@ -102,9 +148,19 @@ export function IssueDocumentAnnotations({
           ? "Document has no saved revision yet."
           : null;
 
+  const handleSelectionAnchorChange = useCallback((anchor: PendingAnchor | null) => {
+    setSelectionAnchor(anchor);
+  }, []);
+
+  const handleClearComposerAnchor = useCallback(() => {
+    setSelectionAnchor(null);
+    setComposerAnchor(null);
+  }, []);
+
   const handleRequestComment = useCallback((anchor: PendingAnchor) => {
     if (newCommentDisabled) return;
-    setPendingAnchor(anchor);
+    setSelectionAnchor(null);
+    setComposerAnchor(anchor);
     onPanelOpenChange(true);
   }, [newCommentDisabled, onPanelOpenChange]);
 
@@ -118,9 +174,13 @@ export function IssueDocumentAnnotations({
 
   const handleRequestCommentFromSelection = useCallback(() => {
     if (newCommentDisabled) return;
+    if (selectionAnchor) {
+      handleRequestComment(selectionAnchor);
+      return;
+    }
     // Trigger the layer to re-read the current selection and emit a pendingAnchor.
     setCaptureSelectionRequestId((current) => current + 1);
-  }, [newCommentDisabled]);
+  }, [handleRequestComment, newCommentDisabled, selectionAnchor]);
 
   // ⌘⇧M / Ctrl+Shift+M global shortcut while the panel is open.
   useEffect(() => {
@@ -153,69 +213,83 @@ export function IssueDocumentAnnotations({
     [allThreads],
   );
 
+  const annotationPanel = panelOpen ? (
+    <DocumentAnnotationPanel
+      open={panelOpen}
+      onOpenChange={(open) => {
+        onPanelOpenChange(open);
+        if (!open) {
+          setSelectionAnchor(null);
+          setComposerAnchor(null);
+          setFocusedThreadId(null);
+          setFocusedCommentId(null);
+        }
+      }}
+      issueId={issueId}
+      documentKey={doc.key}
+      documentRevisionNumber={doc.latestRevisionNumber}
+      baseRevisionId={doc.latestRevisionId}
+      baseRevisionNumber={doc.latestRevisionNumber}
+      threads={allThreads as DocumentAnnotationThreadWithComments[]}
+      focusedThreadId={focusedThreadId}
+      focusedCommentId={focusedCommentId}
+      onFocusThread={(id) => {
+        setFocusedThreadId(id);
+        if (!id) setFocusedCommentId(null);
+      }}
+      pendingAnchor={composerAnchor}
+      onClearPendingAnchor={handleClearComposerAnchor}
+      onRequestCommentFromSelection={handleRequestCommentFromSelection}
+      newCommentDisabled={newCommentDisabled}
+      newCommentDisabledReason={newCommentDisabledReason}
+      isMobile={isMobile}
+      className={isMobile ? undefined : "lg:w-[360px] lg:max-w-[360px]"}
+      agentMap={agentMap}
+      userProfileMap={userProfileMap}
+    />
+  ) : null;
+
   return (
-    <div className="paperclip-doc-annotation-host flex flex-col gap-3 lg:flex-row lg:items-start">
-      <div className="relative min-w-0 flex-1">
-        <section
-          ref={(element) => {
-            containerRef.current = element;
+    <div className="paperclip-doc-annotation-host relative">
+      <section
+        ref={(element) => {
+          containerRef.current = element;
+        }}
+        className="relative min-w-0"
+        data-testid={`document-annotation-body-${doc.key}`}
+      >
+        {children}
+        {!historicalPreview && doc.latestRevisionId ? (
+          <DocumentAnnotationLayer
+            containerRef={containerRef}
+            markdown={bodyMarkdown}
+            threads={overlayThreads}
+            focusedThreadId={focusedThread?.id ?? null}
+            onThreadFocus={handleThreadFocus}
+            pendingAnchor={selectionAnchor}
+            onPendingAnchorChange={handleSelectionAnchorChange}
+            onRequestComment={handleRequestComment}
+            newCommentDisabled={newCommentDisabled}
+            newCommentDisabledReason={newCommentDisabledReason}
+            hideResolved
+            captureSelectionRequestId={captureSelectionRequestId}
+          />
+        ) : null}
+      </section>
+      {panelOpen && !isMobile && desktopPanelFrame ? (
+        <div
+          data-testid="document-annotation-panel-anchor"
+          className="pointer-events-auto fixed hidden lg:block"
+          style={{
+            left: desktopPanelFrame.left,
+            maxHeight: desktopPanelFrame.maxHeight,
+            top: desktopPanelFrame.top,
           }}
-          className="relative"
-          data-testid={`document-annotation-body-${doc.key}`}
         >
-          {children}
-          {!historicalPreview && doc.latestRevisionId ? (
-            <DocumentAnnotationLayer
-              containerRef={containerRef}
-              markdown={bodyMarkdown}
-              threads={overlayThreads}
-              focusedThreadId={focusedThread?.id ?? null}
-              onThreadFocus={handleThreadFocus}
-              pendingAnchor={pendingAnchor}
-              onPendingAnchorChange={(anchor) => setPendingAnchor(anchor)}
-              onRequestComment={handleRequestComment}
-              newCommentDisabled={newCommentDisabled}
-              newCommentDisabledReason={newCommentDisabledReason}
-              hideResolved
-              captureSelectionRequestId={captureSelectionRequestId}
-            />
-          ) : null}
-        </section>
-      </div>
-      {panelOpen ? (
-        <DocumentAnnotationPanel
-          open={panelOpen}
-          onOpenChange={(open) => {
-            onPanelOpenChange(open);
-            if (!open) {
-              setPendingAnchor(null);
-              setFocusedThreadId(null);
-              setFocusedCommentId(null);
-            }
-          }}
-          issueId={issueId}
-          documentKey={doc.key}
-          documentRevisionNumber={doc.latestRevisionNumber}
-          baseRevisionId={doc.latestRevisionId}
-          baseRevisionNumber={doc.latestRevisionNumber}
-          threads={allThreads as DocumentAnnotationThreadWithComments[]}
-          focusedThreadId={focusedThreadId}
-          focusedCommentId={focusedCommentId}
-          onFocusThread={(id) => {
-            setFocusedThreadId(id);
-            if (!id) setFocusedCommentId(null);
-          }}
-          pendingAnchor={pendingAnchor}
-          onClearPendingAnchor={() => setPendingAnchor(null)}
-          onRequestCommentFromSelection={handleRequestCommentFromSelection}
-          newCommentDisabled={newCommentDisabled}
-          newCommentDisabledReason={newCommentDisabledReason}
-          isMobile={isMobile}
-          className={isMobile ? undefined : "lg:w-[360px] lg:max-w-[360px]"}
-          agentMap={agentMap}
-          userProfileMap={userProfileMap}
-        />
+          {annotationPanel}
+        </div>
       ) : null}
+      {panelOpen && isMobile ? annotationPanel : null}
     </div>
   );
 }

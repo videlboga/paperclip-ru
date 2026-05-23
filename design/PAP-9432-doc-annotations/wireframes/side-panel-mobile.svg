@@ -1,0 +1,90 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="375" height="812" />
+
+  <!-- safe area lines -->
+  <line x1="0" y1="44" x2="375" y2="44" />
+  <line x1="0" y1="778" x2="375" y2="778" />
+
+  <!-- 1: scrim over document -->
+  <g transform="translate(0,44)">
+    <rect x="0" y="0" width="375" height="380" fill="#fafafa" stroke="#e6e6e6" />
+    <!-- dim representation of document underneath -->
+    <g transform="translate(16,24)" stroke="#ccc" fill="none">
+      <rect x="0" y="0" width="343" height="16" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="32" width="320" height="8" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="48" width="296" height="8" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="80" width="200" height="8" fill="#bbb" stroke="none" />
+      <rect x="0" y="112" width="296" height="8" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="128" width="248" height="8" fill="#e6e6e6" stroke="none" />
+    </g>
+    <text x="187" y="364" text-anchor="middle" font-size="12" stroke="none" fill="#666">Tap scrim to dismiss</text>
+  </g>
+
+  <!-- 2: bottom sheet -->
+  <g transform="translate(0,400)" data-region="bottom-sheet">
+    <rect x="0" y="0" width="375" height="378" rx="16" />
+    <!-- grab handle -->
+    <rect x="163" y="8" width="48" height="4" rx="2" fill="#ccc" stroke="none" />
+    <!-- header -->
+    <g transform="translate(16,24)">
+      <text x="0" y="16" font-size="14" font-weight="600" stroke="none" fill="#000">Comments</text>
+      <text x="0" y="36" font-size="12" stroke="none" fill="#666">PLAN · rev 4</text>
+      <text x="343" y="16" text-anchor="end" font-size="14" stroke="none" fill="#000">×</text>
+    </g>
+
+    <!-- filter chips -->
+    <g transform="translate(16,76)">
+      <rect x="0" y="0" width="72" height="28" rx="14" fill="#e6e6e6" />
+      <text x="36" y="18" font-size="12" text-anchor="middle" stroke="none" fill="#000">Open 2</text>
+      <rect x="80" y="0" width="96" height="28" rx="14" />
+      <text x="128" y="18" font-size="12" text-anchor="middle" stroke="none" fill="#666">Resolved 1</text>
+      <rect x="184" y="0" width="80" height="28" rx="14" />
+      <text x="224" y="18" font-size="12" text-anchor="middle" stroke="none" fill="#666">Stale 0</text>
+    </g>
+
+    <!-- thread (focused) -->
+    <g transform="translate(16,116)">
+      <rect x="0" y="0" width="343" height="180" rx="6" stroke="#000" stroke-width="2" />
+      <rect x="12" y="12" width="319" height="28" fill="#fafafa" stroke="#e6e6e6" />
+      <text x="20" y="30" font-size="12" stroke="none" fill="#666">“selected quote …”</text>
+      <g transform="translate(12,52)">
+        <circle cx="12" cy="12" r="10" fill="#e6e6e6" stroke="none" />
+        <text x="32" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">Dotta · board</text>
+        <text x="32" y="28" font-size="12" stroke="none" fill="#666">2m ago</text>
+        <rect x="32" y="40" width="280" height="8" fill="#e6e6e6" stroke="none" />
+        <rect x="32" y="56" width="240" height="8" fill="#e6e6e6" stroke="none" />
+      </g>
+      <!-- thread nav (prev/next) -->
+      <g transform="translate(12,144)">
+        <rect x="0" y="0" width="32" height="24" rx="4" />
+        <text x="16" y="16" text-anchor="middle" font-size="12" stroke="none" fill="#000">‹</text>
+        <text x="48" y="16" font-size="12" stroke="none" fill="#666">1 of 2 open</text>
+        <rect x="124" y="0" width="32" height="24" rx="4" />
+        <text x="140" y="16" text-anchor="middle" font-size="12" stroke="none" fill="#000">›</text>
+        <rect x="251" y="0" width="76" height="24" rx="4" />
+        <text x="289" y="16" text-anchor="middle" font-size="12" stroke="none" fill="#000">Resolve</text>
+      </g>
+    </g>
+
+    <!-- composer (collapsed) -->
+    <g transform="translate(16,308)" data-region="composer">
+      <rect x="0" y="0" width="343" height="48" rx="24" />
+      <text x="16" y="30" font-size="14" stroke="none" fill="#666">Reply…</text>
+      <rect x="287" y="8" width="48" height="32" rx="16" fill="#000" />
+      <text x="311" y="28" font-size="12" text-anchor="middle" stroke="none" fill="#fff">Send</text>
+    </g>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="8" y="404" width="359" height="40" />
+    <rect x="8" y="552" width="359" height="60" />
+    <rect x="8" y="716" width="359" height="56" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="8" y="400">1 grab handle — swipe up to expand to full height, swipe down to dismiss</text>
+    <text x="8" y="548">2 single thread focus — prev/next steps through "Open" filter; tapping body scrolls to anchor</text>
+    <text x="8" y="710">3 composer collapses; tapping expands to multiline + mention chip</text>
+  </g>
+</svg>

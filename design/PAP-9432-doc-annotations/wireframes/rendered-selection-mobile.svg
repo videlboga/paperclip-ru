@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="375" height="812" />
+
+  <!-- safe area rails -->
+  <line x1="0" y1="44" x2="375" y2="44" />
+  <line x1="0" y1="778" x2="375" y2="778" />
+
+  <!-- 1: top bar -->
+  <g transform="translate(0,44)">
+    <rect x="0" y="0" width="375" height="48" />
+    <text x="16" y="30" font-size="14" stroke="none" fill="#000">← Issue</text>
+    <text x="359" y="30" font-size="14" text-anchor="end" stroke="none" fill="#000">⋯</text>
+  </g>
+
+  <!-- 2: issue title -->
+  <g transform="translate(16,100)">
+    <text x="0" y="20" font-size="14" stroke="none" fill="#666">PAP-9436</text>
+    <text x="0" y="48" font-size="20" font-weight="600" stroke="none" fill="#000">Phase 4: Document</text>
+    <text x="0" y="72" font-size="20" font-weight="600" stroke="none" fill="#000">annotation UI</text>
+  </g>
+
+  <!-- 3: document card -->
+  <g transform="translate(16,200)" data-region="document-card">
+    <rect x="0" y="0" width="343" height="500" rx="8" />
+    <!-- chrome -->
+    <g transform="translate(12,12)">
+      <text x="0" y="14" font-size="12" stroke="none" fill="#666">▾</text>
+      <rect x="16" y="0" width="40" height="20" rx="10" />
+      <text x="36" y="14" font-size="12" text-anchor="middle" stroke="none" fill="#000">PLAN</text>
+      <text x="64" y="14" font-size="12" stroke="none" fill="#666">rev 4 ▾</text>
+      <!-- counter chip -->
+      <rect x="216" y="0" width="88" height="20" rx="10" />
+      <circle cx="230" cy="10" r="3" fill="#000" stroke="none" />
+      <text x="240" y="14" font-size="12" stroke="none" fill="#000">3 comments</text>
+    </g>
+
+    <!-- body -->
+    <g transform="translate(16,52)">
+      <rect x="0" y="0" width="180" height="16" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="32" width="304" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="48" width="288" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- selected text -->
+      <rect x="0" y="80" width="304" height="10" fill="#000" stroke="none" />
+      <rect x="0" y="96" width="224" height="10" fill="#000" stroke="none" />
+      <!-- next -->
+      <rect x="0" y="128" width="296" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="144" width="312" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- active highlight -->
+      <rect x="0" y="176" width="220" height="10" fill="#bbb" stroke="none" />
+      <!-- resolved highlight -->
+      <rect x="0" y="208" width="160" height="10" fill="#f2f2f2" stroke="#000" stroke-dasharray="2 3" />
+    </g>
+
+    <!-- selection action sheet over selection -->
+    <g transform="translate(40,308)" data-region="selection-action">
+      <rect x="0" y="0" width="264" height="44" rx="22" />
+      <text x="20" y="28" font-size="14" stroke="none" fill="#000">＋ Comment</text>
+      <line x1="124" y1="10" x2="124" y2="34" />
+      <text x="140" y="28" font-size="14" stroke="none" fill="#000">⎘ Copy link</text>
+      <path d="M 32 44 L 40 52 L 48 44 Z" />
+    </g>
+  </g>
+
+  <!-- 4: ambient hint at bottom -->
+  <g transform="translate(0,720)">
+    <line x1="0" y1="0" x2="375" y2="0" />
+    <text x="16" y="22" font-size="12" stroke="none" fill="#666">Long-press text to select • Selection menu appears above</text>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="28" y="304" width="288" height="56" />
+    <rect x="20" y="200" width="120" height="20" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="28" y="296">1 native selection sheet → tap "Comment" opens compose drawer (full bottom sheet)</text>
+    <text x="20" y="194">2 unresolved count chip</text>
+  </g>
+</svg>

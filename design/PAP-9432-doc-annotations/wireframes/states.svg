@@ -1,0 +1,118 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="800" viewBox="0 0 1280 800"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="1280" height="800" />
+
+  <!-- title -->
+  <g transform="translate(48,48)">
+    <text x="0" y="24" font-size="20" font-weight="600" stroke="none" fill="#000">Thread state matrix — visible chrome per state</text>
+    <text x="0" y="48" font-size="12" stroke="none" fill="#666">Same anchor data, different presentation. Card states on the left, in-body highlight states on the right.</text>
+  </g>
+
+  <!-- LEFT: panel state cards -->
+  <g transform="translate(48,112)" data-region="state-cards">
+    <!-- Open / active -->
+    <g transform="translate(0,0)">
+      <rect x="0" y="0" width="416" height="160" rx="6" />
+      <rect x="12" y="12" width="392" height="28" fill="#fafafa" stroke="#e6e6e6" />
+      <text x="20" y="30" font-size="12" stroke="none" fill="#666">“selected quote …”</text>
+      <text x="12" y="60" font-size="12" font-weight="600" stroke="none" fill="#000">Open · active anchor</text>
+      <text x="12" y="80" font-size="12" stroke="none" fill="#666">Dotta · 2m ago · 2 replies</text>
+      <rect x="12" y="96" width="60" height="20" rx="10" fill="#000" stroke="#000" />
+      <text x="42" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#fff">Open</text>
+      <text x="84" y="110" font-size="12" stroke="none" fill="#666">rev 4 (current)</text>
+      <line x1="12" y1="128" x2="404" y2="128" stroke="#ccc" />
+      <text x="12" y="146" font-size="12" stroke="none" fill="#666">Reply • Resolve • Copy link</text>
+    </g>
+
+    <!-- Resolved -->
+    <g transform="translate(0,176)">
+      <rect x="0" y="0" width="416" height="160" rx="6" fill="#fafafa" />
+      <rect x="12" y="12" width="392" height="28" fill="#fff" stroke="#e6e6e6" stroke-dasharray="2 3" />
+      <text x="20" y="30" font-size="12" stroke="none" fill="#666">“resolved quote …”</text>
+      <text x="12" y="60" font-size="12" font-weight="600" stroke="none" fill="#666">Resolved</text>
+      <text x="12" y="80" font-size="12" stroke="none" fill="#666">CodexCoder · 3h ago · 1 reply</text>
+      <rect x="12" y="96" width="78" height="20" rx="10" />
+      <text x="51" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#666">Resolved</text>
+      <text x="102" y="110" font-size="12" stroke="none" fill="#666">rev 3 → 4</text>
+      <line x1="12" y1="128" x2="404" y2="128" stroke="#ccc" />
+      <text x="12" y="146" font-size="12" stroke="none" fill="#666">Reopen • Copy link</text>
+    </g>
+
+    <!-- Stale -->
+    <g transform="translate(440,0)">
+      <rect x="0" y="0" width="416" height="160" rx="6" />
+      <rect x="12" y="12" width="392" height="28" fill="#fafafa" stroke="#000" stroke-dasharray="2 3" />
+      <text x="20" y="30" font-size="12" stroke="none" fill="#666">“fuzzy-matched quote …”</text>
+      <text x="12" y="60" font-size="12" font-weight="600" stroke="none" fill="#000">Stale · fuzzy anchor</text>
+      <text x="12" y="80" font-size="12" stroke="none" fill="#666">Senior PE · resolved match at rev 4</text>
+      <rect x="12" y="96" width="56" height="20" rx="10" />
+      <text x="40" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#000">Stale</text>
+      <rect x="76" y="96" width="76" height="20" rx="10" />
+      <text x="114" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#000">Re-anchor</text>
+      <rect x="160" y="96" width="80" height="20" rx="10" />
+      <text x="200" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#000">Show diff</text>
+      <line x1="12" y1="128" x2="404" y2="128" stroke="#ccc" />
+      <text x="12" y="146" font-size="12" stroke="none" fill="#666">Click "Show diff" to compare rev 3 anchor vs rev 4 text</text>
+    </g>
+
+    <!-- Orphaned -->
+    <g transform="translate(440,176)">
+      <rect x="0" y="0" width="416" height="160" rx="6" />
+      <rect x="12" y="12" width="392" height="28" fill="#e6e6e6" stroke="#000" stroke-dasharray="2 3" />
+      <text x="20" y="30" font-size="12" stroke="none" fill="#666">“original quote no longer in body”</text>
+      <text x="12" y="60" font-size="12" font-weight="600" stroke="none" fill="#000">Orphaned · no match</text>
+      <text x="12" y="80" font-size="12" stroke="none" fill="#666">QA · last seen rev 3 · 4 replies</text>
+      <rect x="12" y="96" width="80" height="20" rx="10" fill="#e6e6e6" />
+      <text x="52" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#000">Orphaned</text>
+      <rect x="100" y="96" width="92" height="20" rx="10" />
+      <text x="146" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#000">View rev 3</text>
+      <rect x="200" y="96" width="64" height="20" rx="10" />
+      <text x="232" y="110" text-anchor="middle" font-size="12" stroke="none" fill="#000">Resolve</text>
+      <line x1="12" y1="128" x2="404" y2="128" stroke="#ccc" />
+      <text x="12" y="146" font-size="12" stroke="none" fill="#666">No in-body anchor → no scroll-to action; quote stays canonical</text>
+    </g>
+  </g>
+
+  <!-- RIGHT: in-body highlight legend -->
+  <g transform="translate(880,112)" data-region="legend">
+    <rect x="0" y="0" width="352" height="496" rx="8" />
+    <text x="16" y="32" font-size="14" font-weight="600" stroke="none" fill="#000">In-body highlight legend</text>
+    <line x1="16" y1="48" x2="336" y2="48" />
+
+    <!-- legend rows -->
+    <g transform="translate(16,72)">
+      <rect x="0" y="0" width="240" height="10" fill="#000" stroke="none" />
+      <text x="0" y="32" font-size="12" stroke="none" fill="#000">Active selection (composing)</text>
+
+      <rect x="0" y="56" width="240" height="10" fill="#bbb" stroke="none" />
+      <text x="0" y="88" font-size="12" stroke="none" fill="#000">Open thread — solid mid-grey underline</text>
+
+      <rect x="0" y="112" width="240" height="10" fill="#fafafa" stroke="#000" stroke-dasharray="2 3" />
+      <text x="0" y="144" font-size="12" stroke="none" fill="#000">Resolved thread — dashed outline, dim fill</text>
+
+      <rect x="0" y="168" width="240" height="10" fill="#fafafa" stroke="#000" stroke-dasharray="2 3" />
+      <text x="0" y="200" font-size="12" stroke="none" fill="#000">Stale (fuzzy match) — dashed outline, ⚠ flag</text>
+      <text x="244" y="178" font-size="12" stroke="none" fill="#000">⚠</text>
+
+      <line x1="0" y1="232" x2="240" y2="232" stroke="#ccc" stroke-dasharray="3 3" />
+      <text x="0" y="264" font-size="12" stroke="none" fill="#000">Orphaned — no in-body underline; panel-only</text>
+
+      <rect x="0" y="296" width="240" height="14" fill="#fff" stroke="#000" stroke-width="2" />
+      <text x="0" y="332" font-size="12" stroke="none" fill="#000">Focused thread — heavy 2px border across anchor</text>
+    </g>
+
+    <!-- count chip semantics -->
+    <g transform="translate(16,440)">
+      <rect x="0" y="0" width="96" height="20" rx="10" />
+      <circle cx="14" cy="10" r="3" fill="#000" stroke="none" />
+      <text x="24" y="14" font-size="12" stroke="none" fill="#000">3 comments</text>
+      <text x="112" y="14" font-size="12" stroke="none" fill="#666">unresolved count only — resolved/stale/orphaned hidden until filter toggled</text>
+    </g>
+  </g>
+
+  <!-- footer callout -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="40" y="104" width="824" height="416" />
+  </g>
+  <text x="40" y="540" stroke="none" fill="#d33" font-size="12">All four states show identical author/quote/reply metadata. Only the chrome (border, fill, badge, actions) differs — never the data layout.</text>
+</svg>

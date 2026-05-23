@@ -85,6 +85,7 @@ export function DocumentAnnotationLayer({
   const [toolbarPosition, setToolbarPosition] = useState<ToolbarPosition | null>(null);
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const layerContainerRef = useRef<HTMLDivElement | null>(null);
+  const lastCaptureSelectionRequestIdRef = useRef<number>(0);
 
   const visibleThreads = useMemo(() => {
     if (!hideResolved) return threads;
@@ -230,6 +231,8 @@ export function DocumentAnnotationLayer({
   useEffect(() => {
     if (captureSelectionRequestId === undefined) return;
     if (captureSelectionRequestId === 0) return;
+    if (lastCaptureSelectionRequestIdRef.current === captureSelectionRequestId) return;
+    lastCaptureSelectionRequestIdRef.current = captureSelectionRequestId;
     const anchor = captureSelection();
     if (anchor) {
       onPendingAnchorChange(anchor);

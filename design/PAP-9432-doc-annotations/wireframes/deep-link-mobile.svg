@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="375" height="812" />
+
+  <line x1="0" y1="44" x2="375" y2="44" />
+  <line x1="0" y1="778" x2="375" y2="778" />
+
+  <!-- top bar -->
+  <g transform="translate(0,44)">
+    <rect x="0" y="0" width="375" height="48" />
+    <text x="16" y="30" font-size="14" stroke="none" fill="#000">← Issue</text>
+    <text x="187" y="30" text-anchor="middle" font-size="14" font-weight="600" stroke="none" fill="#000">PLAN — rev 4</text>
+    <text x="359" y="30" text-anchor="end" font-size="14" stroke="none" fill="#000">⋯</text>
+  </g>
+
+  <!-- URL hint -->
+  <g transform="translate(16,108)">
+    <rect x="0" y="0" width="343" height="24" rx="12" fill="#fafafa" />
+    <text x="12" y="16" font-size="12" stroke="none" fill="#666">…#document-plan&amp;thread=docann_xyz</text>
+  </g>
+
+  <!-- document body, scrolled to anchor -->
+  <g transform="translate(16,148)">
+    <rect x="0" y="0" width="343" height="320" rx="8" />
+    <g transform="translate(12,12)">
+      <rect x="0" y="0" width="200" height="14" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="28" width="319" height="10" fill="#e6e6e6" stroke="none" />
+      <!-- focused anchor pulse -->
+      <rect x="-4" y="56" width="319" height="36" stroke="#000" stroke-width="2" fill="#fafafa" />
+      <rect x="0" y="64" width="304" height="10" fill="#000" stroke="none" />
+      <rect x="0" y="80" width="240" height="10" fill="#000" stroke="none" />
+      <rect x="0" y="120" width="319" height="10" fill="#e6e6e6" stroke="none" />
+      <rect x="0" y="136" width="296" height="10" fill="#e6e6e6" stroke="none" />
+    </g>
+  </g>
+
+  <!-- bottom sheet auto-open with targeted thread -->
+  <g transform="translate(0,488)">
+    <rect x="0" y="0" width="375" height="290" rx="16" />
+    <rect x="163" y="8" width="48" height="4" rx="2" fill="#ccc" stroke="none" />
+    <g transform="translate(16,24)">
+      <text x="0" y="16" font-size="14" font-weight="600" stroke="none" fill="#000">Thread</text>
+      <text x="343" y="16" text-anchor="end" font-size="14" stroke="none" fill="#000">×</text>
+    </g>
+    <g transform="translate(16,52)">
+      <rect x="0" y="0" width="343" height="216" rx="6" stroke="#000" stroke-width="2" />
+      <rect x="12" y="12" width="319" height="24" fill="#fafafa" stroke="#e6e6e6" />
+      <text x="20" y="28" font-size="12" stroke="none" fill="#666">“quote …”</text>
+      <g transform="translate(12,48)">
+        <text x="0" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">Dotta · 2m ago</text>
+        <rect x="0" y="20" width="280" height="10" fill="#e6e6e6" stroke="none" />
+      </g>
+      <!-- targeted comment ring -->
+      <g transform="translate(12,96)">
+        <rect x="-4" y="-4" width="327" height="64" stroke="#000" stroke-width="2" fill="#fafafa" />
+        <text x="0" y="12" font-size="12" font-weight="600" stroke="none" fill="#000">UXDesigner · just now</text>
+        <text x="0" y="28" font-size="12" stroke="none" fill="#666">[comment=c_42]</text>
+        <rect x="0" y="36" width="240" height="10" fill="#e6e6e6" stroke="none" />
+      </g>
+      <g transform="translate(12,180)">
+        <rect x="0" y="0" width="32" height="24" rx="4" />
+        <text x="16" y="16" text-anchor="middle" font-size="12" stroke="none" fill="#000">‹</text>
+        <text x="48" y="16" font-size="12" stroke="none" fill="#666">1 of 2 open</text>
+        <rect x="124" y="0" width="32" height="24" rx="4" />
+        <text x="140" y="16" text-anchor="middle" font-size="12" stroke="none" fill="#000">›</text>
+        <rect x="251" y="0" width="76" height="24" rx="4" />
+        <text x="289" y="16" text-anchor="middle" font-size="12" stroke="none" fill="#000">Resolve</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="8" y="140" width="359" height="200" />
+    <rect x="0" y="482" width="375" height="296" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="8" y="134">1 deep link unfolds doc, scrolls anchor into upper half of viewport above the sheet</text>
+    <text x="0" y="476">2 bottom sheet opens automatically; comment-id focus ring on target comment</text>
+  </g>
+</svg>

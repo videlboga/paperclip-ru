@@ -1,0 +1,73 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="375" height="812" viewBox="0 0 375 812"
+     font-family="-apple-system, system-ui, sans-serif" fill="#fff" stroke="#000" stroke-width="1.5">
+  <rect x="0" y="0" width="375" height="812" />
+
+  <line x1="0" y1="44" x2="375" y2="44" />
+  <line x1="0" y1="778" x2="375" y2="778" />
+
+  <!-- top bar (edit context) -->
+  <g transform="translate(0,44)">
+    <rect x="0" y="0" width="375" height="48" />
+    <text x="16" y="30" font-size="14" stroke="none" fill="#000">← Cancel</text>
+    <text x="187" y="30" text-anchor="middle" font-size="14" font-weight="600" stroke="none" fill="#000">Edit plan</text>
+    <text x="359" y="30" text-anchor="end" font-size="14" stroke="none" fill="#000">Done</text>
+  </g>
+
+  <!-- saving banner -->
+  <g transform="translate(0,92)">
+    <rect x="0" y="0" width="375" height="32" fill="#fafafa" />
+    <text x="16" y="20" font-size="12" stroke="none" fill="#666">⟳ Saving draft… new comments disabled until saved</text>
+  </g>
+
+  <!-- editor toolbar (sticky) -->
+  <g transform="translate(0,124)" data-region="toolbar">
+    <rect x="0" y="0" width="375" height="48" />
+    <g font-size="14" stroke="none" fill="#000">
+      <text x="16" y="30">B</text>
+      <text x="40" y="30" font-style="italic">I</text>
+      <text x="72" y="30">H</text>
+      <text x="104" y="30">•</text>
+      <text x="136" y="30">⌧</text>
+      <line x1="168" y1="12" x2="168" y2="36" stroke="#ccc" />
+      <rect x="184" y="10" width="176" height="28" rx="14" fill="#fafafa" stroke="#ccc" />
+      <text x="272" y="28" text-anchor="middle" font-size="12" fill="#999">＋ Comment (save first)</text>
+    </g>
+  </g>
+
+  <!-- editor body -->
+  <g transform="translate(16,196)" data-region="editor-body">
+    <rect x="0" y="0" width="200" height="16" fill="#e6e6e6" stroke="none" />
+    <rect x="0" y="32" width="312" height="10" fill="#e6e6e6" stroke="none" />
+    <rect x="0" y="48" width="288" height="10" fill="#e6e6e6" stroke="none" />
+    <!-- selection -->
+    <rect x="-2" y="76" width="312" height="14" fill="#bbb" stroke="none" />
+    <rect x="0" y="80" width="308" height="10" fill="#000" stroke="none" />
+    <rect x="-2" y="92" width="200" height="14" fill="#bbb" stroke="none" />
+    <rect x="0" y="96" width="196" height="10" fill="#000" stroke="none" />
+    <rect x="0" y="128" width="288" height="10" fill="#e6e6e6" stroke="none" />
+    <!-- existing thread underline (read-only) -->
+    <rect x="0" y="160" width="240" height="10" fill="#e6e6e6" stroke="none" />
+    <line x1="0" y1="174" x2="240" y2="174" stroke-dasharray="3 3" />
+    <rect x="0" y="192" width="248" height="10" fill="#e6e6e6" stroke="none" />
+  </g>
+
+  <!-- in-keyboard accessory bar (showing comment shortcut grayed) -->
+  <g transform="translate(0,640)">
+    <line x1="0" y1="0" x2="375" y2="0" />
+    <rect x="0" y="0" width="375" height="48" fill="#fafafa" />
+    <text x="16" y="30" font-size="12" stroke="none" fill="#666">Comment disabled — autosave in progress</text>
+    <text x="359" y="30" text-anchor="end" font-size="12" stroke="none" fill="#666">Hide</text>
+  </g>
+
+  <!-- callouts -->
+  <g stroke="#d33" stroke-dasharray="4 4" fill="none">
+    <rect x="0" y="88" width="375" height="40" />
+    <rect x="176" y="128" width="192" height="40" />
+    <rect x="0" y="632" width="375" height="56" />
+  </g>
+  <g stroke="none" fill="#d33" font-size="12">
+    <text x="0" y="82">1 dirty-state ribbon — explains why new anchors are disabled</text>
+    <text x="176" y="124">2 toolbar action disabled with reason hover (sheet on tap)</text>
+    <text x="0" y="626">3 keyboard accessory mirrors the disabled state</text>
+  </g>
+</svg>
