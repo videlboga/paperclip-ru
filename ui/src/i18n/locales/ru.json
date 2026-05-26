@@ -4,6 +4,86 @@
       "title": "Создайте свою первую компанию",
       "description": "Начните с создания компании.",
       "newCompany": "Новая компания"
+    },
+    "onboarding": {
+      "welcome": "Добро пожаловать в Paperclip",
+      "createCompany": "Создать компанию",
+      "companyName": "Название компании",
+      "companyGoal": "Цель компании",
+      "addAgent": "Добавить агента",
+      "agentName": "Имя агента",
+      "agentRole": "Роль",
+      "skip": "Пропустить",
+      "finish": "Завершить"
+    },
+    "dashboard": {
+      "title": "Панель управления",
+      "totalIssues": "Всего задач",
+      "activeRuns": "Активных запусков",
+      "totalCost": "Общие затраты",
+      "completedToday": "Выполнено сегодня"
+    },
+    "common": {
+      "save": "Сохранить",
+      "cancel": "Отмена",
+      "delete": "Удалить",
+      "edit": "Редактировать",
+      "create": "Создать",
+      "search": "Поиск",
+      "loading": "Загрузка...",
+      "error": "Ошибка",
+      "back": "Назад",
+      "close": "Закрыть",
+      "confirm": "Подтвердить"
+    },
+    "auth": {
+      "login": "Войти",
+      "logout": "Выйти",
+      "email": "Email",
+      "password": "Пароль",
+      "signup": "Создать аккаунт"
+    },
+    "nav": {
+      "dashboard": "Панель",
+      "companies": "Компании",
+      "agents": "Агенты",
+      "issues": "Задачи",
+      "inbox": "Входящие",
+      "settings": "Настройки",
+      "docs": "Документация",
+      "routines": "Рутины",
+      "workspaces": "Рабочие пространства"
+    },
+    "agent": {
+      "hire": "Нанять агента",
+      "name": "Имя агента",
+      "role": "Роль",
+      "type": "Тип агента",
+      "status": "Статус",
+      "online": "В сети",
+      "offline": "Не в сети",
+      "busy": "Занят",
+      "cost": "Затраты"
+    },
+    "issue": {
+      "title": "Название задачи",
+      "description": "Описание",
+      "status": "Статус",
+      "assignee": "Исполнитель",
+      "parent": "Родительская задача",
+      "subtasks": "Подзадачи",
+      "comments": "Комментарии",
+      "created": "Создана",
+      "updated": "Обновлена",
+      "priority": "Приоритет"
+    },
+    "status": {
+      "todo": "К выполнению",
+      "inProgress": "В работе",
+      "done": "Готово",
+      "closed": "Закрыто",
+      "blocked": "Заблокировано",
+      "failed": "Ошибка"
     }
   }
 }
