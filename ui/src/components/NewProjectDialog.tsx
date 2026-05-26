@@ -38,6 +38,7 @@ import { cn } from "../lib/utils";
 import { MarkdownEditor, type MarkdownEditorRef, type MentionOption } from "./MarkdownEditor";
 import { StatusBadge } from "./StatusBadge";
 import { ChoosePathButton } from "./PathInstructionsModal";
+import { useTranslation } from "@/i18n";
 
 const projectStatuses = [
   { value: "backlog", label: "Backlog" },
@@ -224,7 +225,7 @@ export function NewProjectDialog() {
               </span>
             )}
             <span className="text-muted-foreground/60">&rsaquo;</span>
-            <span>New project</span>
+            <span>{t("pcomponents_NewProjectDialog.new_project", {defaultValue: "New project"})}</span>
           </div>
           <div className="flex items-center gap-1">
             <Button
@@ -250,7 +251,7 @@ export function NewProjectDialog() {
         <div className="px-4 pt-4 pb-2 shrink-0">
           <input
             className="w-full text-lg font-semibold bg-transparent outline-none placeholder:text-muted-foreground/50"
-            placeholder="Project name"
+            placeholder={t("pcomponents_NewProjectDialog.project_name", {defaultValue: "Project name"})}
             value={name}
             onChange={(e) => setName(e.target.value)}
             onKeyDown={(e) => {
@@ -269,7 +270,7 @@ export function NewProjectDialog() {
             ref={descriptionEditorRef}
             value={description}
             onChange={setDescription}
-            placeholder="Add description..."
+            placeholder={t("pcomponents_NewProjectDialog.add_description", {defaultValue: "Add description..."})}
             bordered={false}
             mentions={mentionOptions}
             contentClassName={cn("text-sm text-muted-foreground", expanded ? "min-h-[220px]" : "min-h-[120px]")}
@@ -283,7 +284,7 @@ export function NewProjectDialog() {
         <div className="px-4 pt-3 pb-3 space-y-3 border-t border-border">
           <div>
             <div className="mb-1 flex items-center gap-1.5">
-              <label className="block text-xs text-muted-foreground">Repo URL</label>
+              <label className="block text-xs text-muted-foreground">{t("pcomponents_NewProjectDialog.repo_url", {defaultValue: "Repo URL"})}</label>
               <span className="text-xs text-muted-foreground/50">optional</span>
               <Tooltip delayDuration={300}>
                 <TooltipTrigger asChild>
@@ -298,13 +299,13 @@ export function NewProjectDialog() {
               className="w-full rounded border border-border bg-transparent px-2 py-1 text-xs outline-none"
               value={workspaceRepoUrl}
               onChange={(e) => { setWorkspaceRepoUrl(e.target.value); setWorkspaceError(null); }}
-              placeholder="https://github.com/org/repo"
+              placeholder={t("pcomponents_NewProjectDialog.httpsgithubcomorgrepo", {defaultValue: "https://github.com/org/repo"})}
             />
           </div>
 
           <div>
             <div className="mb-1 flex items-center gap-1.5">
-              <label className="block text-xs text-muted-foreground">Local folder</label>
+              <label className="block text-xs text-muted-foreground">{t("pcomponents_NewProjectDialog.local_folder", {defaultValue: "Local folder"})}</label>
               <span className="text-xs text-muted-foreground/50">optional</span>
               <Tooltip delayDuration={300}>
                 <TooltipTrigger asChild>
@@ -320,7 +321,7 @@ export function NewProjectDialog() {
                 className="w-full rounded border border-border bg-transparent px-2 py-1 text-xs font-mono outline-none"
                 value={workspaceLocalPath}
                 onChange={(e) => { setWorkspaceLocalPath(e.target.value); setWorkspaceError(null); }}
-                placeholder="/absolute/path/to/workspace"
+                placeholder={t("pcomponents_NewProjectDialog.absolutepathtoworkspace", {defaultValue: "/absolute/path/to/workspace"})}
               />
               <ChoosePathButton />
             </div>
@@ -421,7 +422,7 @@ export function NewProjectDialog() {
               className="bg-transparent outline-none text-xs w-24"
               value={targetDate}
               onChange={(e) => setTargetDate(e.target.value)}
-              placeholder="Target date"
+              placeholder={t("pcomponents_NewProjectDialog.target_date", {defaultValue: "Target date"})}
             />
           </div>
         </div>
@@ -429,7 +430,7 @@ export function NewProjectDialog() {
         {/* Footer */}
         <div className="flex items-center justify-between px-4 py-2.5 border-t border-border">
           {createProject.isError ? (
-            <p className="text-xs text-destructive">Failed to create project.</p>
+            <p className="text-xs text-destructive">{t("pcomponents_NewProjectDialog.failed_to_create_project", {defaultValue: "Failed to create project."})}</p>
           ) : (
             <span />
           )}

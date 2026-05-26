@@ -76,6 +76,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "../lib/utils";
 import { PageTabBar } from "../components/PageTabBar";
 import { ImportFromVaultDialog } from "./secrets/ImportFromVaultDialog";
+import { useTranslation } from "@/i18n";
 
 type CreateMode = "managed" | "external";
 type SecretsTab = "secrets" | "vaults";
@@ -820,7 +821,7 @@ export function Secrets() {
 
   if (!selectedCompanyId) {
     return (
-      <div className="p-6 text-sm text-muted-foreground">Select a company to manage secrets.</div>
+      <div className="p-6 text-sm text-muted-foreground">{t("ppages_Secrets.select_a_company_to_manage_secrets", {defaultValue: "Select a company to manage secrets."})}</div>
     );
   }
 
@@ -828,7 +829,7 @@ export function Secrets() {
     <div className="flex h-full min-h-0 flex-col gap-4">
       <div className="flex items-center gap-2">
         <KeyRound className="h-5 w-5 text-muted-foreground" />
-        <h1 className="text-lg font-semibold">Secrets</h1>
+        <h1 className="text-lg font-semibold">{t("ppages_Secrets.secrets", {defaultValue: "Secrets"})}</h1>
       </div>
 
       <Tabs
@@ -854,9 +855,9 @@ export function Secrets() {
               <Input
                 value={search}
                 onChange={(event) => setSearch(event.target.value)}
-                placeholder="Search by name, key, ref"
+                placeholder={t("ppages_Secrets.search_by_name_key_ref", {defaultValue: "Search by name, key, ref"})}
                 className="pl-7 text-xs sm:text-sm"
-                aria-label="Search secrets"
+                aria-label={t("ppages_Secrets.search_secrets", {defaultValue: "Search secrets"})}
                 data-page-search-target="true"
               />
             </div>
@@ -900,15 +901,15 @@ export function Secrets() {
               <table className="w-full text-sm">
               <thead className="bg-muted/40 text-xs uppercase tracking-wide text-muted-foreground">
                 <tr>
-                  <th className="px-3 py-2 text-left font-medium">Name</th>
-                  <th className="px-2 py-2 text-left font-medium">Mode</th>
-                  <th className="px-2 py-2 text-left font-medium">Provider</th>
-                  <th className="px-2 py-2 text-left font-medium">Status</th>
-                  <th className="px-2 py-2 text-left font-medium">Version</th>
-                  <th className="px-2 py-2 text-left font-medium">Last rotated</th>
-                  <th className="px-2 py-2 text-left font-medium">Last resolved</th>
-                  <th className="px-2 py-2 text-left font-medium">References</th>
-                  <th className="px-2 py-2 text-left font-medium">Reference</th>
+                  <th className="px-3 py-2 text-left font-medium">{t("ppages_Secrets.name", {defaultValue: "Name"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.mode", {defaultValue: "Mode"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.provider", {defaultValue: "Provider"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.status", {defaultValue: "Status"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.version", {defaultValue: "Version"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.last_rotated", {defaultValue: "Last rotated"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.last_resolved", {defaultValue: "Last resolved"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.references", {defaultValue: "References"})}</th>
+                  <th className="px-2 py-2 text-left font-medium">{t("ppages_Secrets.reference", {defaultValue: "Reference"})}</th>
                   <th className="px-3 py-2"></th>
                 </tr>
               </thead>
@@ -964,7 +965,7 @@ export function Secrets() {
                           {secret.externalRef ?? "—"}
                         </span>
                       ) : (
-                        <span className="text-muted-foreground">Owned</span>
+                        <span className="text-muted-foreground">{t("ppages_Secrets.owned", {defaultValue: "Owned"})}</span>
                       )}
                     </td>
                     <td className="px-3 py-2.5 text-right">
@@ -1127,7 +1128,7 @@ export function Secrets() {
       >
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Secret references</DialogTitle>
+            <DialogTitle>{t("ppages_Secrets.secret_references", {defaultValue: "Secret references"})}</DialogTitle>
             <DialogDescription>
               {usageDialogSecret
                 ? `${usageDialogSecret.name} is referenced by ${usageDialogSecret.referenceCount ?? 0} ${
@@ -1163,7 +1164,7 @@ export function Secrets() {
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="sm:max-w-lg">
           <DialogHeader>
-            <DialogTitle>Create secret</DialogTitle>
+            <DialogTitle>{t("ppages_Secrets.create_secret", {defaultValue: "Create secret"})}</DialogTitle>
             <DialogDescription>
               Choose whether Paperclip should own future provider writes, or only resolve an existing
               provider reference at runtime.
@@ -1171,21 +1172,21 @@ export function Secrets() {
           </DialogHeader>
           <Tabs value={createMode} onValueChange={(value) => setCreateMode(value as CreateMode)}>
             <TabsList className="w-full grid grid-cols-2">
-              <TabsTrigger value="managed">Managed value</TabsTrigger>
-              <TabsTrigger value="external">External reference</TabsTrigger>
+              <TabsTrigger value="managed">{t("ppages_Secrets.managed_value", {defaultValue: "Managed value"})}</TabsTrigger>
+              <TabsTrigger value="external">{t("ppages_Secrets.external_reference", {defaultValue: "External reference"})}</TabsTrigger>
             </TabsList>
           </Tabs>
           <div className="space-y-3">
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="text-xs font-medium" htmlFor="new-secret-name">Name</label>
+                <label className="text-xs font-medium" htmlFor="new-secret-name">{t("ppages_Secrets.name", {defaultValue: "Name"})}</label>
                 <Input
                   id="new-secret-name"
                   value={createForm.name}
                   onChange={(event) =>
                     setCreateForm((current) => ({ ...current, name: event.target.value }))
                   }
-                  placeholder="OPENAI_API_KEY"
+                  placeholder={t("ppages_Secrets.openaiapikey", {defaultValue: "OPENAI_API_KEY"})}
                   autoFocus
                 />
               </div>
@@ -1199,12 +1200,12 @@ export function Secrets() {
                   onChange={(event) =>
                     setCreateForm((current) => ({ ...current, key: event.target.value }))
                   }
-                  placeholder="auto from name"
+                  placeholder={t("ppages_Secrets.auto_from_name", {defaultValue: "auto from name"})}
                 />
               </div>
             </div>
             <div>
-              <label className="text-xs font-medium" htmlFor="new-secret-provider">Provider</label>
+              <label className="text-xs font-medium" htmlFor="new-secret-provider">{t("ppages_Secrets.provider", {defaultValue: "Provider"})}</label>
               <select
                 id="new-secret-provider"
                 className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm outline-none"
@@ -1247,7 +1248,7 @@ export function Secrets() {
               ) : null}
             </div>
             <div>
-              <label className="text-xs font-medium" htmlFor="new-secret-vault">Provider vault</label>
+              <label className="text-xs font-medium" htmlFor="new-secret-vault">{t("ppages_Secrets.provider_vault", {defaultValue: "Provider vault"})}</label>
               <select
                 id="new-secret-vault"
                 className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm outline-none"
@@ -1256,7 +1257,7 @@ export function Secrets() {
                   setCreateForm((current) => ({ ...current, providerConfigId: event.target.value }))
                 }
               >
-                <option value="">Deployment default</option>
+                <option value="">{t("ppages_Secrets.deployment_default", {defaultValue: "Deployment default"})}</option>
                 {createProviderConfigs.map((config) => {
                   const blockReason = getProviderConfigBlockReason(config);
                   return (
@@ -1291,7 +1292,7 @@ export function Secrets() {
                   ) : null}
                 </div>
                 <div>
-                  <label className="text-xs font-medium" htmlFor="new-secret-value">Value</label>
+                  <label className="text-xs font-medium" htmlFor="new-secret-value">{t("ppages_Secrets.value", {defaultValue: "Value"})}</label>
                   <Textarea
                     id="new-secret-value"
                     value={createForm.value}
@@ -1300,20 +1301,20 @@ export function Secrets() {
                     }
                     rows={3}
                     className="min-w-0 overflow-x-hidden break-all font-mono text-xs"
-                    placeholder="Stored once, never re-displayed"
+                    placeholder={t("ppages_Secrets.stored_once_never_redisplayed", {defaultValue: "Stored once, never re-displayed"})}
                   />
                 </div>
               </>
             ) : (
               <div>
-                <label className="text-xs font-medium" htmlFor="new-secret-ref">External reference</label>
+                <label className="text-xs font-medium" htmlFor="new-secret-ref">{t("ppages_Secrets.external_reference", {defaultValue: "External reference"})}</label>
                 <Input
                   id="new-secret-ref"
                   value={createForm.externalRef}
                   onChange={(event) =>
                     setCreateForm((current) => ({ ...current, externalRef: event.target.value }))
                   }
-                  placeholder="arn:aws:secretsmanager:..."
+                  placeholder={t("ppages_Secrets.arnawssecretsmanager", {defaultValue: "arn:aws:secretsmanager:..."})}
                   className="font-mono text-xs"
                 />
                 <p className="text-[11px] text-muted-foreground mt-1">
@@ -1332,7 +1333,7 @@ export function Secrets() {
                 onChange={(event) =>
                   setCreateForm((current) => ({ ...current, description: event.target.value }))
                 }
-                placeholder="What is this secret used for? (no values)"
+                placeholder={t("ppages_Secrets.what_is_this_secret_used_for_no_values", {defaultValue: "What is this secret used for? (no values)"})}
               />
             </div>
             {createError ? <p className="text-xs text-destructive">{createError}</p> : null}
@@ -1371,7 +1372,7 @@ export function Secrets() {
           <div className="space-y-4">
             <div className="grid gap-3 sm:grid-cols-2">
               <div>
-                <label className="text-xs font-medium" htmlFor="vault-provider">Provider</label>
+                <label className="text-xs font-medium" htmlFor="vault-provider">{t("ppages_Secrets.provider", {defaultValue: "Provider"})}</label>
                 <select
                   id="vault-provider"
                   className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm outline-none disabled:opacity-60"
@@ -1392,18 +1393,18 @@ export function Secrets() {
                 </select>
               </div>
               <div>
-                <label className="text-xs font-medium" htmlFor="vault-name">Display name</label>
+                <label className="text-xs font-medium" htmlFor="vault-name">{t("ppages_Secrets.display_name", {defaultValue: "Display name"})}</label>
                 <Input
                   id="vault-name"
                   value={vaultForm.displayName}
                   onChange={(event) =>
                     setVaultForm((current) => ({ ...current, displayName: event.target.value }))
                   }
-                  placeholder="Production local vault"
+                  placeholder={t("ppages_Secrets.production_local_vault", {defaultValue: "Production local vault"})}
                 />
               </div>
               <div>
-                <label className="text-xs font-medium" htmlFor="vault-status">Status</label>
+                <label className="text-xs font-medium" htmlFor="vault-status">{t("ppages_Secrets.status", {defaultValue: "Status"})}</label>
                 <select
                   id="vault-status"
                   className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm outline-none"
@@ -1424,8 +1425,8 @@ export function Secrets() {
                   <option value="warning" disabled={vaultForm.provider === "gcp_secret_manager" || vaultForm.provider === "vault"}>
                     Warning
                   </option>
-                  <option value="coming_soon">Coming soon</option>
-                  <option value="disabled">Disabled</option>
+                  <option value="coming_soon">{t("ppages_Secrets.coming_soon", {defaultValue: "Coming soon"})}</option>
+                  <option value="disabled">{t("ppages_Secrets.disabled", {defaultValue: "Disabled"})}</option>
                 </select>
               </div>
               <label className="flex items-center gap-2 pt-6 text-sm">
@@ -1502,14 +1503,14 @@ export function Secrets() {
             </DialogDescription>
           </DialogHeader>
           <div>
-            <label className="text-xs font-medium" htmlFor="rotate-secret-vault">Provider vault</label>
+            <label className="text-xs font-medium" htmlFor="rotate-secret-vault">{t("ppages_Secrets.provider_vault", {defaultValue: "Provider vault"})}</label>
             <select
               id="rotate-secret-vault"
               className="h-9 w-full rounded-md border border-border bg-background px-2 text-sm outline-none"
               value={rotateProviderConfigId}
               onChange={(event) => setRotateProviderConfigId(event.target.value)}
             >
-              <option value="">Deployment default</option>
+              <option value="">{t("ppages_Secrets.deployment_default", {defaultValue: "Deployment default"})}</option>
               {selectedRotateProviderConfigs.map((config) => {
                 const blockReason = getProviderConfigBlockReason(config);
                 return (
@@ -1531,7 +1532,7 @@ export function Secrets() {
           </div>
           {selectedSecret?.managedMode === "external_reference" ? (
             <div>
-              <label className="text-xs font-medium" htmlFor="rotate-ref">External reference</label>
+              <label className="text-xs font-medium" htmlFor="rotate-ref">{t("ppages_Secrets.external_reference", {defaultValue: "External reference"})}</label>
               <Input
                 id="rotate-ref"
                 value={rotateExternalRef}
@@ -1545,14 +1546,14 @@ export function Secrets() {
             </div>
           ) : (
             <div>
-              <label className="text-xs font-medium" htmlFor="rotate-value">New value</label>
+              <label className="text-xs font-medium" htmlFor="rotate-value">{t("ppages_Secrets.new_value", {defaultValue: "New value"})}</label>
               <Textarea
                 id="rotate-value"
                 value={rotateValue}
                 onChange={(event) => setRotateValue(event.target.value)}
                 rows={3}
                 className="font-mono text-xs"
-                placeholder="Paste the new value"
+                placeholder={t("ppages_Secrets.paste_the_new_value", {defaultValue: "Paste the new value"})}
               />
             </div>
           )}
@@ -1584,13 +1585,13 @@ export function Secrets() {
       <Dialog open={Boolean(deleteConfirm)} onOpenChange={(open) => !open && setDeleteConfirm(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Delete secret</DialogTitle>
+            <DialogTitle>{t("ppages_Secrets.delete_secret", {defaultValue: "Delete secret"})}</DialogTitle>
             <DialogDescription>
               Permanently removes <strong>{deleteConfirm?.name}</strong>. Active bindings will fail until you remap them.
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setDeleteConfirm(null)}>{t("ppages_Secrets.cancel", {defaultValue: "Cancel"})}</Button>
             <Button
               variant="destructive"
               onClick={() => deleteConfirm && deleteMutation.mutate(deleteConfirm.id)}
@@ -1606,7 +1607,7 @@ export function Secrets() {
       <Dialog open={Boolean(removeVaultConfirm)} onOpenChange={(open) => !open && setRemoveVaultConfirm(null)}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Remove provider vault</DialogTitle>
+            <DialogTitle>{t("ppages_Secrets.remove_provider_vault", {defaultValue: "Remove provider vault"})}</DialogTitle>
             <DialogDescription>
               Removes <strong>{removeVaultConfirm?.displayName}</strong> from Paperclip only.{" "}
               {removeVaultConfirm?.provider === "aws_secrets_manager"
@@ -1616,7 +1617,7 @@ export function Secrets() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRemoveVaultConfirm(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setRemoveVaultConfirm(null)}>{t("ppages_Secrets.cancel", {defaultValue: "Cancel"})}</Button>
             <Button
               variant="destructive"
               onClick={() => removeVaultConfirm && removeVaultMutation.mutate(removeVaultConfirm.id)}
@@ -1637,11 +1638,11 @@ function SecretsHowToUse() {
     <div className="flex items-start gap-2 rounded-md border border-border bg-muted/20 px-3 py-2 text-xs text-muted-foreground">
       <Info className="mt-0.5 h-3.5 w-3.5 shrink-0" />
       <div className="space-y-1">
-        <p className="font-medium text-foreground">Use secrets by binding them to runtime environment variables.</p>
+        <p className="font-medium text-foreground">{t("ppages_Secrets.use_secrets_by_binding_them_to_runtime_environment", {defaultValue: "Use secrets by binding them to runtime environment variables."})}</p>
         <p>
           Create or link a secret here, then open an agent&apos;s Environment variables or a project&apos;s Env field.
-          Add the env key the process expects, for example <code className="font-mono">GH_TOKEN</code>, choose{" "}
-          <span className="font-medium text-foreground">Secret</span>, and select the stored secret version.
+          Add the env key the process expects, for example <code className="font-mono">{t("ppages_Secrets.ghtoken", {defaultValue: "GH_TOKEN"})}</code>, choose{" "}
+          <span className="font-medium text-foreground">{t("ppages_Secrets.secret", {defaultValue: "Secret"})}</span>, and select the stored secret version.
         </p>
         <p>
           Paperclip resolves the value server-side when the run starts and injects it as that env var. Project env
@@ -1702,7 +1703,7 @@ function SecretsFiltersPopover({
       >
         <div className="space-y-3 p-3">
           <div className="flex items-center justify-between">
-            <span className="text-sm font-medium">Filters</span>
+            <span className="text-sm font-medium">{t("ppages_Secrets.filters", {defaultValue: "Filters"})}</span>
             {activeFilterCount > 0 ? (
               <button
                 type="button"
@@ -1717,7 +1718,7 @@ function SecretsFiltersPopover({
 
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-1">
-              <span className="text-xs text-muted-foreground">Status</span>
+              <span className="text-xs text-muted-foreground">{t("ppages_Secrets.status", {defaultValue: "Status"})}</span>
               <div className="space-y-0.5">
                 {statusOptions.map((option) => (
                   <label key={option.value} className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -1732,14 +1733,14 @@ function SecretsFiltersPopover({
             </div>
 
             <div className="space-y-1">
-              <span className="text-xs text-muted-foreground">Provider</span>
+              <span className="text-xs text-muted-foreground">{t("ppages_Secrets.provider", {defaultValue: "Provider"})}</span>
               <div className="max-h-48 space-y-0.5 overflow-y-auto pr-1">
                 <label className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
                   <Checkbox
                     checked={providerFilter === "all"}
                     onCheckedChange={() => onProviderChange("all")}
                   />
-                  <span className="text-sm">All providers</span>
+                  <span className="text-sm">{t("ppages_Secrets.all_providers", {defaultValue: "All providers"})}</span>
                 </label>
                 {providers.map((provider) => (
                   <label key={provider.id} className="flex cursor-pointer items-center gap-2 rounded-sm px-2 py-1 hover:bg-accent/50">
@@ -1837,7 +1838,7 @@ function ImportFromVaultButton({
         size="sm"
         onClick={onManageVaults}
         className={cn("text-xs text-muted-foreground", className)}
-        title="Configure an AWS provider vault to enable remote import"
+        title={t("ppages_Secrets.configure_an_aws_provider_vault_to_enable_remote_i", {defaultValue: "Configure an AWS provider vault to enable remote import"})}
       >
         <Cloud className="h-3.5 w-3.5 mr-1" /> AWS vault disabled — manage
       </Button>
@@ -1937,7 +1938,7 @@ export function ProviderVaultsTab({
               <Icon className="h-4 w-4 text-muted-foreground" />
               <h2 className="text-sm font-semibold">{provider?.label ?? id.replaceAll("_", " ")}</h2>
               {isComingSoonFamily ? (
-                <span className="ml-auto text-xs text-muted-foreground">Coming soon</span>
+                <span className="ml-auto text-xs text-muted-foreground">{t("ppages_Secrets.coming_soon", {defaultValue: "Coming soon"})}</span>
               ) : (
                 <Button variant="outline" size="sm" className="ml-auto" onClick={() => onCreate(id)}>
                   <Plus className="h-3.5 w-3.5 mr-1" />
@@ -2015,7 +2016,7 @@ function ProviderVaultCard({
                 Health {config.healthStatus.replace("_", " ")} · {formatRelative(config.healthCheckedAt)}
               </span>
             ) : (
-              <span className="text-xs text-muted-foreground">Health not checked</span>
+              <span className="text-xs text-muted-foreground">{t("ppages_Secrets.health_not_checked", {defaultValue: "Health not checked"})}</span>
             )}
           </div>
         </div>
@@ -2104,12 +2105,12 @@ function ProviderVaultFields({
   if (form.provider === "aws_secrets_manager") {
     return (
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="AWS region" value={form.region} onChange={(value) => setField("region", value)} placeholder="us-east-1" required />
-        <TextField label="Namespace" value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="production" />
-        <TextField label="Secret name prefix" value={form.secretNamePrefix} onChange={(value) => setField("secretNamePrefix", value)} placeholder="paperclip" />
-        <TextField label="KMS key id" value={form.kmsKeyId} onChange={(value) => setField("kmsKeyId", value)} placeholder="alias/paperclip-secrets" />
-        <TextField label="Owner tag" value={form.ownerTag} onChange={(value) => setField("ownerTag", value)} placeholder="platform" />
-        <TextField label="Environment tag" value={form.environmentTag} onChange={(value) => setField("environmentTag", value)} placeholder="prod" />
+        <TextField label={t("ppages_Secrets.aws_region", {defaultValue: "AWS region"})} value={form.region} onChange={(value) => setField("region", value)} placeholder="us-east-1" required />
+        <TextField label={t("ppages_Secrets.namespace", {defaultValue: "Namespace"})} value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="production" />
+        <TextField label={t("ppages_Secrets.secret_name_prefix", {defaultValue: "Secret name prefix"})} value={form.secretNamePrefix} onChange={(value) => setField("secretNamePrefix", value)} placeholder="paperclip" />
+        <TextField label={t("ppages_Secrets.kms_key_id", {defaultValue: "KMS key id"})} value={form.kmsKeyId} onChange={(value) => setField("kmsKeyId", value)} placeholder={t("ppages_Secrets.aliaspaperclipsecrets", {defaultValue: "alias/paperclip-secrets"})} />
+        <TextField label={t("ppages_Secrets.owner_tag", {defaultValue: "Owner tag"})} value={form.ownerTag} onChange={(value) => setField("ownerTag", value)} placeholder="platform" />
+        <TextField label={t("ppages_Secrets.environment_tag", {defaultValue: "Environment tag"})} value={form.environmentTag} onChange={(value) => setField("environmentTag", value)} placeholder="prod" />
       </div>
     );
   }
@@ -2117,20 +2118,20 @@ function ProviderVaultFields({
   if (form.provider === "gcp_secret_manager") {
     return (
       <div className="grid gap-3 sm:grid-cols-2">
-        <TextField label="Project id" value={form.projectId} onChange={(value) => setField("projectId", value)} placeholder="paperclip-prod" />
-        <TextField label="Location" value={form.location} onChange={(value) => setField("location", value)} placeholder="global" />
-        <TextField label="Namespace" value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="production" />
-        <TextField label="Secret name prefix" value={form.secretNamePrefix} onChange={(value) => setField("secretNamePrefix", value)} placeholder="paperclip" />
+        <TextField label={t("ppages_Secrets.project_id", {defaultValue: "Project id"})} value={form.projectId} onChange={(value) => setField("projectId", value)} placeholder="paperclip-prod" />
+        <TextField label={t("ppages_Secrets.location", {defaultValue: "Location"})} value={form.location} onChange={(value) => setField("location", value)} placeholder="global" />
+        <TextField label={t("ppages_Secrets.namespace", {defaultValue: "Namespace"})} value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="production" />
+        <TextField label={t("ppages_Secrets.secret_name_prefix", {defaultValue: "Secret name prefix"})} value={form.secretNamePrefix} onChange={(value) => setField("secretNamePrefix", value)} placeholder="paperclip" />
       </div>
     );
   }
 
   return (
     <div className="grid gap-3 sm:grid-cols-2">
-      <TextField label="Address" value={form.address} onChange={(value) => setField("address", value)} placeholder="https://vault.example.com" />
-      <TextField label="Namespace" value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="admin" />
-      <TextField label="Mount path" value={form.mountPath} onChange={(value) => setField("mountPath", value)} placeholder="secret" />
-      <TextField label="Secret path prefix" value={form.secretPathPrefix} onChange={(value) => setField("secretPathPrefix", value)} placeholder="paperclip/prod" />
+      <TextField label={t("ppages_Secrets.address", {defaultValue: "Address"})} value={form.address} onChange={(value) => setField("address", value)} placeholder={t("ppages_Secrets.httpsvaultexamplecom", {defaultValue: "https://vault.example.com"})} />
+      <TextField label={t("ppages_Secrets.namespace", {defaultValue: "Namespace"})} value={form.namespace} onChange={(value) => setField("namespace", value)} placeholder="admin" />
+      <TextField label={t("ppages_Secrets.mount_path", {defaultValue: "Mount path"})} value={form.mountPath} onChange={(value) => setField("mountPath", value)} placeholder="secret" />
+      <TextField label={t("ppages_Secrets.secret_path_prefix", {defaultValue: "Secret path prefix"})} value={form.secretPathPrefix} onChange={(value) => setField("secretPathPrefix", value)} placeholder={t("ppages_Secrets.paperclipprod", {defaultValue: "paperclip/prod"})} />
     </div>
   );
 }
@@ -2157,7 +2158,7 @@ function AwsProviderVaultDiscoveryPanel({
     <div className="space-y-3 border-t border-border pt-3">
       <div className="flex flex-wrap items-center gap-2">
         <div className="min-w-0 flex-1">
-          <p className="text-sm font-medium">AWS discovery</p>
+          <p className="text-sm font-medium">{t("ppages_Secrets.aws_discovery", {defaultValue: "AWS discovery"})}</p>
           <p className="text-xs text-muted-foreground">
             Uses the current draft routing fields to inspect AWS Secrets Manager metadata. Values are not read.
           </p>
@@ -2180,7 +2181,7 @@ function AwsProviderVaultDiscoveryPanel({
       </div>
 
       {!canDiscover ? (
-        <p className="text-xs text-muted-foreground">Enter an AWS region before discovery.</p>
+        <p className="text-xs text-muted-foreground">{t("ppages_Secrets.enter_an_aws_region_before_discovery", {defaultValue: "Enter an AWS region before discovery."})}</p>
       ) : null}
 
       {loading ? (
@@ -2325,17 +2326,17 @@ function SecretDetailsTab({
 }) {
   return (
     <dl className="grid grid-cols-2 gap-x-4 gap-y-3 text-xs">
-      <DetailRow label="Description">
+      <DetailRow label={t("ppages_Secrets.description", {defaultValue: "Description"})}>
         <span>{secret.description ?? <span className="text-muted-foreground">—</span>}</span>
       </DetailRow>
-      <DetailRow label="Custody">{modeLabel(secret.managedMode)}</DetailRow>
-      <DetailRow label="Provider">{secret.provider.replaceAll("_", " ")}</DetailRow>
-      <DetailRow label="Provider vault">{providerVaultLabel(providerConfigs, secret.providerConfigId)}</DetailRow>
-      <DetailRow label="Latest version">v{secret.latestVersion}</DetailRow>
-      <DetailRow label="Created">{formatRelative(secret.createdAt)}</DetailRow>
-      <DetailRow label="Updated">{formatRelative(secret.updatedAt)}</DetailRow>
-      <DetailRow label="Last rotated">{formatRelative(secret.lastRotatedAt)}</DetailRow>
-      <DetailRow label="Last resolved">{formatRelative(secret.lastResolvedAt)}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.custody", {defaultValue: "Custody"})}>{modeLabel(secret.managedMode)}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.provider", {defaultValue: "Provider"})}>{secret.provider.replaceAll("_", " ")}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.provider_vault", {defaultValue: "Provider vault"})}>{providerVaultLabel(providerConfigs, secret.providerConfigId)}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.latest_version", {defaultValue: "Latest version"})}>v{secret.latestVersion}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.created", {defaultValue: "Created"})}>{formatRelative(secret.createdAt)}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.updated", {defaultValue: "Updated"})}>{formatRelative(secret.updatedAt)}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.last_rotated", {defaultValue: "Last rotated"})}>{formatRelative(secret.lastRotatedAt)}</DetailRow>
+      <DetailRow label={t("ppages_Secrets.last_resolved", {defaultValue: "Last resolved"})}>{formatRelative(secret.lastResolvedAt)}</DetailRow>
       {secret.externalRef ? (
         <div className="col-span-2">
           <dt className="text-[11px] uppercase tracking-wide text-muted-foreground mb-1">
@@ -2364,7 +2365,7 @@ function DetailRow({ label, children }: { label: string; children: React.ReactNo
 
 function SecretUsageTab({ loading, bindings }: { loading: boolean; bindings: CompanySecretUsageBinding[] }) {
   if (loading) {
-    return <div className="py-6 text-center text-xs text-muted-foreground">Loading…</div>;
+    return <div className="py-6 text-center text-xs text-muted-foreground">{t("ppages_Secrets.loading", {defaultValue: "Loading…"})}</div>;
   }
   if (bindings.length === 0) {
     return (
@@ -2412,7 +2413,7 @@ function SecretUsageTab({ loading, bindings }: { loading: boolean; bindings: Com
 
 function SecretEventsTab({ loading, events }: { loading: boolean; events: SecretAccessEvent[] }) {
   if (loading) {
-    return <div className="py-6 text-center text-xs text-muted-foreground">Loading…</div>;
+    return <div className="py-6 text-center text-xs text-muted-foreground">{t("ppages_Secrets.loading", {defaultValue: "Loading…"})}</div>;
   }
   if (events.length === 0) {
     return (

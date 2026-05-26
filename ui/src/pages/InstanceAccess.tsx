@@ -9,6 +9,7 @@ import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { useCompany } from "@/context/CompanyContext";
 import { useToast } from "@/context/ToastContext";
 import { queryKeys } from "@/lib/queryKeys";
+import { useTranslation } from "@/i18n";
 
 export function InstanceAccess() {
   const { companies } = useCompany();
@@ -84,7 +85,7 @@ export function InstanceAccess() {
   });
 
   if (usersQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading instance users…</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_InstanceAccess.loading_instance_users", {defaultValue: "Loading instance users…"})}</div>;
   }
 
   if (usersQuery.error) {
@@ -102,7 +103,7 @@ export function InstanceAccess() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <Shield className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Instance Access</h1>
+          <h1 className="text-lg font-semibold">{t("ppages_InstanceAccess.instance_access", {defaultValue: "Instance Access"})}</h1>
         </div>
         <p className="max-w-3xl text-sm text-muted-foreground">
           Search users, manage instance-admin status, and control which companies they can access.
@@ -112,12 +113,12 @@ export function InstanceAccess() {
       <div className="grid gap-6 lg:grid-cols-[320px_minmax(0,1fr)]">
         <section className="space-y-4 rounded-xl border border-border bg-card p-4">
           <label className="block space-y-2 text-sm">
-            <span className="font-medium">Search users</span>
+            <span className="font-medium">{t("ppages_InstanceAccess.search_users", {defaultValue: "Search users"})}</span>
             <input
               className="w-full rounded-md border border-border bg-background px-3 py-2"
               value={search}
               onChange={(event) => setSearch(event.target.value)}
-              placeholder="Search by name or email"
+              placeholder={t("ppages_InstanceAccess.search_by_name_or_email", {defaultValue: "Search by name or email"})}
             />
           </label>
           <div className="space-y-2">
@@ -151,9 +152,9 @@ export function InstanceAccess() {
 
         <section className="space-y-4 rounded-xl border border-border bg-card p-5">
           {!selectedUserId ? (
-            <div className="text-sm text-muted-foreground">Select a user to inspect instance access.</div>
+            <div className="text-sm text-muted-foreground">{t("ppages_InstanceAccess.select_a_user_to_inspect_instance_access", {defaultValue: "Select a user to inspect instance access."})}</div>
           ) : userAccessQuery.isLoading ? (
-            <div className="text-sm text-muted-foreground">Loading user access…</div>
+            <div className="text-sm text-muted-foreground">{t("ppages_InstanceAccess.loading_user_access", {defaultValue: "Loading user access…"})}</div>
           ) : userAccessQuery.error ? (
             <div className="text-sm text-destructive">
               {userAccessQuery.error instanceof Error ? userAccessQuery.error.message : "Failed to load user access."}
@@ -180,7 +181,7 @@ export function InstanceAccess() {
 
               <div className="space-y-3">
                 <div>
-                  <h2 className="text-sm font-semibold">Company access</h2>
+                  <h2 className="text-sm font-semibold">{t("ppages_InstanceAccess.company_access", {defaultValue: "Company access"})}</h2>
                   <p className="text-sm text-muted-foreground">
                     Toggle company membership for this user. New access defaults to an active operator membership.
                   </p>
@@ -220,7 +221,7 @@ export function InstanceAccess() {
               </div>
 
               <div className="space-y-2">
-                <h2 className="text-sm font-semibold">Current memberships</h2>
+                <h2 className="text-sm font-semibold">{t("ppages_InstanceAccess.current_memberships", {defaultValue: "Current memberships"})}</h2>
                 <div className="space-y-2">
                   {(userAccessQuery.data?.companyAccess ?? []).map((membership) => (
                     <div

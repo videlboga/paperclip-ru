@@ -22,6 +22,7 @@ import { IssueRow } from "./IssueRow";
 import { Identity } from "./Identity";
 import { StatusIcon } from "./StatusIcon";
 import { Button } from "@/components/ui/button";
+import { useTranslation } from "@/i18n";
 
 interface BlockedInboxViewProps {
   companyId: string;
@@ -146,7 +147,7 @@ export function BlockedInboxView({
         <div className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" aria-hidden="true" />
           <div className="flex-1 space-y-1">
-            <p className="text-sm font-medium">Couldn't load the Blocked tab.</p>
+            <p className="text-sm font-medium">{t("pcomponents_BlockedInboxView.couldnt_load_the_blocked_tab", {defaultValue: "Couldn't load the Blocked tab."})}</p>
             <p className="text-xs opacity-80">
               Other Inbox tabs still work. {message}
             </p>
@@ -176,7 +177,7 @@ export function BlockedInboxView({
           <CheckCircle2 className="h-5 w-5" aria-hidden="true" />
         </span>
         <div className="space-y-1">
-          <p className="text-sm font-medium text-foreground">No work is stopped.</p>
+          <p className="text-sm font-medium text-foreground">{t("pcomponents_BlockedInboxView.no_work_is_stopped", {defaultValue: "No work is stopped."})}</p>
           <p className="text-xs text-muted-foreground">
             Issues that need a decision, recovery, or external action will appear here.
           </p>

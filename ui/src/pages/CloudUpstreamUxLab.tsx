@@ -24,6 +24,7 @@ import type {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "@/lib/router";
+import { useTranslation } from "@/i18n";
 
 type FixtureStateKey =
   | "settings-pane"
@@ -116,7 +117,7 @@ export function CloudUpstreamUxLab() {
 function FixtureNav({ active }: { active: FixtureStateKey }) {
   return (
     <div className="rounded-md border border-dashed border-border/70 bg-muted/30 px-3 py-2 text-xs text-muted-foreground">
-      <div className="mb-1 font-semibold uppercase tracking-wide">UX lab · cloud upstream</div>
+      <div className="mb-1 font-semibold uppercase tracking-wide">{t("ppages_CloudUpstreamUxLab.ux_lab_cloud_upstream", {defaultValue: "UX lab · cloud upstream"})}</div>
       <div className="flex flex-wrap gap-x-3 gap-y-1">
         {PARSE_ORDER.map((key) => (
           <a
@@ -156,7 +157,7 @@ function CloudUpstreamRender({ fixture }: { fixture: Fixture }) {
         <div className="space-y-1">
           <div className="flex items-center gap-2">
             <CloudUpload className="h-5 w-5 text-muted-foreground" />
-            <h1 className="text-lg font-semibold">Cloud upstream</h1>
+            <h1 className="text-lg font-semibold">{t("ppages_CloudUpstreamUxLab.cloud_upstream", {defaultValue: "Cloud upstream"})}</h1>
           </div>
           <p className="max-w-2xl text-sm text-muted-foreground">
             Push {selectedCompanyName} into a Paperclip Cloud stack. Automations stay paused until activation.
@@ -186,7 +187,7 @@ function CloudUpstreamRender({ fixture }: { fixture: Fixture }) {
       <Stepper activeStep={activeStep} />
 
       <section className="space-y-3">
-        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Connection</div>
+        <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("ppages_CloudUpstreamUxLab.connection", {defaultValue: "Connection"})}</div>
         <div className="rounded-md border border-border px-4 py-4">
           {connection ? (
             <div className="grid gap-3 lg:grid-cols-[1fr_auto] lg:items-start">
@@ -226,7 +227,7 @@ function CloudUpstreamRender({ fixture }: { fixture: Fixture }) {
       {preview ? (
         <section className="space-y-3">
           <div className="flex items-center justify-between gap-3">
-            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Preview</div>
+            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("ppages_CloudUpstreamUxLab.preview", {defaultValue: "Preview"})}</div>
             <Button disabled={!preview.schemaCompatible}>
               <CloudUpload className="h-4 w-4" />
               Push to cloud
@@ -241,7 +242,7 @@ function CloudUpstreamRender({ fixture }: { fixture: Fixture }) {
       {latestRun ? (
         <section className="space-y-3">
           <div className="flex flex-wrap items-center justify-between gap-2">
-            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">Progress and finish</div>
+            <div className="text-xs font-medium uppercase tracking-wide text-muted-foreground">{t("ppages_CloudUpstreamUxLab.progress_and_finish", {defaultValue: "Progress and finish"})}</div>
             <div className="flex flex-wrap gap-2">
               <Button variant="outline" size="sm">
                 <FileJson className="h-4 w-4" />
@@ -373,9 +374,9 @@ function WarningsPanel({ warnings }: { warnings: CloudUpstreamWarning[] }) {
 function ConflictTable({ conflicts }: { conflicts: CloudUpstreamConflict[] }) {
   return (
     <div className="rounded-md border border-border px-4 py-3">
-      <div className="mb-2 text-sm font-medium">Conflicts</div>
+      <div className="mb-2 text-sm font-medium">{t("ppages_CloudUpstreamUxLab.conflicts", {defaultValue: "Conflicts"})}</div>
       {conflicts.length === 0 ? (
-        <div className="text-sm text-muted-foreground">No target conflicts detected for this preview.</div>
+        <div className="text-sm text-muted-foreground">{t("ppages_CloudUpstreamUxLab.no_target_conflicts_detected_for_this_preview", {defaultValue: "No target conflicts detected for this preview."})}</div>
       ) : (
         <div className="divide-y divide-border">
           {conflicts.map((conflict) => (
@@ -396,7 +397,7 @@ function ActivationChecklist({ run }: { run: CloudUpstreamRun }) {
   const rows = buildActivationRows(run);
   return (
     <div className="rounded-md border border-border px-4 py-3">
-      <div className="mb-2 text-sm font-medium">Activation checklist</div>
+      <div className="mb-2 text-sm font-medium">{t("ppages_CloudUpstreamUxLab.activation_checklist", {defaultValue: "Activation checklist"})}</div>
       <div className="divide-y divide-border">
         {rows.map((row) => {
           const activated = row.status === "activated";

@@ -10,6 +10,7 @@ import {
 import { Activity, ExternalLink, Loader2, Play, RotateCcw, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 
 export type WorkspaceRuntimeAction = "start" | "stop" | "restart" | "run";
 
@@ -398,7 +399,7 @@ export function WorkspaceRuntimeControls({
     <div className={cn("space-y-4", className)}>
       <div className={cn("border border-border/70 bg-background p-3", square ? "rounded-none" : "rounded-xl")}>
         <div className="space-y-1">
-          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Workspace commands</div>
+          <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{t("pcomponents_WorkspaceRuntimeControls.workspace_commands", {defaultValue: "Workspace commands"})}</div>
           <div className="flex flex-wrap items-center gap-2">
             <span
               className={cn(
@@ -422,8 +423,8 @@ export function WorkspaceRuntimeControls({
       </div>
 
       <CommandSection
-        title="Services"
-        description="Long-running commands that Paperclip can supervise for this workspace."
+        title={t("pcomponents_WorkspaceRuntimeControls.services", {defaultValue: "Services"})}
+        description={t("pcomponents_WorkspaceRuntimeControls.longrunning_commands_that_paperclip_can_supervise", {defaultValue: "Long-running commands that Paperclip can supervise for this workspace."})}
         items={resolvedSections.services}
         emptyMessage={resolvedServiceEmptyMessage}
         disabledHint={visibleDisabledHint}
@@ -434,8 +435,8 @@ export function WorkspaceRuntimeControls({
       />
 
       <CommandSection
-        title="Jobs"
-        description="One-shot commands that run now and exit when they finish."
+        title={t("pcomponents_WorkspaceRuntimeControls.jobs", {defaultValue: "Jobs"})}
+        description={t("pcomponents_WorkspaceRuntimeControls.oneshot_commands_that_run_now_and_exit_when_they_f", {defaultValue: "One-shot commands that run now and exit when they finish."})}
         items={resolvedSections.jobs}
         emptyMessage={jobEmptyMessage}
         isPending={isPending}
@@ -446,8 +447,8 @@ export function WorkspaceRuntimeControls({
 
       {resolvedSections.otherServices.length > 0 ? (
         <CommandSection
-          title="Untracked services"
-          description="Running services that no longer match the current workspace command config."
+          title={t("pcomponents_WorkspaceRuntimeControls.untracked_services", {defaultValue: "Untracked services"})}
+          description={t("pcomponents_WorkspaceRuntimeControls.running_services_that_no_longer_match_the_current", {defaultValue: "Running services that no longer match the current workspace command config."})}
           items={resolvedSections.otherServices}
           emptyMessage=""
           isPending={isPending}

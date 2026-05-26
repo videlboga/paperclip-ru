@@ -4,6 +4,7 @@ import { Link } from "../lib/router";
 import { cn } from "../lib/utils";
 import { createIssueDetailPath } from "../lib/issueDetailBreadcrumb";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useTranslation } from "@/i18n";
 
 const TRIGGER_LABELS: Record<string, string> = {
   no_comment_streak: "No-comment streak",
@@ -52,23 +53,23 @@ export function ProductivityReviewBadge({
           aria-label={`Under review · productivity review ${reviewIdentifier} (${label})`}
         >
           <Eye className="h-3 w-3" aria-hidden />
-          {hideLabel ? null : <span>Under review</span>}
+          {hideLabel ? null : <span>{t("pcomponents_ProductivityReviewBadge.under_review", {defaultValue: "Under review"})}</span>}
         </Link>
       </TooltipTrigger>
       <TooltipContent>
         <div className="space-y-1 text-xs">
-          <div className="font-semibold">Productivity review open</div>
+          <div className="font-semibold">{t("pcomponents_ProductivityReviewBadge.productivity_review_open", {defaultValue: "Productivity review open"})}</div>
           <div>
-            <span className="text-muted-foreground">Trigger:</span> {label}
+            <span className="text-muted-foreground">{t("pcomponents_ProductivityReviewBadge.trigger", {defaultValue: "Trigger:"})}</span> {label}
           </div>
           {typeof review.noCommentStreak === "number" && review.noCommentStreak > 0 ? (
             <div>
-              <span className="text-muted-foreground">No-comment streak:</span>{" "}
+              <span className="text-muted-foreground">{t("pcomponents_ProductivityReviewBadge.nocomment_streak", {defaultValue: "No-comment streak:"})}</span>{" "}
               {review.noCommentStreak} runs
             </div>
           ) : null}
           <div>
-            <span className="text-muted-foreground">Review:</span> {reviewIdentifier} ({statusLabel})
+            <span className="text-muted-foreground">{t("pcomponents_ProductivityReviewBadge.review", {defaultValue: "Review:"})}</span> {reviewIdentifier} ({statusLabel})
           </div>
         </div>
       </TooltipContent>

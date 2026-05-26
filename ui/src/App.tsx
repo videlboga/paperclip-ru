@@ -203,7 +203,7 @@ function CompanyRootRedirect() {
   const location = useLocation();
 
   if (loading) {
-    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">Loading...</div>;
+    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">{t("App.loading", {defaultValue: "Loading..."})}</div>;
   }
 
   const targetCompany = selectedCompany ?? companies[0] ?? null;
@@ -227,7 +227,7 @@ function UnprefixedBoardRedirect() {
   const { companies, selectedCompany, loading } = useCompany();
 
   if (loading) {
-    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">Loading...</div>;
+    return <div className="mx-auto max-w-xl py-10 text-sm text-muted-foreground">{t("App.loading", {defaultValue: "Loading..."})}</div>;
   }
 
   const targetCompany = selectedCompany ?? companies[0] ?? null;

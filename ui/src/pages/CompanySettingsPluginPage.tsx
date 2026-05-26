@@ -4,6 +4,7 @@ import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { useCompany } from "@/context/CompanyContext";
 import { PluginSlotMount, usePluginSlots } from "@/plugins/slots";
 import { NotFoundPage } from "./NotFound";
+import { useTranslation } from "@/i18n";
 
 export function CompanySettingsPluginPage() {
   const params = useParams<{
@@ -50,11 +51,11 @@ export function CompanySettingsPluginPage() {
     if (hasInvalidCompanyPrefix) {
       return <NotFoundPage scope="invalid_company_prefix" requestedPrefix={routeCompanyPrefix} />;
     }
-    return <div className="text-sm text-muted-foreground">Select a company to view this page.</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_CompanySettingsPluginPage.select_a_company_to_view_this_page", {defaultValue: "Select a company to view this page."})}</div>;
   }
 
   if (!settingsRoutePath || isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading...</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_CompanySettingsPluginPage.loading", {defaultValue: "Loading..."})}</div>;
   }
 
   if (errorMessage) {

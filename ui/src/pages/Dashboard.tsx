@@ -26,6 +26,7 @@ import { ChartCard, RunActivityChart, PriorityChart, IssueStatusChart, SuccessRa
 import { PageSkeleton } from "../components/PageSkeleton";
 import type { Agent, Issue } from "@paperclipai/shared";
 import { PluginSlotOutlet } from "@/plugins/slots";
+import { useTranslation } from "@/i18n";
 
 const DASHBOARD_ACTIVITY_LIMIT = 10;
 
@@ -241,7 +242,7 @@ export function Dashboard() {
             <MetricCard
               icon={Bot}
               value={data.agents.active + data.agents.running + data.agents.paused + data.agents.error}
-              label="Agents Enabled"
+              label={t("ppages_Dashboard.agents_enabled", {defaultValue: "Agents Enabled"})}
               to="/agents"
               description={
                 <span>
@@ -254,7 +255,7 @@ export function Dashboard() {
             <MetricCard
               icon={CircleDot}
               value={data.tasks.inProgress}
-              label="Tasks In Progress"
+              label={t("ppages_Dashboard.tasks_in_progress", {defaultValue: "Tasks In Progress"})}
               to="/issues"
               description={
                 <span>
@@ -266,7 +267,7 @@ export function Dashboard() {
             <MetricCard
               icon={DollarSign}
               value={formatCents(data.costs.monthSpendCents)}
-              label="Month Spend"
+              label={t("ppages_Dashboard.month_spend", {defaultValue: "Month Spend"})}
               to="/costs"
               description={
                 <span>
@@ -279,7 +280,7 @@ export function Dashboard() {
             <MetricCard
               icon={ShieldCheck}
               value={data.pendingApprovals + data.budgets.pendingApprovals}
-              label="Pending Approvals"
+              label={t("ppages_Dashboard.pending_approvals", {defaultValue: "Pending Approvals"})}
               to="/approvals"
               description={
                 <span>
@@ -292,16 +293,16 @@ export function Dashboard() {
           </div>
 
           <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
-            <ChartCard title="Run Activity" subtitle="Last 14 days">
+            <ChartCard title={t("ppages_Dashboard.run_activity", {defaultValue: "Run Activity"})} subtitle="Last 14 days">
               <RunActivityChart activity={data.runActivity} />
             </ChartCard>
-            <ChartCard title="Issues by Priority" subtitle="Last 14 days">
+            <ChartCard title={t("ppages_Dashboard.issues_by_priority", {defaultValue: "Issues by Priority"})} subtitle="Last 14 days">
               <PriorityChart issues={issues ?? []} />
             </ChartCard>
-            <ChartCard title="Issues by Status" subtitle="Last 14 days">
+            <ChartCard title={t("ppages_Dashboard.issues_by_status", {defaultValue: "Issues by Status"})} subtitle="Last 14 days">
               <IssueStatusChart issues={issues ?? []} />
             </ChartCard>
-            <ChartCard title="Success Rate" subtitle="Last 14 days">
+            <ChartCard title={t("ppages_Dashboard.success_rate", {defaultValue: "Success Rate"})} subtitle="Last 14 days">
               <SuccessRateChart activity={data.runActivity} />
             </ChartCard>
           </div>
@@ -343,7 +344,7 @@ export function Dashboard() {
               </h3>
               {recentIssues.length === 0 ? (
                 <div className="border border-border p-4">
-                  <p className="text-sm text-muted-foreground">No tasks yet.</p>
+                  <p className="text-sm text-muted-foreground">{t("ppages_Dashboard.no_tasks_yet", {defaultValue: "No tasks yet."})}</p>
                 </div>
               ) : (
                 <div className="border border-border divide-y divide-border overflow-hidden">

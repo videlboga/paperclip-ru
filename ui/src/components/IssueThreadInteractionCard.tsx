@@ -25,6 +25,7 @@ import { Checkbox } from "./ui/checkbox";
 import { PriorityIcon } from "./PriorityIcon";
 import { Textarea } from "./ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
+import { useTranslation } from "@/i18n";
 
 interface IssueThreadInteractionCardProps {
   interaction: IssueThreadInteraction;
@@ -284,16 +285,16 @@ function TaskTreeNode({
         {hasMetadata ? (
           <div className="mt-2 flex flex-wrap gap-1.5">
             {hasExplicitAssignee ? (
-              <TaskField label="Assignee" value={assigneeLabel} />
+              <TaskField label={t("pcomponents_IssueThreadInteractionCard.assignee", {defaultValue: "Assignee"})} value={assigneeLabel} />
             ) : null}
             {node.task.billingCode ? (
-              <TaskField label="Billing" value={node.task.billingCode} />
+              <TaskField label={t("pcomponents_IssueThreadInteractionCard.billing", {defaultValue: "Billing"})} value={node.task.billingCode} />
             ) : null}
             {node.task.projectId ? (
-              <TaskField label="Project" value={node.task.projectId} tone="subtle" />
+              <TaskField label={t("pcomponents_IssueThreadInteractionCard.project", {defaultValue: "Project"})} value={node.task.projectId} tone="subtle" />
             ) : null}
             {labels.map((label) => (
-              <TaskField key={label} label="Label" value={label} tone="subtle" />
+              <TaskField key={label} label={t("pcomponents_IssueThreadInteractionCard.label", {defaultValue: "Label"})} value={label} tone="subtle" />
             ))}
           </div>
         ) : null}
@@ -454,7 +455,7 @@ function SuggestTasksCard({
       <div className="flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
         <span>{totalTasks === 1 ? "1 draft issue" : `${totalTasks} draft issues`}</span>
         {interaction.payload.defaultParentId ? (
-          <TaskField label="Default parent" value={interaction.payload.defaultParentId} tone="subtle" />
+          <TaskField label={t("pcomponents_IssueThreadInteractionCard.default_parent", {defaultValue: "Default parent"})} value={interaction.payload.defaultParentId} tone="subtle" />
         ) : null}
       </div>
 
@@ -559,7 +560,7 @@ function SuggestTasksCard({
               <Textarea
                 value={rejectReason}
                 onChange={(event) => setRejectReason(event.target.value)}
-                placeholder="Add a short reason for rejecting this suggestion"
+                placeholder={t("pcomponents_IssueThreadInteractionCard.add_a_short_reason_for_rejecting_this_suggestion", {defaultValue: "Add a short reason for rejecting this suggestion"})}
                 className="min-h-24 bg-background text-sm"
               />
               <div className="flex justify-end">
@@ -828,11 +829,11 @@ function AskUserQuestionsCard({
         </div>
       ) : interaction.status === "cancelled" ? (
         <div className="rounded-2xl border border-rose-300/60 bg-rose-50/85 p-4 text-sm leading-6 text-rose-950 dark:border-rose-500/40 dark:bg-rose-500/10 dark:text-rose-100">
-          <div className="font-semibold">Question cancelled</div>
+          <div className="font-semibold">{t("pcomponents_IssueThreadInteractionCard.question_cancelled", {defaultValue: "Question cancelled"})}</div>
           {interaction.result?.cancellationReason ? (
             <p className="mt-1">{interaction.result.cancellationReason}</p>
           ) : (
-            <p className="mt-1">No answer was recorded.</p>
+            <p className="mt-1">{t("pcomponents_IssueThreadInteractionCard.no_answer_was_recorded", {defaultValue: "No answer was recorded."})}</p>
           )}
         </div>
       ) : (
@@ -853,10 +854,10 @@ function AskUserQuestionsCard({
                 <div className="mt-2 flex flex-wrap gap-2">
                   {labels.length > 0 ? (
                     labels.map((label) => (
-                      <TaskField key={label} label="Answer" value={label} />
+                      <TaskField key={label} label={t("pcomponents_IssueThreadInteractionCard.answer", {defaultValue: "Answer"})} value={label} />
                     ))
                   ) : (
-                    <span className="text-sm text-muted-foreground">No answer recorded.</span>
+                    <span className="text-sm text-muted-foreground">{t("pcomponents_IssueThreadInteractionCard.no_answer_recorded", {defaultValue: "No answer recorded."})}</span>
                   )}
                 </div>
               </div>
@@ -954,7 +955,7 @@ function RequestConfirmationResolution({
   if (interaction.status === "accepted") {
     return (
       <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
-        <span className="font-medium">Confirmed</span>
+        <span className="font-medium">{t("pcomponents_IssueThreadInteractionCard.confirmed", {defaultValue: "Confirmed"})}</span>
         <RequestConfirmationTargetChip interaction={interaction} target={target} />
       </div>
     );
@@ -964,7 +965,7 @@ function RequestConfirmationResolution({
     return (
       <div className="space-y-2">
         <div className="flex flex-wrap items-center gap-2 text-sm leading-6 text-foreground">
-          <span className="font-medium">Declined</span>
+          <span className="font-medium">{t("pcomponents_IssueThreadInteractionCard.declined", {defaultValue: "Declined"})}</span>
           <RequestConfirmationTargetChip interaction={interaction} target={target} />
         </div>
         {interaction.result?.reason ? (
@@ -991,7 +992,7 @@ function RequestConfirmationResolution({
         </p>
         {expiredByComment && interaction.result?.commentId ? (
           <Button asChild size="sm" variant="ghost" className="h-7 px-2 text-amber-950 hover:bg-amber-500/15 dark:text-amber-50">
-            <a href={`#comment-${interaction.result.commentId}`}>Jump to comment</a>
+            <a href={`#comment-${interaction.result.commentId}`}>{t("pcomponents_IssueThreadInteractionCard.jump_to_comment", {defaultValue: "Jump to comment"})}</a>
           </Button>
         ) : null}
         {expiredByTargetChange ? (
@@ -1158,7 +1159,7 @@ function RequestConfirmationCard({
                 )}
               />
               {rejectAttempted && declineReasonInvalid ? (
-                <p className="text-xs text-destructive">A decline reason is required.</p>
+                <p className="text-xs text-destructive">{t("pcomponents_IssueThreadInteractionCard.a_decline_reason_is_required", {defaultValue: "A decline reason is required."})}</p>
               ) : null}
               <div className="flex flex-wrap justify-end gap-2">
                 <Button

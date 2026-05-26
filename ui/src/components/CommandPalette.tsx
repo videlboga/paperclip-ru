@@ -32,6 +32,7 @@ import {
 } from "lucide-react";
 import { Identity } from "./Identity";
 import { agentUrl, projectUrl } from "../lib/utils";
+import { useTranslation } from "@/i18n";
 
 const SEARCH_ALL_VALUE = "__paperclip-search-all__";
 
@@ -121,7 +122,7 @@ export function CommandPalette() {
         if (v && isMobile) setSidebarOpen(false);
       }}>
       <CommandInput
-        placeholder="Search issues, agents, projects..."
+        placeholder={t("pcomponents_CommandPalette.search_issues_agents_projects", {defaultValue: "Search issues, agents, projects..."})}
         value={query}
         onValueChange={setQuery}
         onKeyDown={(event) => {

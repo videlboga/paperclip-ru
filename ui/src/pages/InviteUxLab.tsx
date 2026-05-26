@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { CompanyPatternIcon } from "@/components/CompanyPatternIcon";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 import {
   ArrowRight,
   Check,
@@ -200,22 +201,22 @@ function InviteSummaryPanel({
           className="h-16 w-16 rounded-none border border-zinc-800"
         />
         <div className="min-w-0">
-          <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">You&apos;ve been invited to join Paperclip</p>
+          <p className="text-xs uppercase tracking-[0.24em] text-zinc-500">{t("ppages_InviteUxLab.youaposve_been_invited_to_join_paperclip", {defaultValue: "You&apos;ve been invited to join Paperclip"})}</p>
           <h3 className="mt-2 text-2xl font-semibold text-zinc-100">{title}</h3>
           <p className="mt-2 max-w-2xl text-sm leading-6 text-zinc-300">{description}</p>
         </div>
       </div>
 
       <div className="grid gap-3 sm:grid-cols-2">
-        <MetaCard label="Company" value="Acme Robotics" />
-        <MetaCard label="Invited by" value="Board User" />
-        <MetaCard label="Requested access" value={requestedAccess} />
-        <MetaCard label="Invite expires" value="Mar 7, 2027" />
+        <MetaCard label={t("ppages_InviteUxLab.company", {defaultValue: "Company"})} value="Acme Robotics" />
+        <MetaCard label={t("ppages_InviteUxLab.invited_by", {defaultValue: "Invited by"})} value="Board User" />
+        <MetaCard label={t("ppages_InviteUxLab.requested_access", {defaultValue: "Requested access"})} value={requestedAccess} />
+        <MetaCard label={t("ppages_InviteUxLab.invite_expires", {defaultValue: "Invite expires"})} value="Mar 7, 2027" />
       </div>
 
       {inviteMessage ? (
         <div className="border border-amber-500/40 bg-amber-500/10 p-4">
-          <div className="text-xs uppercase tracking-[0.2em] text-amber-200/80">Message from inviter</div>
+          <div className="text-xs uppercase tracking-[0.2em] text-amber-200/80">{t("ppages_InviteUxLab.message_from_inviter", {defaultValue: "Message from inviter"})}</div>
           <p className="mt-2 text-sm leading-6 text-amber-50">{inviteMessage}</p>
         </div>
       ) : null}
@@ -288,16 +289,16 @@ function InlineAuthPreview({
       <form className="space-y-4">
         {mode === "sign_up" ? (
           <label className="block text-sm">
-            <span className="mb-1 block text-zinc-400">Name</span>
+            <span className="mb-1 block text-zinc-400">{t("ppages_InviteUxLab.name", {defaultValue: "Name"})}</span>
             <input name="name" className={fieldClassName} defaultValue="Jane Example" readOnly />
           </label>
         ) : null}
         <label className="block text-sm">
-          <span className="mb-1 block text-zinc-400">Email</span>
+          <span className="mb-1 block text-zinc-400">{t("ppages_InviteUxLab.email", {defaultValue: "Email"})}</span>
           <input name="email" type="email" className={fieldClassName} defaultValue="jane@example.com" readOnly />
         </label>
         <label className="block text-sm">
-          <span className="mb-1 block text-zinc-400">Password</span>
+          <span className="mb-1 block text-zinc-400">{t("ppages_InviteUxLab.password", {defaultValue: "Password"})}</span>
           <input name="password" type="password" className={fieldClassName} defaultValue="supersecret" readOnly />
         </label>
         {feedback ? (
@@ -323,25 +324,25 @@ function AgentRequestPreview() {
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-semibold text-zinc-100">Submit agent details</h3>
+        <h3 className="text-lg font-semibold text-zinc-100">{t("ppages_InviteUxLab.submit_agent_details", {defaultValue: "Submit agent details"})}</h3>
         <p className="mt-1 text-sm text-zinc-400">
           This invite will create an approval request for a new agent in Acme Robotics.
         </p>
       </div>
       <label className="block text-sm">
-        <span className="mb-1 block text-zinc-400">Agent name</span>
+        <span className="mb-1 block text-zinc-400">{t("ppages_InviteUxLab.agent_name", {defaultValue: "Agent name"})}</span>
         <input className={fieldClassName} defaultValue="Acme Ops Agent" readOnly />
       </label>
       <label className="block text-sm">
-        <span className="mb-1 block text-zinc-400">Adapter type</span>
+        <span className="mb-1 block text-zinc-400">{t("ppages_InviteUxLab.adapter_type", {defaultValue: "Adapter type"})}</span>
         <select className={fieldClassName} defaultValue="codex_local" disabled>
-          <option value="codex_local">Codex</option>
-          <option value="claude_local">Claude Code</option>
-          <option value="cursor">Cursor</option>
+          <option value="codex_local">{t("ppages_InviteUxLab.codex", {defaultValue: "Codex"})}</option>
+          <option value="claude_local">{t("ppages_InviteUxLab.claude_code", {defaultValue: "Claude Code"})}</option>
+          <option value="cursor">{t("ppages_InviteUxLab.cursor", {defaultValue: "Cursor"})}</option>
         </select>
       </label>
       <label className="block text-sm">
-        <span className="mb-1 block text-zinc-400">Capabilities</span>
+        <span className="mb-1 block text-zinc-400">{t("ppages_InviteUxLab.capabilities", {defaultValue: "Capabilities"})}</span>
         <textarea
           className={fieldClassName}
           rows={4}
@@ -368,7 +369,7 @@ function AcceptInvitePreview({
   return (
     <div className="space-y-4">
       <div>
-        <h3 className="text-lg font-semibold text-zinc-100">Accept company invite</h3>
+        <h3 className="text-lg font-semibold text-zinc-100">{t("ppages_InviteUxLab.accept_company_invite", {defaultValue: "Accept company invite"})}</h3>
         <p className="mt-1 text-sm text-zinc-400">
           {autoAccept
             ? "Granting your access to Acme Robotics."
@@ -379,7 +380,7 @@ function AcceptInvitePreview({
       </div>
       {error ? <p className="text-xs text-red-400">{error}</p> : null}
       {autoAccept ? (
-        <div className="text-sm text-zinc-400">Submitting request...</div>
+        <div className="text-sm text-zinc-400">{t("ppages_InviteUxLab.submitting_request", {defaultValue: "Submitting request..."})}</div>
       ) : (
         <Button type="button" className="w-full rounded-none" disabled={isCurrentMember}>
           Accept invite
@@ -422,7 +423,7 @@ function InviteResultPreview({
         ) : (
           <>
             <div className="border border-zinc-800 p-3">
-              <p className="mb-1 text-xs text-zinc-500">Approval page</p>
+              <p className="mb-1 text-xs text-zinc-500">{t("ppages_InviteUxLab.approval_page", {defaultValue: "Approval page"})}</p>
               <a className="text-sm text-zinc-200 underline underline-offset-2" href="/company/settings/members">
                 Company Settings → Members
               </a>
@@ -434,9 +435,9 @@ function InviteResultPreview({
         )}
         {claimSecret ? (
           <div className="space-y-1 border border-zinc-800 p-3 text-xs text-zinc-400">
-            <div className="text-zinc-200">Claim secret</div>
+            <div className="text-zinc-200">{t("ppages_InviteUxLab.claim_secret", {defaultValue: "Claim secret"})}</div>
             <div className="font-mono break-all">{claimSecret}</div>
-            <div className="font-mono break-all">POST /api/agents/claim-api-key</div>
+            <div className="font-mono break-all">{t("ppages_InviteUxLab.post_apiagentsclaimapikey", {defaultValue: "POST /api/agents/claim-api-key"})}</div>
           </div>
         ) : null}
         {onboardingTextUrl ? (
@@ -457,7 +458,7 @@ function AuthScreenPreview({ mode, error }: { mode: "sign_in" | "sign_up"; error
           <div className="mx-auto w-full max-w-md">
             <div className="mb-8 flex items-center gap-2">
               <FlaskConical className="h-4 w-4 text-muted-foreground" />
-              <span className="text-sm font-medium">Paperclip</span>
+              <span className="text-sm font-medium">{t("ppages_InviteUxLab.paperclip", {defaultValue: "Paperclip"})}</span>
             </div>
             <h3 className="text-xl font-semibold">
               {mode === "sign_in" ? "Sign in to Paperclip" : "Create your Paperclip account"}
@@ -470,7 +471,7 @@ function AuthScreenPreview({ mode, error }: { mode: "sign_in" | "sign_up"; error
             <div className="mt-6 space-y-4">
               {mode === "sign_up" ? (
                 <label className="block">
-                  <span className="mb-1 block text-xs text-muted-foreground">Name</span>
+                  <span className="mb-1 block text-xs text-muted-foreground">{t("ppages_InviteUxLab.name", {defaultValue: "Name"})}</span>
                   <input
                     className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm"
                     defaultValue="Jane Example"
@@ -479,7 +480,7 @@ function AuthScreenPreview({ mode, error }: { mode: "sign_in" | "sign_up"; error
                 </label>
               ) : null}
               <label className="block">
-                <span className="mb-1 block text-xs text-muted-foreground">Email</span>
+                <span className="mb-1 block text-xs text-muted-foreground">{t("ppages_InviteUxLab.email", {defaultValue: "Email"})}</span>
                 <input
                   className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm"
                   defaultValue="jane@example.com"
@@ -487,7 +488,7 @@ function AuthScreenPreview({ mode, error }: { mode: "sign_in" | "sign_up"; error
                 />
               </label>
               <label className="block">
-                <span className="mb-1 block text-xs text-muted-foreground">Password</span>
+                <span className="mb-1 block text-xs text-muted-foreground">{t("ppages_InviteUxLab.password", {defaultValue: "Password"})}</span>
                 <input
                   className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm"
                   defaultValue="supersecret"
@@ -512,7 +513,7 @@ function AuthScreenPreview({ mode, error }: { mode: "sign_in" | "sign_up"; error
             <div className="inline-flex items-center gap-2 rounded-full border border-cyan-400/30 bg-cyan-500/[0.08] px-3 py-1 text-[10px] uppercase tracking-[0.22em] text-cyan-200">
               Auth preview
             </div>
-            <div className="text-2xl font-semibold">Side-by-side signup styling review</div>
+            <div className="text-2xl font-semibold">{t("ppages_InviteUxLab.sidebyside_signup_styling_review", {defaultValue: "Side-by-side signup styling review"})}</div>
             <p className="text-sm leading-6 text-zinc-400">
               This frame mirrors the production auth surface so spacing, label density, button treatments, and desktop composition are easy to compare.
             </p>
@@ -533,7 +534,7 @@ function CompanyInvitesPreview() {
             Company Invites
           </div>
           <div>
-            <CardTitle>Create invite</CardTitle>
+            <CardTitle>{t("ppages_InviteUxLab.create_invite", {defaultValue: "Create invite"})}</CardTitle>
             <CardDescription className="mt-2">
               Generate a human invite link and choose the default access it should request.
             </CardDescription>
@@ -541,7 +542,7 @@ function CompanyInvitesPreview() {
         </CardHeader>
         <CardContent className="space-y-4">
           <fieldset className="space-y-3">
-            <legend className="text-sm font-medium">Choose a role</legend>
+            <legend className="text-sm font-medium">{t("ppages_InviteUxLab.choose_a_role", {defaultValue: "Choose a role"})}</legend>
             <div className="rounded-2xl border border-border">
               {inviteRoleOptions.map((option, index) => (
                 <label
@@ -576,14 +577,14 @@ function CompanyInvitesPreview() {
           </div>
 
           <div className="flex flex-wrap items-center gap-3">
-            <Button type="button">Create invite</Button>
-            <span className="text-sm text-muted-foreground">Invite history below keeps the audit trail.</span>
+            <Button type="button">{t("ppages_InviteUxLab.create_invite", {defaultValue: "Create invite"})}</Button>
+            <span className="text-sm text-muted-foreground">{t("ppages_InviteUxLab.invite_history_below_keeps_the_audit_trail", {defaultValue: "Invite history below keeps the audit trail."})}</span>
           </div>
 
           <div className="space-y-3 rounded-2xl border border-border px-4 py-4">
             <div className="flex items-center justify-between gap-3">
               <div>
-                <div className="text-sm font-medium">Latest invite link</div>
+                <div className="text-sm font-medium">{t("ppages_InviteUxLab.latest_invite_link", {defaultValue: "Latest invite link"})}</div>
                 <div className="text-sm text-muted-foreground">
                   This URL includes the current Paperclip domain returned by the server.
                 </div>
@@ -613,7 +614,7 @@ function CompanyInvitesPreview() {
         <CardHeader className="space-y-3">
           <div className="flex items-center justify-between gap-3">
             <div>
-              <CardTitle>Invite history</CardTitle>
+              <CardTitle>{t("ppages_InviteUxLab.invite_history", {defaultValue: "Invite history"})}</CardTitle>
               <CardDescription className="mt-2">
                 Review invite status, role, inviter, and any linked join request.
               </CardDescription>
@@ -628,12 +629,12 @@ function CompanyInvitesPreview() {
             <table className="min-w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-border">
-                  <th className="px-5 py-3 font-medium text-muted-foreground">State</th>
-                  <th className="px-5 py-3 font-medium text-muted-foreground">Role</th>
-                  <th className="px-5 py-3 font-medium text-muted-foreground">Invited by</th>
-                  <th className="px-5 py-3 font-medium text-muted-foreground">Created</th>
-                  <th className="px-5 py-3 font-medium text-muted-foreground">Join request</th>
-                  <th className="px-5 py-3 text-right font-medium text-muted-foreground">Action</th>
+                  <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_InviteUxLab.state", {defaultValue: "State"})}</th>
+                  <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_InviteUxLab.role", {defaultValue: "Role"})}</th>
+                  <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_InviteUxLab.invited_by", {defaultValue: "Invited by"})}</th>
+                  <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_InviteUxLab.created", {defaultValue: "Created"})}</th>
+                  <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_InviteUxLab.join_request", {defaultValue: "Join request"})}</th>
+                  <th className="px-5 py-3 text-right font-medium text-muted-foreground">{t("ppages_InviteUxLab.action", {defaultValue: "Action"})}</th>
                 </tr>
               </thead>
               <tbody>
@@ -665,7 +666,7 @@ function CompanyInvitesPreview() {
                           Revoke
                         </Button>
                       ) : (
-                        <span className="text-xs text-muted-foreground">Inactive</span>
+                        <span className="text-xs text-muted-foreground">{t("ppages_InviteUxLab.inactive", {defaultValue: "Inactive"})}</span>
                       )}
                     </td>
                   </tr>
@@ -676,13 +677,13 @@ function CompanyInvitesPreview() {
 
           <div className="grid gap-3 md:grid-cols-2">
             <div className="rounded-2xl border border-border p-4">
-              <div className="text-sm font-medium">Empty history state</div>
+              <div className="text-sm font-medium">{t("ppages_InviteUxLab.empty_history_state", {defaultValue: "Empty history state"})}</div>
               <div className="mt-2 text-sm text-muted-foreground">
                 No invites have been created for this company yet.
               </div>
             </div>
             <div className="rounded-2xl border border-rose-400/40 bg-rose-500/[0.07] p-4">
-              <div className="text-sm font-medium text-foreground">Permission error</div>
+              <div className="text-sm font-medium text-foreground">{t("ppages_InviteUxLab.permission_error", {defaultValue: "Permission error"})}</div>
               <div className="mt-2 text-sm text-muted-foreground">
                 You do not have permission to manage company invites.
               </div>
@@ -704,7 +705,7 @@ export function InviteUxLab() {
               <FlaskConical className="h-3.5 w-3.5" />
               Invite UX Lab
             </div>
-            <h1 className="mt-4 text-3xl font-semibold tracking-tight">Invite and signup UX review surface</h1>
+            <h1 className="mt-4 text-3xl font-semibold tracking-tight">{t("ppages_InviteUxLab.invite_and_signup_ux_review_surface", {defaultValue: "Invite and signup UX review surface"})}</h1>
             <p className="mt-3 max-w-3xl text-sm leading-6 text-muted-foreground">
               This page collects the current invite landing, signup, approval-result, and company invite-management states in one place so styling changes can be reviewed without recreating each backend condition by hand.
             </p>
@@ -748,52 +749,52 @@ export function InviteUxLab() {
 
       <LabSection
         eyebrow="Top-level states"
-        title="Landing state coverage"
-        description="Small cards for the fast-return invite states that do not render the full split-screen layout."
+        title={t("ppages_InviteUxLab.landing_state_coverage", {defaultValue: "Landing state coverage"})}
+        description={t("ppages_InviteUxLab.small_cards_for_the_fastreturn_invite_states_that", {defaultValue: "Small cards for the fast-return invite states that do not render the full split-screen layout."})}
         accentClassName="bg-[linear-gradient(180deg,rgba(59,130,246,0.05),transparent_30%),var(--background)]"
       >
         <div className="grid gap-4 md:grid-cols-2 xl:grid-cols-4">
           <StatusCard
             icon={<Loader2 className="h-4 w-4 animate-spin" />}
-            title="Loading invite"
+            title={t("ppages_InviteUxLab.loading_invite", {defaultValue: "Loading invite"})}
             body="Shown while invite summary, deployment mode, or auth session data is still loading."
           />
           <StatusCard
             icon={<Clock3 className="h-4 w-4" />}
-            title="Checking your access"
+            title={t("ppages_InviteUxLab.checking_your_access", {defaultValue: "Checking your access"})}
             body="Shown after sign-in while the app verifies whether the current user already belongs to the invited company."
           />
           <StatusCard
             icon={<KeyRound className="h-4 w-4" />}
-            title="Invalid invite token"
+            title={t("ppages_InviteUxLab.invalid_invite_token", {defaultValue: "Invalid invite token"})}
             body="The token is missing entirely, so the page short-circuits before any invite lookup."
             tone="error"
           />
           <StatusCard
             icon={<Link2 className="h-4 w-4" />}
-            title="Invite not available"
+            title={t("ppages_InviteUxLab.invite_not_available", {defaultValue: "Invite not available"})}
             body="Used for expired, revoked, already-consumed, or otherwise missing invites."
             tone="warn"
           />
           <StatusCard
             icon={<ShieldCheck className="h-4 w-4" />}
-            title="Bootstrap complete"
+            title={t("ppages_InviteUxLab.bootstrap_complete", {defaultValue: "Bootstrap complete"})}
             body="Result screen for bootstrap CEO invites after setup has been accepted successfully."
             tone="success"
           />
           <StatusCard
             icon={<ArrowRight className="h-4 w-4" />}
-            title="Auto-accept in progress"
+            title={t("ppages_InviteUxLab.autoaccept_in_progress", {defaultValue: "Auto-accept in progress"})}
             body="Signed-in human users skip the extra button click and move straight into join submission."
           />
           <StatusCard
             icon={<Users className="h-4 w-4" />}
-            title="Already a member"
+            title={t("ppages_InviteUxLab.already_a_member", {defaultValue: "Already a member"})}
             body="Acceptance stays disabled and the page redirects into the company once membership is confirmed."
           />
           <StatusCard
             icon={<UserPlus className="h-4 w-4" />}
-            title="Invite result surfaces"
+            title={t("ppages_InviteUxLab.invite_result_surfaces", {defaultValue: "Invite result surfaces"})}
             body="Both pending-approval and joined-now confirmations are included below with claim and onboarding extras."
             tone="success"
           />
@@ -802,16 +803,16 @@ export function InviteUxLab() {
 
       <LabSection
         eyebrow="Invite landing"
-        title="Split-screen invite flows"
-        description="These frames mirror the production invite surface closely enough to review spacing, hierarchy, and control states while keeping data fixture-driven."
+        title={t("ppages_InviteUxLab.splitscreen_invite_flows", {defaultValue: "Split-screen invite flows"})}
+        description={t("ppages_InviteUxLab.these_frames_mirror_the_production_invite_surface", {defaultValue: "These frames mirror the production invite surface closely enough to review spacing, hierarchy, and control states while keeping data fixture-driven."})}
         accentClassName="bg-[linear-gradient(180deg,rgba(234,179,8,0.06),transparent_28%),var(--background)]"
       >
         <div className="space-y-5">
           <InviteLandingShell
             left={
               <InviteSummaryPanel
-                title="Join Acme Robotics"
-                description="Create your Paperclip account first. If you already have one, switch to sign in and continue the invite with the same email."
+                title={t("ppages_InviteUxLab.join_acme_robotics", {defaultValue: "Join Acme Robotics"})}
+                description={t("ppages_InviteUxLab.create_your_paperclip_account_first_if_you_already", {defaultValue: "Create your Paperclip account first. If you already have one, switch to sign in and continue the invite with the same email."})}
                 inviteMessage="Welcome aboard."
                 requestedAccess="Operator"
               />
@@ -822,8 +823,8 @@ export function InviteUxLab() {
           <InviteLandingShell
             left={
               <InviteSummaryPanel
-                title="Join Acme Robotics"
-                description="Create your Paperclip account first. If you already have one, switch to sign in and continue the invite with the same email."
+                title={t("ppages_InviteUxLab.join_acme_robotics", {defaultValue: "Join Acme Robotics"})}
+                description={t("ppages_InviteUxLab.create_your_paperclip_account_first_if_you_already", {defaultValue: "Create your Paperclip account first. If you already have one, switch to sign in and continue the invite with the same email."})}
                 inviteMessage="Welcome aboard."
                 requestedAccess="Operator"
               />
@@ -842,8 +843,8 @@ export function InviteUxLab() {
           <InviteLandingShell
             left={
               <InviteSummaryPanel
-                title="Join Acme Robotics"
-                description="Your account is ready. Review the invite details, then accept it to continue."
+                title={t("ppages_InviteUxLab.join_acme_robotics", {defaultValue: "Join Acme Robotics"})}
+                description={t("ppages_InviteUxLab.your_account_is_ready_review_the_invite_details_th", {defaultValue: "Your account is ready. Review the invite details, then accept it to continue."})}
                 inviteMessage="Welcome aboard."
                 requestedAccess="Operator"
                 signedInLabel="Jane Example"
@@ -855,8 +856,8 @@ export function InviteUxLab() {
           <InviteLandingShell
             left={
               <InviteSummaryPanel
-                title="Join Acme Robotics"
-                description="Review the invite details, then submit the agent information below to start the join request."
+                title={t("ppages_InviteUxLab.join_acme_robotics", {defaultValue: "Join Acme Robotics"})}
+                description={t("ppages_InviteUxLab.review_the_invite_details_then_submit_the_agent_in", {defaultValue: "Review the invite details, then submit the agent information below to start the join request."})}
                 requestedAccess="Agent join request"
               />
             }
@@ -866,8 +867,8 @@ export function InviteUxLab() {
           <InviteLandingShell
             left={
               <InviteSummaryPanel
-                title="Join Acme Robotics"
-                description="Your account is ready. Review the invite details, then accept it to continue."
+                title={t("ppages_InviteUxLab.join_acme_robotics", {defaultValue: "Join Acme Robotics"})}
+                description={t("ppages_InviteUxLab.your_account_is_ready_review_the_invite_details_th", {defaultValue: "Your account is ready. Review the invite details, then accept it to continue."})}
                 requestedAccess="Operator"
                 signedInLabel="Jane Example"
               />
@@ -879,33 +880,33 @@ export function InviteUxLab() {
 
       <LabSection
         eyebrow="Result states"
-        title="Approval and completion screens"
-        description="These are the post-submit states returned from invite acceptance, including optional claim and onboarding metadata."
+        title={t("ppages_InviteUxLab.approval_and_completion_screens", {defaultValue: "Approval and completion screens"})}
+        description={t("ppages_InviteUxLab.these_are_the_postsubmit_states_returned_from_invi", {defaultValue: "These are the post-submit states returned from invite acceptance, including optional claim and onboarding metadata."})}
         accentClassName="bg-[linear-gradient(180deg,rgba(16,185,129,0.06),transparent_30%),var(--background)]"
       >
         <div className="grid gap-5 xl:grid-cols-3">
           <InviteResultPreview
-            title="Request to join Acme Robotics"
-            description="Board User must approve your request to join."
+            title={t("ppages_InviteUxLab.request_to_join_acme_robotics", {defaultValue: "Request to join Acme Robotics"})}
+            description={t("ppages_InviteUxLab.board_user_must_approve_your_request_to_join", {defaultValue: "Board User must approve your request to join."})}
             claimSecret="pcp_claim_secret_demo"
             onboardingTextUrl="/api/invites/pcp_invite_test/onboarding.txt"
           />
           <InviteResultPreview
-            title="You joined the company"
-            description="Your account already matched the approved invite, so the board can be opened immediately."
+            title={t("ppages_InviteUxLab.you_joined_the_company", {defaultValue: "You joined the company"})}
+            description={t("ppages_InviteUxLab.your_account_already_matched_the_approved_invite_s", {defaultValue: "Your account already matched the approved invite, so the board can be opened immediately."})}
             joinedNow
           />
           <InviteResultPreview
-            title="Request to join Acme Robotics"
-            description="Ask them to visit Company Settings → Members to approve your request."
+            title={t("ppages_InviteUxLab.request_to_join_acme_robotics", {defaultValue: "Request to join Acme Robotics"})}
+            description={t("ppages_InviteUxLab.ask_them_to_visit_company_settings_members_to_appr", {defaultValue: "Ask them to visit Company Settings → Members to approve your request."})}
           />
         </div>
       </LabSection>
 
       <LabSection
         eyebrow="Standalone auth"
-        title="Auth page states"
-        description="The general `/auth` page uses a different composition from invite landing. These previews keep both sign-in and sign-up variants visible."
+        title={t("ppages_InviteUxLab.auth_page_states", {defaultValue: "Auth page states"})}
+        description={t("ppages_InviteUxLab.the_general_auth_page_uses_a_different_composition", {defaultValue: "The general `/auth` page uses a different composition from invite landing. These previews keep both sign-in and sign-up variants visible."})}
         accentClassName="bg-[linear-gradient(180deg,rgba(168,85,247,0.06),transparent_28%),var(--background)]"
       >
         <div className="space-y-5">
@@ -916,8 +917,8 @@ export function InviteUxLab() {
 
       <LabSection
         eyebrow="Company settings"
-        title="Company invite management"
-        description="This section captures the board-side invite creation flow, copied-link state, audit table, and the edge states that are otherwise tedious to stage."
+        title={t("ppages_InviteUxLab.company_invite_management", {defaultValue: "Company invite management"})}
+        description={t("ppages_InviteUxLab.this_section_captures_the_boardside_invite_creatio", {defaultValue: "This section captures the board-side invite creation flow, copied-link state, audit table, and the edge states that are otherwise tedious to stage."})}
         accentClassName="bg-[linear-gradient(180deg,rgba(244,114,182,0.06),transparent_28%),var(--background)]"
       >
         <CompanyInvitesPreview />

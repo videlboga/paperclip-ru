@@ -13,6 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { NotFoundPage } from "./NotFound";
+import { useTranslation } from "@/i18n";
 
 /**
  * Company-context plugin page. Renders a plugin's `page` slot at
@@ -130,13 +131,13 @@ export function PluginPage() {
     }
     return (
       <div className="space-y-4">
-        <p className="text-sm text-muted-foreground">Select a company to view this page.</p>
+        <p className="text-sm text-muted-foreground">{t("ppages_PluginPage.select_a_company_to_view_this_page", {defaultValue: "Select a company to view this page."})}</p>
       </div>
     );
   }
 
   if (!contributions) {
-    return <div className="text-sm text-muted-foreground">Loading…</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_PluginPage.loading", {defaultValue: "Loading…"})}</div>;
   }
 
   if (!pluginId && pluginRoutePath) {

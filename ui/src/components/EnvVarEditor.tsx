@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from "react";
 import type { CompanySecret, EnvBinding, SecretVersionSelector } from "@paperclipai/shared";
 import { AlertCircle, X } from "lucide-react";
 import { cn } from "../lib/utils";
+import { useTranslation } from "@/i18n";
 
 const inputClass =
   "w-full rounded-md border border-border px-2.5 py-1.5 bg-transparent outline-none text-sm font-mono placeholder:text-muted-foreground/40";
@@ -181,7 +182,7 @@ export function EnvVarEditor({
           <div key={index} className="flex items-center gap-1.5">
             <input
               className={cn(inputClass, "flex-[2]")}
-              placeholder="KEY"
+              placeholder={t("pcomponents_EnvVarEditor.key", {defaultValue: "KEY"})}
               value={row.key}
               onChange={(event) => updateRow(index, { key: event.target.value })}
             />
@@ -195,8 +196,8 @@ export function EnvVarEditor({
                 })
               }
             >
-              <option value="plain">Plain</option>
-              <option value="secret">Secret</option>
+              <option value="plain">{t("pcomponents_EnvVarEditor.plain", {defaultValue: "Plain"})}</option>
+              <option value="secret">{t("pcomponents_EnvVarEditor.secret", {defaultValue: "Secret"})}</option>
             </select>
             {row.source === "secret" ? (
               <>
@@ -205,7 +206,7 @@ export function EnvVarEditor({
                   value={row.secretId}
                   onChange={(event) => updateRow(index, { secretId: event.target.value })}
                 >
-                  <option value="">Select secret...</option>
+                  <option value="">{t("pcomponents_EnvVarEditor.select_secret", {defaultValue: "Select secret..."})}</option>
                   {row.secretId && !secrets.some((s) => s.id === row.secretId) ? (
                     <option value={row.secretId}>Missing ({row.secretId.slice(0, 8)}…)</option>
                   ) : null}
@@ -224,7 +225,7 @@ export function EnvVarEditor({
                     updateRow(index, { version: raw === "latest" ? "latest" : Number.parseInt(raw, 10) });
                   }}
                   disabled={!row.secretId}
-                  aria-label="Version"
+                  aria-label={t("pcomponents_EnvVarEditor.version", {defaultValue: "Version"})}
                 >
                   <option value="latest">latest</option>
                   {(() => {
@@ -246,7 +247,7 @@ export function EnvVarEditor({
                   className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground hover:bg-accent/50 transition-colors shrink-0"
                   onClick={() => sealRow(index)}
                   disabled={!row.key.trim() || !row.plainValue}
-                  title="Create secret from current plain value"
+                  title={t("pcomponents_EnvVarEditor.create_secret_from_current_plain_value", {defaultValue: "Create secret from current plain value"})}
                 >
                   New
                 </button>
@@ -264,7 +265,7 @@ export function EnvVarEditor({
                   className="inline-flex items-center rounded-md border border-border px-2 py-0.5 text-xs text-muted-foreground hover:bg-accent/50 transition-colors shrink-0"
                   onClick={() => sealRow(index)}
                   disabled={!row.key.trim() || !row.plainValue}
-                  title="Store value as secret and replace with reference"
+                  title={t("pcomponents_EnvVarEditor.store_value_as_secret_and_replace_with_reference", {defaultValue: "Store value as secret and replace with reference"})}
                 >
                   Seal
                 </button>

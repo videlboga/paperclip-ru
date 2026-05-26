@@ -14,6 +14,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { StatusIcon } from "@/components/StatusIcon";
+import { useTranslation } from "@/i18n";
 
 function summarizeIssueDescription(description: string | null | undefined) {
   if (!description) return null;
@@ -182,7 +183,7 @@ export const IssueLinkQuicklook = React.forwardRef<
             <div className="h-4 w-full rounded bg-accent/40" />
             <div className="h-4 w-3/4 rounded bg-accent/30" />
             {!isLoading ? (
-              <p className="text-xs text-muted-foreground">Unable to load issue preview.</p>
+              <p className="text-xs text-muted-foreground">{t("pcomponents_IssueLinkQuicklook.unable_to_load_issue_preview", {defaultValue: "Unable to load issue preview."})}</p>
             ) : null}
           </div>
         )}

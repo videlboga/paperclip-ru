@@ -1,4 +1,5 @@
 import type { AdapterConfigFieldsProps } from "../types";
+import { useTranslation } from "@/i18n";
 import {
   Field,
   DraftInput,
@@ -17,7 +18,7 @@ export function HttpConfigFields({
   mark,
 }: AdapterConfigFieldsProps) {
   return (
-    <Field label="Webhook URL" hint={help.webhookUrl}>
+    <Field label={t("padapters/http_config-fields.webhook_url", {defaultValue: "Webhook URL"})} hint={help.webhookUrl}>
       <DraftInput
         value={
           isCreate
@@ -31,7 +32,7 @@ export function HttpConfigFields({
         }
         immediate
         className={inputClass}
-        placeholder="https://..."
+        placeholder={t("padapters/http_config-fields.https", {defaultValue: "https://..."})}
       />
     </Field>
   );

@@ -157,6 +157,7 @@ function touchCenter(a: React.Touch, b: React.Touch, container: HTMLDivElement):
 // ── Status dot colors (raw hex for SVG) ─────────────────────────────────
 
 import { getAdapterLabel } from "../adapters/adapter-display-registry";
+import { useTranslation } from "@/i18n";
 
 const statusDotColor: Record<string, string> = {
   running: "#22d3ee",
@@ -488,8 +489,8 @@ export function OrgChart() {
                 });
               }
             }}
-            title="Zoom in"
-            aria-label="Zoom in"
+            title={t("ppages_OrgChart.zoom_in", {defaultValue: "Zoom in"})}
+            aria-label={t("ppages_OrgChart.zoom_in", {defaultValue: "Zoom in"})}
           >
             <Plus className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
           </button>
@@ -504,16 +505,16 @@ export function OrgChart() {
                 });
               }
             }}
-            title="Zoom out"
-            aria-label="Zoom out"
+            title={t("ppages_OrgChart.zoom_out", {defaultValue: "Zoom out"})}
+            aria-label={t("ppages_OrgChart.zoom_out", {defaultValue: "Zoom out"})}
           >
             <Minus className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
           </button>
           <button
             className="flex size-9 items-center justify-center rounded border border-border bg-background text-[10px] transition-colors hover:bg-accent sm:size-7"
             onClick={fitToScreen}
-            title="Fit to screen"
-            aria-label="Fit chart to screen"
+            title={t("ppages_OrgChart.fit_to_screen", {defaultValue: "Fit to screen"})}
+            aria-label={t("ppages_OrgChart.fit_chart_to_screen", {defaultValue: "Fit chart to screen"})}
           >
             <Maximize2 className="h-4 w-4 sm:h-3.5 sm:w-3.5" />
           </button>

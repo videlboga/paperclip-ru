@@ -34,6 +34,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronDown, ChevronRight, Copy, Diff, Download, FilePenLine, FileText, Lock, MoreHorizontal, Plus, Trash2, Unlock, X } from "lucide-react";
 import { DocumentDiffModal } from "./DocumentDiffModal";
+import { useTranslation } from "@/i18n";
 
 type DraftState = {
   key: string;
@@ -734,19 +735,19 @@ export function IssueDocumentsSection({
           {extraActions}
           <Button variant="outline" size="sm" onClick={beginNewDocument} className="shrink-0">
             <Plus className="mr-1.5 h-3.5 w-3.5" />
-            <span className="hidden sm:inline">New document</span>
-            <span className="sm:hidden">New</span>
+            <span className="hidden sm:inline">{t("pcomponents_IssueDocumentsSection.new_document", {defaultValue: "New document"})}</span>
+            <span className="sm:hidden">{t("pcomponents_IssueDocumentsSection.new", {defaultValue: "New"})}</span>
           </Button>
         </div>
       ) : (
         <div className="flex flex-wrap items-center gap-2 min-w-0">
-          <h3 className="w-full text-sm font-medium text-muted-foreground shrink-0 sm:w-auto">Documents</h3>
+          <h3 className="w-full text-sm font-medium text-muted-foreground shrink-0 sm:w-auto">{t("pcomponents_IssueDocumentsSection.documents", {defaultValue: "Documents"})}</h3>
           <div className="flex flex-wrap items-center gap-2 min-w-0 sm:ml-auto">
             {extraActions}
             <Button variant="outline" size="sm" onClick={beginNewDocument} className="shrink-0">
               <Plus className="mr-1.5 h-3.5 w-3.5" />
-              <span className="hidden sm:inline">New document</span>
-              <span className="sm:hidden">New</span>
+              <span className="hidden sm:inline">{t("pcomponents_IssueDocumentsSection.new_document", {defaultValue: "New document"})}</span>
+              <span className="sm:hidden">{t("pcomponents_IssueDocumentsSection.new", {defaultValue: "New"})}</span>
             </Button>
           </div>
         </div>
@@ -766,7 +767,7 @@ export function IssueDocumentsSection({
             onChange={(event) =>
               setDraft((current) => current ? { ...current, key: event.target.value.toLowerCase() } : current)
             }
-            placeholder="Document key"
+            placeholder={t("pcomponents_IssueDocumentsSection.document_key", {defaultValue: "Document key"})}
           />
           {newDocumentKeyError && (
             <p className="text-xs text-destructive">{newDocumentKeyError}</p>
@@ -777,7 +778,7 @@ export function IssueDocumentsSection({
               onChange={(event) =>
                 setDraft((current) => current ? { ...current, title: event.target.value } : current)
               }
-              placeholder="Optional title"
+              placeholder={t("pcomponents_IssueDocumentsSection.optional_title", {defaultValue: "Optional title"})}
             />
           )}
           <MarkdownEditor
@@ -785,7 +786,7 @@ export function IssueDocumentsSection({
             onChange={(body) =>
               setDraft((current) => current ? { ...current, body } : current)
             }
-            placeholder="Markdown body"
+            placeholder={t("pcomponents_IssueDocumentsSection.markdown_body", {defaultValue: "Markdown body"})}
             bordered={false}
             className="bg-transparent"
             contentClassName="min-h-[220px] text-[15px] leading-7"
@@ -894,9 +895,9 @@ export function IssueDocumentsSection({
                         </Button>
                       </DropdownMenuTrigger>
                       <DropdownMenuContent align="start" className="w-72">
-                        <DropdownMenuLabel>Revision history</DropdownMenuLabel>
+                        <DropdownMenuLabel>{t("pcomponents_IssueDocumentsSection.revision_history", {defaultValue: "Revision history"})}</DropdownMenuLabel>
                         {revisionMenuOpenKey === doc.key && isFetchingDocumentRevisions && rawRevisionHistory.length === 0 ? (
-                          <DropdownMenuItem disabled>Loading revisions...</DropdownMenuItem>
+                          <DropdownMenuItem disabled>{t("pcomponents_IssueDocumentsSection.loading_revisions", {defaultValue: "Loading revisions..."})}</DropdownMenuItem>
                         ) : revisionHistory.length > 0 ? (
                           <DropdownMenuRadioGroup value={selectedRevisionId ?? currentRevision.id ?? ""}>
                             {revisionHistory.map((revision) => {
@@ -926,7 +927,7 @@ export function IssueDocumentsSection({
                             })}
                           </DropdownMenuRadioGroup>
                         ) : (
-                          <DropdownMenuItem disabled>No revisions yet</DropdownMenuItem>
+                          <DropdownMenuItem disabled>{t("pcomponents_IssueDocumentsSection.no_revisions_yet", {defaultValue: "No revisions yet"})}</DropdownMenuItem>
                         )}
                       </DropdownMenuContent>
                     </DropdownMenu>
@@ -956,7 +957,7 @@ export function IssueDocumentsSection({
                       {isLocked ? <Lock className="h-3.5 w-3.5" /> : <Unlock className="h-3.5 w-3.5" />}
                     </Button>
                   ) : isLocked ? (
-                    <span title="Locked document" aria-label="Locked document" className="inline-flex h-6 w-6 items-center justify-center text-amber-300">
+                    <span title={t("pcomponents_IssueDocumentsSection.locked_document", {defaultValue: "Locked document"})} aria-label={t("pcomponents_IssueDocumentsSection.locked_document", {defaultValue: "Locked document"})} className="inline-flex h-6 w-6 items-center justify-center text-amber-300">
                       <Lock className="h-3.5 w-3.5" />
                     </span>
                   ) : null}
@@ -982,7 +983,7 @@ export function IssueDocumentsSection({
                         variant="ghost"
                         size="icon-xs"
                         className="text-muted-foreground"
-                        title="Document actions"
+                        title={t("pcomponents_IssueDocumentsSection.document_actions", {defaultValue: "Document actions"})}
                       >
                         <MoreHorizontal className="h-3.5 w-3.5" />
                       </Button>
@@ -1081,7 +1082,7 @@ export function IssueDocumentsSection({
                     <div className="rounded-md border border-amber-500/30 bg-amber-500/5 px-3 py-3">
                       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
                         <div className="space-y-1">
-                          <p className="text-sm font-medium text-amber-200">Out of date</p>
+                          <p className="text-sm font-medium text-amber-200">{t("pcomponents_IssueDocumentsSection.out_of_date", {defaultValue: "Out of date"})}</p>
                           <p className="text-xs text-muted-foreground">
                             This document changed while you were editing. Your local draft is preserved and autosave is paused.
                           </p>
@@ -1145,7 +1146,7 @@ export function IssueDocumentsSection({
                         markDocumentDirty(doc.key);
                         setDraft((current) => current ? { ...current, title: event.target.value } : current);
                       }}
-                      placeholder="Optional title"
+                      placeholder={t("pcomponents_IssueDocumentsSection.optional_title", {defaultValue: "Optional title"})}
                     />
                   )}
                   <div
@@ -1167,7 +1168,7 @@ export function IssueDocumentsSection({
                             return current;
                           });
                         }}
-                        placeholder="Markdown body"
+                        placeholder={t("pcomponents_IssueDocumentsSection.markdown_body", {defaultValue: "Markdown body"})}
                         bordered={false}
                         className="bg-transparent"
                         contentClassName={documentBodyContentClassName}

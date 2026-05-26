@@ -1,6 +1,7 @@
 import type { FinanceEvent } from "@paperclipai/shared";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTranslation } from "@/i18n";
 import {
   financeDirectionDisplayName,
   financeEventKindDisplayName,
@@ -21,8 +22,8 @@ export function FinanceTimelineCard({
   return (
     <Card>
       <CardHeader className="px-4 pt-4 pb-1">
-        <CardTitle className="text-base">Recent financial events</CardTitle>
-        <CardDescription>Top-ups, fees, credits, commitments, and other non-request charges.</CardDescription>
+        <CardTitle className="text-base">{t("pcomponents_FinanceTimelineCard.recent_financial_events", {defaultValue: "Recent financial events"})}</CardTitle>
+        <CardDescription>{t("pcomponents_FinanceTimelineCard.topups_fees_credits_commitments_and_other_nonreque", {defaultValue: "Top-ups, fees, credits, commitments, and other non-request charges."})}</CardDescription>
       </CardHeader>
       <CardContent className="space-y-3 px-4 pb-4 pt-3">
         {rows.length === 0 ? (

@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { agentUrl } from "@/lib/utils";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/i18n";
 import {
   deriveRecoveryDisplayState,
   type RecoveryDisplayState,
@@ -416,19 +417,19 @@ export function IssueRecoveryActionCard({
         </div>
       </header>
       <dl className={cn("border-t bg-background/40 dark:bg-background/20", tone.divider)}>
-        <MetadataRow label="Owner">
+        <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.owner", {defaultValue: "Owner"})}>
           <span className="inline-flex flex-wrap items-center gap-1.5">
             {action.ownerType === "agent" && action.ownerAgentId ? (
               <>
-                <span className="text-muted-foreground">Recovery:</span>
+                <span className="text-muted-foreground">{t("pcomponents_IssueRecoveryActionCard.recovery", {defaultValue: "Recovery:"})}</span>
                 <AgentLink agentId={action.ownerAgentId} agentMap={agentMap} />
               </>
             ) : action.ownerType === "board" ? (
-              <span className="font-medium">Board</span>
+              <span className="font-medium">{t("pcomponents_IssueRecoveryActionCard.board", {defaultValue: "Board"})}</span>
             ) : action.ownerType === "user" && action.ownerUserId ? (
               <span className="font-medium">user {action.ownerUserId.slice(0, 6)}</span>
             ) : action.ownerType === "system" ? (
-              <span className="font-medium">System</span>
+              <span className="font-medium">{t("pcomponents_IssueRecoveryActionCard.system", {defaultValue: "System"})}</span>
             ) : (
               <span className="text-muted-foreground">unassigned — pick one to wake them</span>
             )}
@@ -440,25 +441,25 @@ export function IssueRecoveryActionCard({
             ) : null}
           </span>
         </MetadataRow>
-        <MetadataRow label="Source run">
+        <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.source_run", {defaultValue: "Source run"})}>
           <RunChip runId={sourceRunId} agentId={action.previousOwnerAgentId} />
         </MetadataRow>
         {correctiveRunId ? (
-          <MetadataRow label="Corrective run">
+          <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.corrective_run", {defaultValue: "Corrective run"})}>
             <RunChip runId={correctiveRunId} agentId={action.previousOwnerAgentId} />
           </MetadataRow>
         ) : null}
-        <MetadataRow label="Evidence">
+        <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.evidence", {defaultValue: "Evidence"})}>
           {evidenceSummary ? (
             <span className="break-words font-mono text-[11px] text-foreground/80">{evidenceSummary}</span>
           ) : (
             <MissingValue />
           )}
         </MetadataRow>
-        <MetadataRow label="Next action">
+        <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.next_action", {defaultValue: "Next action"})}>
           {action.nextAction ? <span>{action.nextAction}</span> : <MissingValue />}
         </MetadataRow>
-        <MetadataRow label="Wake">
+        <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.wake", {defaultValue: "Wake"})}>
           <span className="inline-flex flex-wrap items-center gap-1.5">
             {wakeSummary ? <span>{wakeSummary}</span> : <MissingValue />}
             {showAttempt ? (
@@ -474,7 +475,7 @@ export function IssueRecoveryActionCard({
           </span>
         </MetadataRow>
         {cardState === "resolved" && action.outcome ? (
-          <MetadataRow label="Resolution">
+          <MetadataRow label={t("pcomponents_IssueRecoveryActionCard.resolution", {defaultValue: "Resolution"})}>
             <span className={cn("font-medium", tone.labelClass)}>
               Resolved as {OUTCOME_LABEL[action.outcome]}
               {action.resolvedAt ? ` · ${formatTimeShort(action.resolvedAt) ?? ""}` : ""}
@@ -491,7 +492,7 @@ export function IssueRecoveryActionCard({
                 size="sm"
                 variant="default"
                 data-testid="recovery-action-resolve-trigger"
-                aria-label="Resolve recovery"
+                aria-label={t("pcomponents_IssueRecoveryActionCard.resolve_recovery", {defaultValue: "Resolve recovery"})}
               >
                 Resolve…
               </Button>

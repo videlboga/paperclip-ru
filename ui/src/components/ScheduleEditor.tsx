@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Input } from "@/components/ui/input";
 import { ChevronDown, ChevronRight } from "lucide-react";
+import { useTranslation } from "@/i18n";
 
 type SchedulePreset = "every_minute" | "every_hour" | "every_day" | "weekdays" | "weekly" | "monthly" | "custom";
 
@@ -196,7 +197,7 @@ export function ScheduleEditor({
     <div className="space-y-3">
       <Select value={preset} onValueChange={(v) => handlePresetChange(v as SchedulePreset)}>
         <SelectTrigger className="w-full">
-          <SelectValue placeholder="Choose frequency..." />
+          <SelectValue placeholder={t("pcomponents_ScheduleEditor.choose_frequency", {defaultValue: "Choose frequency..."})} />
         </SelectTrigger>
         <SelectContent>
           {PRESETS.map((p) => (
@@ -215,7 +216,7 @@ export function ScheduleEditor({
               setCustomCron(e.target.value);
               emitChange("custom", hour, minute, dayOfWeek, dayOfMonth, e.target.value);
             }}
-            placeholder="0 10 * * *"
+            placeholder={t("pcomponents_ScheduleEditor.0_10", {defaultValue: "0 10 * * *"})}
             className="font-mono text-sm"
           />
           <p className="text-xs text-muted-foreground">

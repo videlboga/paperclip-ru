@@ -125,6 +125,7 @@ import { PageSkeleton } from "@/components/PageSkeleton";
 import { Identity } from "@/components/Identity";
 import { IssueReferencePill } from "@/components/IssueReferencePill";
 import { MembershipAction } from "@/components/MembershipAction";
+import { useTranslation } from "@/i18n";
 
 /* ------------------------------------------------------------------ */
 /*  Section wrapper                                                    */
@@ -194,7 +195,7 @@ export function DesignGuide() {
     <div className="space-y-10 max-w-4xl">
       {/* Page header */}
       <div>
-        <h2 className="text-xl font-bold">Design Guide</h2>
+        <h2 className="text-xl font-bold">{t("ppages_DesignGuide.design_guide", {defaultValue: "Design Guide"})}</h2>
         <p className="text-sm text-muted-foreground mt-1">
           Every component, style, and pattern used across Paperclip.
         </p>
@@ -203,12 +204,12 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  COVERAGE                                                     */}
       {/* ============================================================ */}
-      <Section title="Component Coverage">
+      <Section title={t("ppages_DesignGuide.component_coverage", {defaultValue: "Component Coverage"})}>
         <p className="text-sm text-muted-foreground">
           This page should be updated when new UI primitives or app-level patterns ship.
         </p>
         <div className="grid gap-6 md:grid-cols-2">
-          <SubSection title="UI primitives">
+          <SubSection title={t("ppages_DesignGuide.ui_primitives", {defaultValue: "UI primitives"})}>
             <div className="flex flex-wrap gap-2">
               {[
                 "avatar", "badge", "breadcrumb", "button", "card", "checkbox", "collapsible",
@@ -221,7 +222,7 @@ export function DesignGuide() {
               ))}
             </div>
           </SubSection>
-          <SubSection title="App components">
+          <SubSection title={t("ppages_DesignGuide.app_components", {defaultValue: "App components"})}>
             <div className="flex flex-wrap gap-2">
               {[
                 "StatusBadge", "StatusIcon", "PriorityIcon", "EntityRow", "EmptyState", "MetricCard",
@@ -240,8 +241,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  COLORS                                                       */}
       {/* ============================================================ */}
-      <Section title="Colors">
-        <SubSection title="Core">
+      <Section title={t("ppages_DesignGuide.colors", {defaultValue: "Colors"})}>
+        <SubSection title={t("ppages_DesignGuide.core", {defaultValue: "Core"})}>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Swatch name="Background" cssVar="--background" />
             <Swatch name="Foreground" cssVar="--foreground" />
@@ -258,14 +259,14 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Sidebar">
+        <SubSection title={t("ppages_DesignGuide.sidebar", {defaultValue: "Sidebar"})}>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Swatch name="Sidebar" cssVar="--sidebar" />
             <Swatch name="Sidebar border" cssVar="--sidebar-border" />
           </div>
         </SubSection>
 
-        <SubSection title="Chart">
+        <SubSection title={t("ppages_DesignGuide.chart", {defaultValue: "Chart"})}>
           <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
             <Swatch name="Chart 1" cssVar="--chart-1" />
             <Swatch name="Chart 2" cssVar="--chart-2" />
@@ -279,16 +280,16 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  TYPOGRAPHY                                                   */}
       {/* ============================================================ */}
-      <Section title="Typography">
+      <Section title={t("ppages_DesignGuide.typography", {defaultValue: "Typography"})}>
         <div className="space-y-3">
-          <h2 className="text-xl font-bold">Page Title — text-xl font-bold</h2>
-          <h2 className="text-lg font-semibold">Section Title — text-lg font-semibold</h2>
+          <h2 className="text-xl font-bold">{t("ppages_DesignGuide.page_title_textxl_fontbold", {defaultValue: "Page Title — text-xl font-bold"})}</h2>
+          <h2 className="text-lg font-semibold">{t("ppages_DesignGuide.section_title_textlg_fontsemibold", {defaultValue: "Section Title — text-lg font-semibold"})}</h2>
           <h3 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide">
             Section Heading — text-sm font-semibold uppercase tracking-wide
           </h3>
-          <p className="text-sm font-medium">Card Title — text-sm font-medium</p>
-          <p className="text-sm font-semibold">Card Title Alt — text-sm font-semibold</p>
-          <p className="text-sm">Body text — text-sm</p>
+          <p className="text-sm font-medium">{t("ppages_DesignGuide.card_title_textsm_fontmedium", {defaultValue: "Card Title — text-sm font-medium"})}</p>
+          <p className="text-sm font-semibold">{t("ppages_DesignGuide.card_title_alt_textsm_fontsemibold", {defaultValue: "Card Title Alt — text-sm font-semibold"})}</p>
+          <p className="text-sm">{t("ppages_DesignGuide.body_text_textsm", {defaultValue: "Body text — text-sm"})}</p>
           <p className="text-sm text-muted-foreground">
             Muted description — text-sm text-muted-foreground
           </p>
@@ -298,15 +299,15 @@ export function DesignGuide() {
           <p className="text-sm font-mono text-muted-foreground">
             Mono identifier — text-sm font-mono text-muted-foreground
           </p>
-          <p className="text-2xl font-bold">Large stat — text-2xl font-bold</p>
-          <p className="font-mono text-xs">Log/code text — font-mono text-xs</p>
+          <p className="text-2xl font-bold">{t("ppages_DesignGuide.large_stat_text2xl_fontbold", {defaultValue: "Large stat — text-2xl font-bold"})}</p>
+          <p className="font-mono text-xs">{t("ppages_DesignGuide.logcode_text_fontmono_textxs", {defaultValue: "Log/code text — font-mono text-xs"})}</p>
         </div>
       </Section>
 
       {/* ============================================================ */}
       {/*  SPACING & RADIUS                                             */}
       {/* ============================================================ */}
-      <Section title="Radius">
+      <Section title={t("ppages_DesignGuide.radius", {defaultValue: "Radius"})}>
         <div className="flex items-end gap-4 flex-wrap">
           {[
             ["sm", "var(--radius-sm)"],
@@ -329,8 +330,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  BUTTONS                                                      */}
       {/* ============================================================ */}
-      <Section title="Buttons">
-        <SubSection title="Variants">
+      <Section title={t("ppages_DesignGuide.buttons", {defaultValue: "Buttons"})}>
+        <SubSection title={t("ppages_DesignGuide.variants", {defaultValue: "Variants"})}>
           <div className="flex items-center gap-2 flex-wrap">
             <Button variant="default">Default</Button>
             <Button variant="secondary">Secondary</Button>
@@ -341,16 +342,16 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Sizes">
+        <SubSection title={t("ppages_DesignGuide.sizes", {defaultValue: "Sizes"})}>
           <div className="flex items-center gap-2 flex-wrap">
-            <Button size="xs">Extra Small</Button>
+            <Button size="xs">{t("ppages_DesignGuide.extra_small", {defaultValue: "Extra Small"})}</Button>
             <Button size="sm">Small</Button>
             <Button size="default">Default</Button>
             <Button size="lg">Large</Button>
           </div>
         </SubSection>
 
-        <SubSection title="Icon buttons">
+        <SubSection title={t("ppages_DesignGuide.icon_buttons", {defaultValue: "Icon buttons"})}>
           <div className="flex items-center gap-2 flex-wrap">
             <Button variant="ghost" size="icon-xs"><Search /></Button>
             <Button variant="ghost" size="icon-sm"><Search /></Button>
@@ -359,7 +360,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="With icons">
+        <SubSection title={t("ppages_DesignGuide.with_icons", {defaultValue: "With icons"})}>
           <div className="flex items-center gap-2 flex-wrap">
             <Button><Plus /> New Issue</Button>
             <Button variant="outline"><Upload /> Upload</Button>
@@ -368,10 +369,10 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="States">
+        <SubSection title={t("ppages_DesignGuide.states", {defaultValue: "States"})}>
           <div className="flex items-center gap-2 flex-wrap">
-            <Button disabled>Disabled</Button>
-            <Button variant="outline" disabled>Disabled Outline</Button>
+            <Button disabled>{t("ppages_DesignGuide.disabled", {defaultValue: "Disabled"})}</Button>
+            <Button variant="outline" disabled>{t("ppages_DesignGuide.disabled_outline", {defaultValue: "Disabled Outline"})}</Button>
           </div>
         </SubSection>
       </Section>
@@ -379,8 +380,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  BADGES                                                       */}
       {/* ============================================================ */}
-      <Section title="Badges">
-        <SubSection title="Variants">
+      <Section title={t("ppages_DesignGuide.badges", {defaultValue: "Badges"})}>
+        <SubSection title={t("ppages_DesignGuide.variants", {defaultValue: "Variants"})}>
           <div className="flex items-center gap-2 flex-wrap">
             <Badge variant="default">Default</Badge>
             <Badge variant="secondary">Secondary</Badge>
@@ -394,8 +395,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  STATUS BADGES & ICONS                                        */}
       {/* ============================================================ */}
-      <Section title="Status System">
-        <SubSection title="StatusBadge (all statuses)">
+      <Section title={t("ppages_DesignGuide.status_system", {defaultValue: "Status System"})}>
+        <SubSection title={t("ppages_DesignGuide.statusbadge_all_statuses", {defaultValue: "StatusBadge (all statuses)"})}>
           <div className="flex items-center gap-2 flex-wrap">
             {[
               "active", "running", "paused", "idle", "archived", "planned",
@@ -409,7 +410,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="StatusIcon (interactive)">
+        <SubSection title={t("ppages_DesignGuide.statusicon_interactive", {defaultValue: "StatusIcon (interactive)"})}>
           <div className="flex items-center gap-3 flex-wrap">
             {["backlog", "todo", "in_progress", "in_review", "done", "cancelled", "blocked"].map(
               (s) => (
@@ -426,7 +427,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="PriorityIcon (interactive)">
+        <SubSection title={t("ppages_DesignGuide.priorityicon_interactive", {defaultValue: "PriorityIcon (interactive)"})}>
           <div className="flex items-center gap-3 flex-wrap">
             {["critical", "high", "medium", "low"].map((p) => (
               <div key={p} className="flex items-center gap-1.5">
@@ -441,7 +442,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Agent status dots">
+        <SubSection title={t("ppages_DesignGuide.agent_status_dots", {defaultValue: "Agent status dots"})}>
           <div className="flex items-center gap-4 flex-wrap">
             {(["running", "active", "paused", "error", "archived"] as const).map((label) => (
               <div key={label} className="flex items-center gap-2">
@@ -454,7 +455,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Run invocation badges">
+        <SubSection title={t("ppages_DesignGuide.run_invocation_badges", {defaultValue: "Run invocation badges"})}>
           <div className="flex items-center gap-2 flex-wrap">
             {[
               ["timer", "bg-blue-100 text-blue-700 dark:bg-blue-900/50 dark:text-blue-300"],
@@ -469,7 +470,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="IssueReferencePill">
+        <SubSection title={t("ppages_DesignGuide.issuereferencepill", {defaultValue: "IssueReferencePill"})}>
           <p className="text-xs text-muted-foreground">
             Used wherever a task is referenced — in markdown, the Related Work tab, and activity summaries.
             Pass <code className="font-mono">status</code> to show the target issue&apos;s state at a glance.
@@ -488,38 +489,38 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  FORM ELEMENTS                                                */}
       {/* ============================================================ */}
-      <Section title="Form Elements">
+      <Section title={t("ppages_DesignGuide.form_elements", {defaultValue: "Form Elements"})}>
         <div className="grid gap-6 md:grid-cols-2">
-          <SubSection title="Input">
-            <Input placeholder="Default input" />
-            <Input placeholder="Disabled input" disabled className="mt-2" />
+          <SubSection title={t("ppages_DesignGuide.input", {defaultValue: "Input"})}>
+            <Input placeholder={t("ppages_DesignGuide.default_input", {defaultValue: "Default input"})} />
+            <Input placeholder={t("ppages_DesignGuide.disabled_input", {defaultValue: "Disabled input"})} disabled className="mt-2" />
           </SubSection>
 
-          <SubSection title="Textarea">
-            <Textarea placeholder="Write something..." />
+          <SubSection title={t("ppages_DesignGuide.textarea", {defaultValue: "Textarea"})}>
+            <Textarea placeholder={t("ppages_DesignGuide.write_something", {defaultValue: "Write something..."})} />
           </SubSection>
 
-          <SubSection title="Checkbox & Label">
+          <SubSection title={t("ppages_DesignGuide.checkbox_label", {defaultValue: "Checkbox & Label"})}>
             <div className="space-y-3">
               <div className="flex items-center gap-2">
                 <Checkbox id="check1" defaultChecked />
-                <Label htmlFor="check1">Checked item</Label>
+                <Label htmlFor="check1">{t("ppages_DesignGuide.checked_item", {defaultValue: "Checked item"})}</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="check2" />
-                <Label htmlFor="check2">Unchecked item</Label>
+                <Label htmlFor="check2">{t("ppages_DesignGuide.unchecked_item", {defaultValue: "Unchecked item"})}</Label>
               </div>
               <div className="flex items-center gap-2">
                 <Checkbox id="check3" disabled />
-                <Label htmlFor="check3">Disabled item</Label>
+                <Label htmlFor="check3">{t("ppages_DesignGuide.disabled_item", {defaultValue: "Disabled item"})}</Label>
               </div>
             </div>
           </SubSection>
 
-          <SubSection title="Inline Editor">
+          <SubSection title={t("ppages_DesignGuide.inline_editor", {defaultValue: "Inline Editor"})}>
             <div className="space-y-4">
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Title (single-line)</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("ppages_DesignGuide.title_singleline", {defaultValue: "Title (single-line)"})}</p>
                 <InlineEditor
                   value={inlineTitle}
                   onSave={setInlineTitle}
@@ -528,7 +529,7 @@ export function DesignGuide() {
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Body text (single-line)</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("ppages_DesignGuide.body_text_singleline", {defaultValue: "Body text (single-line)"})}</p>
                 <InlineEditor
                   value={inlineText}
                   onSave={setInlineText}
@@ -537,13 +538,13 @@ export function DesignGuide() {
                 />
               </div>
               <div>
-                <p className="text-xs text-muted-foreground mb-1">Description (multiline, auto-sizing)</p>
+                <p className="text-xs text-muted-foreground mb-1">{t("ppages_DesignGuide.description_multiline_autosizing", {defaultValue: "Description (multiline, auto-sizing)"})}</p>
                 <InlineEditor
                   value={inlineDesc}
                   onSave={setInlineDesc}
                   as="p"
                   className="text-sm text-muted-foreground"
-                  placeholder="Add a description..."
+                  placeholder={t("ppages_DesignGuide.add_a_description", {defaultValue: "Add a description..."})}
                   multiline
                 />
               </div>
@@ -555,33 +556,33 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  SELECT                                                       */}
       {/* ============================================================ */}
-      <Section title="Select">
+      <Section title={t("ppages_DesignGuide.select", {defaultValue: "Select"})}>
         <div className="grid gap-6 md:grid-cols-2">
-          <SubSection title="Default size">
+          <SubSection title={t("ppages_DesignGuide.default_size", {defaultValue: "Default size"})}>
             <Select value={selectValue} onValueChange={setSelectValue}>
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select status" />
+                <SelectValue placeholder={t("ppages_DesignGuide.select_status", {defaultValue: "Select status"})} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="backlog">Backlog</SelectItem>
-                <SelectItem value="todo">Todo</SelectItem>
-                <SelectItem value="in_progress">In Progress</SelectItem>
-                <SelectItem value="in_review">In Review</SelectItem>
-                <SelectItem value="done">Done</SelectItem>
+                <SelectItem value="backlog">{t("ppages_DesignGuide.backlog", {defaultValue: "Backlog"})}</SelectItem>
+                <SelectItem value="todo">{t("ppages_DesignGuide.todo", {defaultValue: "Todo"})}</SelectItem>
+                <SelectItem value="in_progress">{t("ppages_DesignGuide.in_progress", {defaultValue: "In Progress"})}</SelectItem>
+                <SelectItem value="in_review">{t("ppages_DesignGuide.in_review", {defaultValue: "In Review"})}</SelectItem>
+                <SelectItem value="done">{t("ppages_DesignGuide.done", {defaultValue: "Done"})}</SelectItem>
               </SelectContent>
             </Select>
             <p className="text-xs text-muted-foreground">Current value: {selectValue}</p>
           </SubSection>
-          <SubSection title="Small trigger">
+          <SubSection title={t("ppages_DesignGuide.small_trigger", {defaultValue: "Small trigger"})}>
             <Select defaultValue="high">
               <SelectTrigger size="sm" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="critical">Critical</SelectItem>
-                <SelectItem value="high">High</SelectItem>
+                <SelectItem value="critical">{t("ppages_DesignGuide.critical", {defaultValue: "Critical"})}</SelectItem>
+                <SelectItem value="high">{t("ppages_DesignGuide.high", {defaultValue: "High"})}</SelectItem>
                 <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
+                <SelectItem value="low">{t("ppages_DesignGuide.low", {defaultValue: "Low"})}</SelectItem>
               </SelectContent>
             </Select>
           </SubSection>
@@ -591,7 +592,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  DROPDOWN MENU                                                */}
       {/* ============================================================ */}
-      <Section title="Dropdown Menu">
+      <Section title={t("ppages_DesignGuide.dropdown_menu", {defaultValue: "Dropdown Menu"})}>
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm">
@@ -627,17 +628,17 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  POPOVER                                                      */}
       {/* ============================================================ */}
-      <Section title="Popover">
+      <Section title={t("ppages_DesignGuide.popover", {defaultValue: "Popover"})}>
         <Popover>
           <PopoverTrigger asChild>
-            <Button variant="outline" size="sm">Open Popover</Button>
+            <Button variant="outline" size="sm">{t("ppages_DesignGuide.open_popover", {defaultValue: "Open Popover"})}</Button>
           </PopoverTrigger>
           <PopoverContent className="space-y-2">
-            <p className="text-sm font-medium">Agent heartbeat</p>
+            <p className="text-sm font-medium">{t("ppages_DesignGuide.agent_heartbeat", {defaultValue: "Agent heartbeat"})}</p>
             <p className="text-xs text-muted-foreground">
               Last run succeeded 24s ago. Next timer run in 9m.
             </p>
-            <Button size="xs">Wake now</Button>
+            <Button size="xs">{t("ppages_DesignGuide.wake_now", {defaultValue: "Wake now"})}</Button>
           </PopoverContent>
         </Popover>
       </Section>
@@ -645,7 +646,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  COLLAPSIBLE                                                  */}
       {/* ============================================================ */}
-      <Section title="Collapsible">
+      <Section title={t("ppages_DesignGuide.collapsible", {defaultValue: "Collapsible"})}>
         <Collapsible open={collapsibleOpen} onOpenChange={setCollapsibleOpen} className="space-y-2">
           <CollapsibleTrigger asChild>
             <Button variant="outline" size="sm">
@@ -654,8 +655,8 @@ export function DesignGuide() {
           </CollapsibleTrigger>
           <CollapsibleContent className="rounded-md border border-border p-3">
             <div className="space-y-2">
-              <Label htmlFor="owner-filter">Owner</Label>
-              <Input id="owner-filter" placeholder="Filter by agent name" />
+              <Label htmlFor="owner-filter">{t("ppages_DesignGuide.owner", {defaultValue: "Owner"})}</Label>
+              <Input id="owner-filter" placeholder={t("ppages_DesignGuide.filter_by_agent_name", {defaultValue: "Filter by agent name"})} />
             </div>
           </CollapsibleContent>
         </Collapsible>
@@ -664,29 +665,29 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  SHEET                                                        */}
       {/* ============================================================ */}
-      <Section title="Sheet">
+      <Section title={t("ppages_DesignGuide.sheet", {defaultValue: "Sheet"})}>
         <Sheet>
           <SheetTrigger asChild>
-            <Button variant="outline" size="sm">Open Side Panel</Button>
+            <Button variant="outline" size="sm">{t("ppages_DesignGuide.open_side_panel", {defaultValue: "Open Side Panel"})}</Button>
           </SheetTrigger>
           <SheetContent side="right">
             <SheetHeader>
-              <SheetTitle>Issue Properties</SheetTitle>
-              <SheetDescription>Edit metadata without leaving the current page.</SheetDescription>
+              <SheetTitle>{t("ppages_DesignGuide.issue_properties", {defaultValue: "Issue Properties"})}</SheetTitle>
+              <SheetDescription>{t("ppages_DesignGuide.edit_metadata_without_leaving_the_current_page", {defaultValue: "Edit metadata without leaving the current page."})}</SheetDescription>
             </SheetHeader>
             <div className="space-y-4 px-4">
               <div className="space-y-1">
-                <Label htmlFor="sheet-title">Title</Label>
+                <Label htmlFor="sheet-title">{t("ppages_DesignGuide.title", {defaultValue: "Title"})}</Label>
                 <Input id="sheet-title" defaultValue="Improve onboarding docs" />
               </div>
               <div className="space-y-1">
-                <Label htmlFor="sheet-description">Description</Label>
+                <Label htmlFor="sheet-description">{t("ppages_DesignGuide.description", {defaultValue: "Description"})}</Label>
                 <Textarea id="sheet-description" defaultValue="Capture setup pitfalls and screenshots." />
               </div>
             </div>
             <SheetFooter>
-              <Button variant="outline">Cancel</Button>
-              <Button>Save</Button>
+              <Button variant="outline">{t("ppages_DesignGuide.cancel", {defaultValue: "Cancel"})}</Button>
+              <Button>{t("ppages_DesignGuide.save", {defaultValue: "Save"})}</Button>
             </SheetFooter>
           </SheetContent>
         </Sheet>
@@ -695,7 +696,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  SCROLL AREA                                                  */}
       {/* ============================================================ */}
-      <Section title="Scroll Area">
+      <Section title={t("ppages_DesignGuide.scroll_area", {defaultValue: "Scroll Area"})}>
         <ScrollArea className="h-36 rounded-md border border-border">
           <div className="space-y-2 p-3">
             {Array.from({ length: 12 }).map((_, i) => (
@@ -710,12 +711,12 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  COMMAND                                                      */}
       {/* ============================================================ */}
-      <Section title="Command (CMDK)">
+      <Section title={t("ppages_DesignGuide.command_cmdk", {defaultValue: "Command (CMDK)"})}>
         <div className="rounded-md border border-border">
           <Command>
-            <CommandInput placeholder="Type a command or search..." />
+            <CommandInput placeholder={t("ppages_DesignGuide.type_a_command_or_search", {defaultValue: "Type a command or search..."})} />
             <CommandList>
-              <CommandEmpty>No results found.</CommandEmpty>
+              <CommandEmpty>{t("ppages_DesignGuide.no_results_found", {defaultValue: "No results found."})}</CommandEmpty>
               <CommandGroup heading="Pages">
                 <CommandItem>
                   <LayoutDashboard className="h-4 w-4" />
@@ -745,19 +746,19 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  BREADCRUMB                                                   */}
       {/* ============================================================ */}
-      <Section title="Breadcrumb">
+      <Section title={t("ppages_DesignGuide.breadcrumb", {defaultValue: "Breadcrumb"})}>
         <Breadcrumb>
           <BreadcrumbList>
             <BreadcrumbItem>
-              <BreadcrumbLink href="#">Projects</BreadcrumbLink>
+              <BreadcrumbLink href="#">{t("ppages_DesignGuide.projects", {defaultValue: "Projects"})}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbLink href="#">Paperclip App</BreadcrumbLink>
+              <BreadcrumbLink href="#">{t("ppages_DesignGuide.paperclip_app", {defaultValue: "Paperclip App"})}</BreadcrumbLink>
             </BreadcrumbItem>
             <BreadcrumbSeparator />
             <BreadcrumbItem>
-              <BreadcrumbPage>Issue List</BreadcrumbPage>
+              <BreadcrumbPage>{t("ppages_DesignGuide.issue_list", {defaultValue: "Issue List"})}</BreadcrumbPage>
             </BreadcrumbItem>
           </BreadcrumbList>
         </Breadcrumb>
@@ -766,29 +767,29 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  CARDS                                                        */}
       {/* ============================================================ */}
-      <Section title="Cards">
-        <SubSection title="Standard Card">
+      <Section title={t("ppages_DesignGuide.cards", {defaultValue: "Cards"})}>
+        <SubSection title={t("ppages_DesignGuide.standard_card", {defaultValue: "Standard Card"})}>
           <Card>
             <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card description with supporting text.</CardDescription>
+              <CardTitle>{t("ppages_DesignGuide.card_title", {defaultValue: "Card Title"})}</CardTitle>
+              <CardDescription>{t("ppages_DesignGuide.card_description_with_supporting_text", {defaultValue: "Card description with supporting text."})}</CardDescription>
             </CardHeader>
             <CardContent>
-              <p className="text-sm">Card content goes here. This is the main body area.</p>
+              <p className="text-sm">{t("ppages_DesignGuide.card_content_goes_here_this_is_the_main_body_area", {defaultValue: "Card content goes here. This is the main body area."})}</p>
             </CardContent>
             <CardFooter className="gap-2">
-              <Button size="sm">Action</Button>
-              <Button variant="outline" size="sm">Cancel</Button>
+              <Button size="sm">{t("ppages_DesignGuide.action", {defaultValue: "Action"})}</Button>
+              <Button variant="outline" size="sm">{t("ppages_DesignGuide.cancel", {defaultValue: "Cancel"})}</Button>
             </CardFooter>
           </Card>
         </SubSection>
 
-        <SubSection title="Metric Cards">
+        <SubSection title={t("ppages_DesignGuide.metric_cards", {defaultValue: "Metric Cards"})}>
           <div className="grid md:grid-cols-2 xl:grid-cols-4 gap-4">
-            <MetricCard icon={Bot} value={12} label="Active Agents" description="+3 this week" />
-            <MetricCard icon={CircleDot} value={48} label="Open Issues" />
-            <MetricCard icon={DollarSign} value="$1,234" label="Monthly Cost" description="Under budget" />
-            <MetricCard icon={Zap} value="99.9%" label="Uptime" />
+            <MetricCard icon={Bot} value={12} label={t("ppages_DesignGuide.active_agents", {defaultValue: "Active Agents"})} description={t("ppages_DesignGuide.3_this_week", {defaultValue: "+3 this week"})} />
+            <MetricCard icon={CircleDot} value={48} label={t("ppages_DesignGuide.open_issues", {defaultValue: "Open Issues"})} />
+            <MetricCard icon={DollarSign} value="$1,234" label={t("ppages_DesignGuide.monthly_cost", {defaultValue: "Monthly Cost"})} description={t("ppages_DesignGuide.under_budget", {defaultValue: "Under budget"})} />
+            <MetricCard icon={Zap} value="99.9%" label={t("ppages_DesignGuide.uptime", {defaultValue: "Uptime"})} />
           </div>
         </SubSection>
       </Section>
@@ -796,45 +797,45 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  TABS                                                         */}
       {/* ============================================================ */}
-      <Section title="Tabs">
-        <SubSection title="Default (pill) variant">
+      <Section title={t("ppages_DesignGuide.tabs", {defaultValue: "Tabs"})}>
+        <SubSection title={t("ppages_DesignGuide.default_pill_variant", {defaultValue: "Default (pill) variant"})}>
           <Tabs defaultValue="overview">
             <TabsList>
-              <TabsTrigger value="overview">Overview</TabsTrigger>
-              <TabsTrigger value="runs">Runs</TabsTrigger>
-              <TabsTrigger value="config">Config</TabsTrigger>
-              <TabsTrigger value="costs">Costs</TabsTrigger>
+              <TabsTrigger value="overview">{t("ppages_DesignGuide.overview", {defaultValue: "Overview"})}</TabsTrigger>
+              <TabsTrigger value="runs">{t("ppages_DesignGuide.runs", {defaultValue: "Runs"})}</TabsTrigger>
+              <TabsTrigger value="config">{t("ppages_DesignGuide.config", {defaultValue: "Config"})}</TabsTrigger>
+              <TabsTrigger value="costs">{t("ppages_DesignGuide.costs", {defaultValue: "Costs"})}</TabsTrigger>
             </TabsList>
             <TabsContent value="overview">
-              <p className="text-sm text-muted-foreground py-4">Overview tab content.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.overview_tab_content", {defaultValue: "Overview tab content."})}</p>
             </TabsContent>
             <TabsContent value="runs">
-              <p className="text-sm text-muted-foreground py-4">Runs tab content.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.runs_tab_content", {defaultValue: "Runs tab content."})}</p>
             </TabsContent>
             <TabsContent value="config">
-              <p className="text-sm text-muted-foreground py-4">Config tab content.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.config_tab_content", {defaultValue: "Config tab content."})}</p>
             </TabsContent>
             <TabsContent value="costs">
-              <p className="text-sm text-muted-foreground py-4">Costs tab content.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.costs_tab_content", {defaultValue: "Costs tab content."})}</p>
             </TabsContent>
           </Tabs>
         </SubSection>
 
-        <SubSection title="Line variant">
+        <SubSection title={t("ppages_DesignGuide.line_variant", {defaultValue: "Line variant"})}>
           <Tabs defaultValue="summary">
             <TabsList variant="line">
-              <TabsTrigger value="summary">Summary</TabsTrigger>
-              <TabsTrigger value="details">Details</TabsTrigger>
-              <TabsTrigger value="comments">Comments</TabsTrigger>
+              <TabsTrigger value="summary">{t("ppages_DesignGuide.summary", {defaultValue: "Summary"})}</TabsTrigger>
+              <TabsTrigger value="details">{t("ppages_DesignGuide.details", {defaultValue: "Details"})}</TabsTrigger>
+              <TabsTrigger value="comments">{t("ppages_DesignGuide.comments", {defaultValue: "Comments"})}</TabsTrigger>
             </TabsList>
             <TabsContent value="summary">
-              <p className="text-sm text-muted-foreground py-4">Summary content with underline tabs.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.summary_content_with_underline_tabs", {defaultValue: "Summary content with underline tabs."})}</p>
             </TabsContent>
             <TabsContent value="details">
-              <p className="text-sm text-muted-foreground py-4">Details content.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.details_content", {defaultValue: "Details content."})}</p>
             </TabsContent>
             <TabsContent value="comments">
-              <p className="text-sm text-muted-foreground py-4">Comments content.</p>
+              <p className="text-sm text-muted-foreground py-4">{t("ppages_DesignGuide.comments_content", {defaultValue: "Comments content."})}</p>
             </TabsContent>
           </Tabs>
         </SubSection>
@@ -843,7 +844,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  ENTITY ROWS                                                  */}
       {/* ============================================================ */}
-      <Section title="Entity Rows">
+      <Section title={t("ppages_DesignGuide.entity_rows", {defaultValue: "Entity Rows"})}>
         <div className="border border-border rounded-md">
           <EntityRow
             leading={
@@ -853,7 +854,7 @@ export function DesignGuide() {
               </>
             }
             identifier="PAP-001"
-            title="Implement authentication flow"
+            title={t("ppages_DesignGuide.implement_authentication_flow", {defaultValue: "Implement authentication flow"})}
             subtitle="Assigned to Agent Alpha"
             trailing={<StatusBadge status="in_progress" />}
             onClick={() => {}}
@@ -866,7 +867,7 @@ export function DesignGuide() {
               </>
             }
             identifier="PAP-002"
-            title="Set up CI/CD pipeline"
+            title={t("ppages_DesignGuide.set_up_cicd_pipeline", {defaultValue: "Set up CI/CD pipeline"})}
             subtitle="Completed 2 days ago"
             trailing={<StatusBadge status="done" />}
             onClick={() => {}}
@@ -879,7 +880,7 @@ export function DesignGuide() {
               </>
             }
             identifier="PAP-003"
-            title="Write API documentation"
+            title={t("ppages_DesignGuide.write_api_documentation", {defaultValue: "Write API documentation"})}
             trailing={<StatusBadge status="todo" />}
             onClick={() => {}}
           />
@@ -891,16 +892,16 @@ export function DesignGuide() {
               </>
             }
             identifier="PAP-004"
-            title="Deploy to production"
+            title={t("ppages_DesignGuide.deploy_to_production", {defaultValue: "Deploy to production"})}
             subtitle="Blocked by PAP-001"
             trailing={<StatusBadge status="blocked" />}
             selected
           />
         </div>
-        <SubSection title="Membership action">
+        <SubSection title={t("ppages_DesignGuide.membership_action", {defaultValue: "Membership action"})}>
           <div className="border border-border rounded-md">
             <EntityRow
-              title="Joined resource"
+              title={t("ppages_DesignGuide.joined_resource", {defaultValue: "Joined resource"})}
               subtitle="Hover or focus the row to reveal the reserved action slot."
               className="group"
               trailing={
@@ -913,7 +914,7 @@ export function DesignGuide() {
               }
             />
             <EntityRow
-              title="Left resource"
+              title={t("ppages_DesignGuide.left_resource", {defaultValue: "Left resource"})}
               subtitle="Persistent action with dimmed row content."
               className="group text-foreground/55"
               trailing={
@@ -926,7 +927,7 @@ export function DesignGuide() {
               }
             />
             <EntityRow
-              title="Leaving resource"
+              title={t("ppages_DesignGuide.leaving_resource", {defaultValue: "Leaving resource"})}
               subtitle="Disabled while the optimistic mutation is pending."
               className="group text-foreground/55"
               trailing={
@@ -941,7 +942,7 @@ export function DesignGuide() {
               }
             />
             <EntityRow
-              title="Joining resource"
+              title={t("ppages_DesignGuide.joining_resource", {defaultValue: "Joining resource"})}
               subtitle="The target state is visible immediately while the server confirms."
               className="group"
               trailing={
@@ -962,7 +963,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  FILTER BAR                                                   */}
       {/* ============================================================ */}
-      <Section title="Filter Bar">
+      <Section title={t("ppages_DesignGuide.filter_bar", {defaultValue: "Filter Bar"})}>
         <FilterBar
           filters={filters}
           onRemove={(key) => setFilters((f) => f.filter((x) => x.key !== key))}
@@ -987,8 +988,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  AVATARS                                                      */}
       {/* ============================================================ */}
-      <Section title="Avatars">
-        <SubSection title="Sizes">
+      <Section title={t("ppages_DesignGuide.avatars", {defaultValue: "Avatars"})}>
+        <SubSection title={t("ppages_DesignGuide.sizes", {defaultValue: "Sizes"})}>
           <div className="flex items-center gap-3">
             <Avatar size="sm"><AvatarFallback>SM</AvatarFallback></Avatar>
             <Avatar><AvatarFallback>DF</AvatarFallback></Avatar>
@@ -996,7 +997,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Group">
+        <SubSection title={t("ppages_DesignGuide.group", {defaultValue: "Group"})}>
           <AvatarGroup>
             <Avatar><AvatarFallback>A1</AvatarFallback></Avatar>
             <Avatar><AvatarFallback>A2</AvatarFallback></Avatar>
@@ -1009,8 +1010,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  IDENTITY                                                     */}
       {/* ============================================================ */}
-      <Section title="Identity">
-        <SubSection title="Sizes">
+      <Section title={t("ppages_DesignGuide.identity", {defaultValue: "Identity"})}>
+        <SubSection title={t("ppages_DesignGuide.sizes", {defaultValue: "Sizes"})}>
           <div className="flex items-center gap-6">
             <Identity name="Agent Alpha" size="sm" />
             <Identity name="Agent Alpha" />
@@ -1018,7 +1019,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Initials derivation">
+        <SubSection title={t("ppages_DesignGuide.initials_derivation", {defaultValue: "Initials derivation"})}>
           <div className="flex flex-col gap-2">
             <Identity name="CEO Agent" size="sm" />
             <Identity name="Alpha" size="sm" />
@@ -1026,7 +1027,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Custom initials">
+        <SubSection title={t("ppages_DesignGuide.custom_initials", {defaultValue: "Custom initials"})}>
           <Identity name="Backend Service" initials="BS" size="sm" />
         </SubSection>
       </Section>
@@ -1034,19 +1035,19 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  TOOLTIPS                                                     */}
       {/* ============================================================ */}
-      <Section title="Tooltips">
+      <Section title={t("ppages_DesignGuide.tooltips", {defaultValue: "Tooltips"})}>
         <div className="flex items-center gap-4">
           <Tooltip>
             <TooltipTrigger asChild>
-              <Button variant="outline" size="sm">Hover me</Button>
+              <Button variant="outline" size="sm">{t("ppages_DesignGuide.hover_me", {defaultValue: "Hover me"})}</Button>
             </TooltipTrigger>
-            <TooltipContent>This is a tooltip</TooltipContent>
+            <TooltipContent>{t("ppages_DesignGuide.this_is_a_tooltip", {defaultValue: "This is a tooltip"})}</TooltipContent>
           </Tooltip>
           <Tooltip>
             <TooltipTrigger asChild>
               <Button variant="ghost" size="icon-sm"><Settings /></Button>
             </TooltipTrigger>
-            <TooltipContent>Settings</TooltipContent>
+            <TooltipContent>{t("ppages_DesignGuide.settings", {defaultValue: "Settings"})}</TooltipContent>
           </Tooltip>
         </div>
       </Section>
@@ -1054,31 +1055,31 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  DIALOG                                                       */}
       {/* ============================================================ */}
-      <Section title="Dialog">
+      <Section title={t("ppages_DesignGuide.dialog", {defaultValue: "Dialog"})}>
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant="outline">Open Dialog</Button>
+            <Button variant="outline">{t("ppages_DesignGuide.open_dialog", {defaultValue: "Open Dialog"})}</Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Dialog Title</DialogTitle>
+              <DialogTitle>{t("ppages_DesignGuide.dialog_title", {defaultValue: "Dialog Title"})}</DialogTitle>
               <DialogDescription>
                 This is a sample dialog showing the standard layout with header, content, and footer.
               </DialogDescription>
             </DialogHeader>
             <div className="space-y-3">
               <div>
-                <Label>Name</Label>
-                <Input placeholder="Enter a name" className="mt-1.5" />
+                <Label>{t("ppages_DesignGuide.name", {defaultValue: "Name"})}</Label>
+                <Input placeholder={t("ppages_DesignGuide.enter_a_name", {defaultValue: "Enter a name"})} className="mt-1.5" />
               </div>
               <div>
-                <Label>Description</Label>
-                <Textarea placeholder="Describe..." className="mt-1.5" />
+                <Label>{t("ppages_DesignGuide.description", {defaultValue: "Description"})}</Label>
+                <Textarea placeholder={t("ppages_DesignGuide.describe", {defaultValue: "Describe..."})} className="mt-1.5" />
               </div>
             </div>
             <DialogFooter>
-              <Button variant="outline">Cancel</Button>
-              <Button>Save</Button>
+              <Button variant="outline">{t("ppages_DesignGuide.cancel", {defaultValue: "Cancel"})}</Button>
+              <Button>{t("ppages_DesignGuide.save", {defaultValue: "Save"})}</Button>
             </DialogFooter>
           </DialogContent>
         </Dialog>
@@ -1087,7 +1088,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  EMPTY STATE                                                  */}
       {/* ============================================================ */}
-      <Section title="Empty State">
+      <Section title={t("ppages_DesignGuide.empty_state", {defaultValue: "Empty State"})}>
         <div className="border border-border rounded-md">
           <EmptyState
             icon={Inbox}
@@ -1101,7 +1102,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  PROGRESS BARS                                                */}
       {/* ============================================================ */}
-      <Section title="Progress Bars (Budget)">
+      <Section title={t("ppages_DesignGuide.progress_bars_budget", {defaultValue: "Progress Bars (Budget)"})}>
         <div className="space-y-3">
           {[
             { label: "Under budget (40%)", pct: 40, color: "bg-green-400" },
@@ -1127,7 +1128,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  LOG VIEWER                                                   */}
       {/* ============================================================ */}
-      <Section title="Log Viewer">
+      <Section title={t("ppages_DesignGuide.log_viewer", {defaultValue: "Log Viewer"})}>
         <div className="bg-neutral-950 rounded-lg p-3 font-mono text-xs max-h-80 overflow-y-auto">
           <div className="text-foreground">[12:00:01] INFO  Agent started successfully</div>
           <div className="text-foreground">[12:00:02] INFO  Processing task PAP-001</div>
@@ -1141,7 +1142,7 @@ export function DesignGuide() {
               <span className="absolute inline-flex h-full w-full rounded-full bg-cyan-400 animate-pulse" />
               <span className="inline-flex h-full w-full rounded-full bg-cyan-400" />
             </span>
-            <span className="text-cyan-400">Live</span>
+            <span className="text-cyan-400">{t("ppages_DesignGuide.live", {defaultValue: "Live"})}</span>
           </div>
         </div>
       </Section>
@@ -1149,26 +1150,26 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  PROPERTY ROW PATTERN                                         */}
       {/* ============================================================ */}
-      <Section title="Property Row Pattern">
+      <Section title={t("ppages_DesignGuide.property_row_pattern", {defaultValue: "Property Row Pattern"})}>
         <div className="border border-border rounded-md p-4 space-y-1 max-w-sm">
           <div className="flex items-center justify-between py-1.5">
-            <span className="text-xs text-muted-foreground">Status</span>
+            <span className="text-xs text-muted-foreground">{t("ppages_DesignGuide.status", {defaultValue: "Status"})}</span>
             <StatusBadge status="active" />
           </div>
           <div className="flex items-center justify-between py-1.5">
-            <span className="text-xs text-muted-foreground">Priority</span>
+            <span className="text-xs text-muted-foreground">{t("ppages_DesignGuide.priority", {defaultValue: "Priority"})}</span>
             <PriorityIcon priority="high" />
           </div>
           <div className="flex items-center justify-between py-1.5">
-            <span className="text-xs text-muted-foreground">Assignee</span>
+            <span className="text-xs text-muted-foreground">{t("ppages_DesignGuide.assignee", {defaultValue: "Assignee"})}</span>
             <div className="flex items-center gap-1.5">
               <Avatar size="sm"><AvatarFallback>A</AvatarFallback></Avatar>
-              <span className="text-xs">Agent Alpha</span>
+              <span className="text-xs">{t("ppages_DesignGuide.agent_alpha", {defaultValue: "Agent Alpha"})}</span>
             </div>
           </div>
           <div className="flex items-center justify-between py-1.5">
-            <span className="text-xs text-muted-foreground">Created</span>
-            <span className="text-xs">Jan 15, 2025</span>
+            <span className="text-xs text-muted-foreground">{t("ppages_DesignGuide.created", {defaultValue: "Created"})}</span>
+            <span className="text-xs">{t("ppages_DesignGuide.jan_15_2025", {defaultValue: "Jan 15, 2025"})}</span>
           </div>
         </div>
       </Section>
@@ -1176,8 +1177,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  NAVIGATION PATTERNS                                          */}
       {/* ============================================================ */}
-      <Section title="Navigation Patterns">
-        <SubSection title="Sidebar nav items">
+      <Section title={t("ppages_DesignGuide.navigation_patterns", {defaultValue: "Navigation Patterns"})}>
+        <SubSection title={t("ppages_DesignGuide.sidebar_nav_items", {defaultValue: "Sidebar nav items"})}>
           <div className="w-60 border border-border rounded-md p-3 space-y-0.5 bg-card">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-md text-sm font-medium bg-accent text-accent-foreground">
               <LayoutDashboard className="h-4 w-4" />
@@ -1201,7 +1202,7 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="View toggle">
+        <SubSection title={t("ppages_DesignGuide.view_toggle", {defaultValue: "View toggle"})}>
           <div className="flex items-center border border-border rounded-md w-fit">
             <button className="px-3 py-1.5 text-xs font-medium bg-accent text-foreground rounded-l-md">
               <ListTodo className="h-3.5 w-3.5 inline mr-1" />
@@ -1218,24 +1219,24 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  GROUPED LIST (Issues pattern)                                */}
       {/* ============================================================ */}
-      <Section title="Grouped List (Issues pattern)">
+      <Section title={t("ppages_DesignGuide.grouped_list_issues_pattern", {defaultValue: "Grouped List (Issues pattern)"})}>
         <div>
           <div className="flex items-center gap-2 px-4 py-2 bg-muted/50 rounded-t-md">
             <StatusIcon status="in_progress" />
-            <span className="text-sm font-medium">In Progress</span>
+            <span className="text-sm font-medium">{t("ppages_DesignGuide.in_progress", {defaultValue: "In Progress"})}</span>
             <span className="text-xs text-muted-foreground ml-1">2</span>
           </div>
           <div className="border border-border rounded-b-md">
             <EntityRow
               leading={<PriorityIcon priority="high" />}
               identifier="PAP-101"
-              title="Build agent heartbeat system"
+              title={t("ppages_DesignGuide.build_agent_heartbeat_system", {defaultValue: "Build agent heartbeat system"})}
               onClick={() => {}}
             />
             <EntityRow
               leading={<PriorityIcon priority="medium" />}
               identifier="PAP-102"
-              title="Add cost tracking dashboard"
+              title={t("ppages_DesignGuide.add_cost_tracking_dashboard", {defaultValue: "Add cost tracking dashboard"})}
               onClick={() => {}}
             />
           </div>
@@ -1245,28 +1246,28 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  COMMENT THREAD PATTERN                                       */}
       {/* ============================================================ */}
-      <Section title="Comment Thread Pattern">
+      <Section title={t("ppages_DesignGuide.comment_thread_pattern", {defaultValue: "Comment Thread Pattern"})}>
         <div className="space-y-3 max-w-2xl">
-          <h3 className="text-sm font-semibold">Comments (2)</h3>
+          <h3 className="text-sm font-semibold">{t("ppages_DesignGuide.comments_2", {defaultValue: "Comments (2)"})}</h3>
           <div className="space-y-3">
             <div className="rounded-md border border-border p-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium text-muted-foreground">Agent</span>
-                <span className="text-xs text-muted-foreground">Jan 15, 2025</span>
+                <span className="text-xs font-medium text-muted-foreground">{t("ppages_DesignGuide.agent", {defaultValue: "Agent"})}</span>
+                <span className="text-xs text-muted-foreground">{t("ppages_DesignGuide.jan_15_2025", {defaultValue: "Jan 15, 2025"})}</span>
               </div>
-              <p className="text-sm">Started working on the authentication module. Will need API keys configured.</p>
+              <p className="text-sm">{t("ppages_DesignGuide.started_working_on_the_authentication_module_will", {defaultValue: "Started working on the authentication module. Will need API keys configured."})}</p>
             </div>
             <div className="rounded-md border border-border p-3">
               <div className="flex items-center justify-between mb-1">
-                <span className="text-xs font-medium text-muted-foreground">Human</span>
-                <span className="text-xs text-muted-foreground">Jan 16, 2025</span>
+                <span className="text-xs font-medium text-muted-foreground">{t("ppages_DesignGuide.human", {defaultValue: "Human"})}</span>
+                <span className="text-xs text-muted-foreground">{t("ppages_DesignGuide.jan_16_2025", {defaultValue: "Jan 16, 2025"})}</span>
               </div>
-              <p className="text-sm">API keys have been added to the vault. Please proceed.</p>
+              <p className="text-sm">{t("ppages_DesignGuide.api_keys_have_been_added_to_the_vault_please_proce", {defaultValue: "API keys have been added to the vault. Please proceed."})}</p>
             </div>
           </div>
           <div className="space-y-2">
-            <Textarea placeholder="Leave a comment..." rows={3} />
-            <Button size="sm">Comment</Button>
+            <Textarea placeholder={t("ppages_DesignGuide.leave_a_comment", {defaultValue: "Leave a comment..."})} rows={3} />
+            <Button size="sm">{t("ppages_DesignGuide.comment", {defaultValue: "Comment"})}</Button>
           </div>
         </div>
       </Section>
@@ -1274,14 +1275,14 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  COST TABLE PATTERN                                           */}
       {/* ============================================================ */}
-      <Section title="Cost Table Pattern">
+      <Section title={t("ppages_DesignGuide.cost_table_pattern", {defaultValue: "Cost Table Pattern"})}>
         <div className="border border-border rounded-lg overflow-hidden">
           <table className="w-full text-xs">
             <thead className="border-b border-border bg-accent/20">
               <tr>
-                <th className="text-left px-3 py-2 font-medium text-muted-foreground">Model</th>
-                <th className="text-left px-3 py-2 font-medium text-muted-foreground">Tokens</th>
-                <th className="text-left px-3 py-2 font-medium text-muted-foreground">Cost</th>
+                <th className="text-left px-3 py-2 font-medium text-muted-foreground">{t("ppages_DesignGuide.model", {defaultValue: "Model"})}</th>
+                <th className="text-left px-3 py-2 font-medium text-muted-foreground">{t("ppages_DesignGuide.tokens", {defaultValue: "Tokens"})}</th>
+                <th className="text-left px-3 py-2 font-medium text-muted-foreground">{t("ppages_DesignGuide.cost", {defaultValue: "Cost"})}</th>
               </tr>
             </thead>
             <tbody>
@@ -1296,7 +1297,7 @@ export function DesignGuide() {
                 <td className="px-3 py-2 font-mono">$1.25</td>
               </tr>
               <tr>
-                <td className="px-3 py-2 font-medium">Total</td>
+                <td className="px-3 py-2 font-medium">{t("ppages_DesignGuide.total", {defaultValue: "Total"})}</td>
                 <td className="px-3 py-2 font-mono">1.7M</td>
                 <td className="px-3 py-2 font-mono font-medium">$19.25</td>
               </tr>
@@ -1308,8 +1309,8 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  SKELETONS                                                    */}
       {/* ============================================================ */}
-      <Section title="Skeletons">
-        <SubSection title="Individual">
+      <Section title={t("ppages_DesignGuide.skeletons", {defaultValue: "Skeletons"})}>
+        <SubSection title={t("ppages_DesignGuide.individual", {defaultValue: "Individual"})}>
           <div className="space-y-2">
             <Skeleton className="h-4 w-48" />
             <Skeleton className="h-8 w-full max-w-sm" />
@@ -1317,13 +1318,13 @@ export function DesignGuide() {
           </div>
         </SubSection>
 
-        <SubSection title="Page Skeleton (list)">
+        <SubSection title={t("ppages_DesignGuide.page_skeleton_list", {defaultValue: "Page Skeleton (list)"})}>
           <div className="border border-border rounded-md p-4">
             <PageSkeleton variant="list" />
           </div>
         </SubSection>
 
-        <SubSection title="Page Skeleton (detail)">
+        <SubSection title={t("ppages_DesignGuide.page_skeleton_detail", {defaultValue: "Page Skeleton (detail)"})}>
           <div className="border border-border rounded-md p-4">
             <PageSkeleton variant="detail" />
           </div>
@@ -1333,9 +1334,9 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  SEPARATOR                                                    */}
       {/* ============================================================ */}
-      <Section title="Separator">
+      <Section title={t("ppages_DesignGuide.separator", {defaultValue: "Separator"})}>
         <div className="space-y-4">
-          <p className="text-sm text-muted-foreground">Horizontal</p>
+          <p className="text-sm text-muted-foreground">{t("ppages_DesignGuide.horizontal", {defaultValue: "Horizontal"})}</p>
           <Separator />
           <div className="flex items-center gap-4 h-8">
             <span className="text-sm">Left</span>
@@ -1348,7 +1349,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  ICON REFERENCE                                               */}
       {/* ============================================================ */}
-      <Section title="Common Icons (Lucide)">
+      <Section title={t("ppages_DesignGuide.common_icons_lucide", {defaultValue: "Common Icons (Lucide)"})}>
         <div className="grid grid-cols-4 md:grid-cols-6 gap-4">
           {[
             ["Inbox", Inbox],
@@ -1383,7 +1384,7 @@ export function DesignGuide() {
       {/* ============================================================ */}
       {/*  KEYBOARD SHORTCUTS                                           */}
       {/* ============================================================ */}
-      <Section title="Keyboard Shortcuts">
+      <Section title={t("ppages_DesignGuide.keyboard_shortcuts", {defaultValue: "Keyboard Shortcuts"})}>
         <div className="border border-border rounded-md divide-y divide-border text-sm">
           {[
             ["Cmd+K / Ctrl+K", "Open Command Palette"],

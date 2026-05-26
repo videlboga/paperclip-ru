@@ -22,6 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SecretBindingPicker, type SecretBindingValue } from "./SecretBindingPicker";
+import { useTranslation } from "@/i18n";
 
 // ---------------------------------------------------------------------------
 // Constants
@@ -453,7 +454,7 @@ const EnumField = React.memo(({
       disabled={disabled}
     >
       <SelectTrigger className="w-full">
-        <SelectValue placeholder="Select an option" />
+        <SelectValue placeholder={t("pcomponents_JsonSchemaForm.select_an_option", {defaultValue: "Select an option"})} />
       </SelectTrigger>
       <SelectContent>
         {options.map((option) => (
@@ -624,7 +625,7 @@ const SecretField = React.memo(({
           value={bindingValue}
           onChange={handlePickerChange}
           label=""
-          placeholder="Select an existing secret"
+          placeholder={t("pcomponents_JsonSchemaForm.select_an_existing_secret", {defaultValue: "Select an existing secret"})}
           allowVersionSelector={false}
           emptyHint="No active secrets yet. Create one or paste a raw value below."
           disabled={disabled}
@@ -870,7 +871,7 @@ const ArrayField = React.memo(({
               }}
             >
               <Trash2 className="h-4 w-4" />
-              <span className="sr-only">Remove item</span>
+              <span className="sr-only">{t("pcomponents_JsonSchemaForm.remove_item", {defaultValue: "Remove item"})}</span>
             </Button>
           </div>
         ))}

@@ -14,6 +14,7 @@ import { useRetryNowMutation } from "../hooks/useRetryNowMutation";
 import { IssueLinkQuicklook } from "./IssueLinkQuicklook";
 import { RetryErrorBand } from "./IssueScheduledRetryCard";
 import { isAssignedBacklogBlocker } from "../lib/issue-blockers";
+import { useTranslation } from "@/i18n";
 import {
   deriveActiveRecoveryDisplayState,
   RECOVERY_CHIP_DEFAULT_TONE,
@@ -205,7 +206,7 @@ export function IssueBlockedNotice({
         <div className="min-w-0 space-y-1.5">
           {showSuccessfulRunHandoff ? (
             <>
-              <p className="font-medium leading-5">This issue still needs a next step.</p>
+              <p className="font-medium leading-5">{t("pcomponents_IssueBlockedNotice.this_issue_still_needs_a_next_step", {defaultValue: "This issue still needs a next step."})}</p>
               <p className="leading-5">
                 A run finished successfully, but this issue is still open in{" "}
                 <code className="rounded bg-amber-100 px-1 py-0.5 text-[12px] dark:bg-amber-400/15">
@@ -214,10 +215,10 @@ export function IssueBlockedNotice({
                 with no clear owner for the next action.
               </p>
               <ul className="list-disc space-y-1 pl-5 text-xs leading-5 text-amber-900 dark:text-amber-100">
-                <li>Mark it done or cancelled.</li>
-                <li>Send it for review or ask for input.</li>
-                <li>Mark it blocked with a blocker owner.</li>
-                <li>Delegate follow-up work or queue a continuation.</li>
+                <li>{t("pcomponents_IssueBlockedNotice.mark_it_done_or_cancelled", {defaultValue: "Mark it done or cancelled."})}</li>
+                <li>{t("pcomponents_IssueBlockedNotice.send_it_for_review_or_ask_for_input", {defaultValue: "Send it for review or ask for input."})}</li>
+                <li>{t("pcomponents_IssueBlockedNotice.mark_it_blocked_with_a_blocker_owner", {defaultValue: "Mark it blocked with a blocker owner."})}</li>
+                <li>{t("pcomponents_IssueBlockedNotice.delegate_followup_work_or_queue_a_continuation", {defaultValue: "Delegate follow-up work or queue a continuation."})}</li>
               </ul>
               <div className="flex flex-wrap gap-1.5 text-xs">
                 {successfulRunHandoff.sourceRunId && successfulRunHandoff.assigneeAgentId ? (
@@ -261,7 +262,7 @@ export function IssueBlockedNotice({
                       ? <>Work on this issue is blocked by {blockerLabel}, but the chain is stalled in review without a clear next step. Resolve the stalled reviews below or remove them as blockers.</>
                       : <>Work on this issue is blocked by {blockerLabel}, but the chain is stalled in review without a clear next step. Resolve the stalled review below or remove it as a blocker.</>
                     : <>Work on this issue is blocked by {blockerLabel} until {blockers.length === 1 ? "it is" : "they are"} complete. Comments still wake the assignee for questions or triage.</>
-                  : <>Work on this issue is blocked until it is moved back to todo. Comments still wake the assignee for questions or triage.</>}
+                  : <>{t("pcomponents_IssueBlockedNotice.work_on_this_issue_is_blocked_until_it_is_moved_ba", {defaultValue: "Work on this issue is blocked until it is moved back to todo. Comments still wake the assignee for questions or triage."})}</>}
               </p>
               {blockers.length > 0 ? (
                 <div className="flex flex-wrap gap-1.5">

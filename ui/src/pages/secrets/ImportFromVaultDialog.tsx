@@ -51,6 +51,7 @@ import {
 } from "@/components/ui/select";
 import { EmptyState } from "../../components/EmptyState";
 import { cn } from "../../lib/utils";
+import { useTranslation } from "@/i18n";
 
 type Step = "select" | "review" | "result";
 
@@ -658,7 +659,7 @@ export function ImportFromVaultDialog({
             type="button"
             className="rounded-sm text-muted-foreground transition-opacity hover:opacity-100 opacity-70"
             onClick={() => handleClose()}
-            aria-label="Close import dialog"
+            aria-label={t("ppages/secrets_ImportFromVaultDialog.close_import_dialog", {defaultValue: "Close import dialog"})}
           >
             <X className="h-4 w-4" />
           </button>
@@ -889,7 +890,7 @@ function SelectStep(props: SelectStepProps) {
   return (
     <div className="flex min-h-0 flex-1 flex-col">
       <div className="flex flex-wrap items-center gap-2 border-b border-border/60 px-5 py-3">
-        <label className="text-xs uppercase tracking-wide text-muted-foreground">Vault</label>
+        <label className="text-xs uppercase tracking-wide text-muted-foreground">{t("ppages/secrets_ImportFromVaultDialog.vault", {defaultValue: "Vault"})}</label>
         {awsVaults.length === 1 && eligible.length === 1 ? (
           <span className="text-xs font-medium" data-testid="vault-static-label">
             {eligible[0].displayName}
@@ -899,8 +900,8 @@ function SelectStep(props: SelectStepProps) {
             value={vaultId ?? undefined}
             onValueChange={onVaultChange}
           >
-            <SelectTrigger size="sm" className="text-xs" aria-label="Select AWS vault">
-              <SelectValue placeholder="Select an AWS vault" />
+            <SelectTrigger size="sm" className="text-xs" aria-label={t("ppages/secrets_ImportFromVaultDialog.select_aws_vault", {defaultValue: "Select AWS vault"})}>
+              <SelectValue placeholder={t("ppages/secrets_ImportFromVaultDialog.select_an_aws_vault", {defaultValue: "Select an AWS vault"})} />
             </SelectTrigger>
             <SelectContent>
               {awsVaults.map((vault) => {
@@ -938,9 +939,9 @@ function SelectStep(props: SelectStepProps) {
           <Input
             value={searchInput}
             onChange={(event) => onSearchInput(event.target.value)}
-            placeholder="Search by name, ARN, tag"
+            placeholder={t("ppages/secrets_ImportFromVaultDialog.search_by_name_arn_tag", {defaultValue: "Search by name, ARN, tag"})}
             className="pl-7 pr-7 text-xs"
-            aria-label="Search remote secrets"
+            aria-label={t("ppages/secrets_ImportFromVaultDialog.search_remote_secrets", {defaultValue: "Search remote secrets"})}
             data-testid="vault-search"
           />
           {showSearchSpinner && (
@@ -953,7 +954,7 @@ function SelectStep(props: SelectStepProps) {
           size="sm"
           onClick={onRefresh}
           disabled={previewLoading || !vaultId}
-          aria-label="Refresh remote secrets"
+          aria-label={t("ppages/secrets_ImportFromVaultDialog.refresh_remote_secrets", {defaultValue: "Refresh remote secrets"})}
         >
           <RefreshCw className={cn("h-3.5 w-3.5", previewLoading && "animate-spin")} />
         </Button>
@@ -994,11 +995,11 @@ function SelectStep(props: SelectStepProps) {
                     disabled={selectableInLoaded.length === 0}
                   />
                 </th>
-                <th className="px-2 py-2 text-left font-medium">Remote name</th>
-                <th className="px-2 py-2 text-left font-medium">Reference</th>
-                <th className="px-2 py-2 text-left font-medium">Last changed</th>
-                <th className="px-2 py-2 text-left font-medium">Suggested name</th>
-                <th className="px-2 py-2 text-left font-medium">State</th>
+                <th className="px-2 py-2 text-left font-medium">{t("ppages/secrets_ImportFromVaultDialog.remote_name", {defaultValue: "Remote name"})}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("ppages/secrets_ImportFromVaultDialog.reference", {defaultValue: "Reference"})}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("ppages/secrets_ImportFromVaultDialog.last_changed", {defaultValue: "Last changed"})}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("ppages/secrets_ImportFromVaultDialog.suggested_name", {defaultValue: "Suggested name"})}</th>
+                <th className="px-2 py-2 text-left font-medium">{t("ppages/secrets_ImportFromVaultDialog.state", {defaultValue: "State"})}</th>
               </tr>
             </thead>
             <tbody data-testid="vault-table-body">
@@ -1237,7 +1238,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
                   </div>
                   <div className="grid grid-cols-1 gap-2 sm:grid-cols-3">
                     <label className="flex flex-col gap-1 text-xs">
-                      <span className="text-muted-foreground">Paperclip name</span>
+                      <span className="text-muted-foreground">{t("ppages/secrets_ImportFromVaultDialog.paperclip_name", {defaultValue: "Paperclip name"})}</span>
                       <Input
                         value={draft.name}
                         onChange={(e) =>
@@ -1250,7 +1251,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
                       />
                     </label>
                     <label className="flex flex-col gap-1 text-xs">
-                      <span className="text-muted-foreground">Key</span>
+                      <span className="text-muted-foreground">{t("ppages/secrets_ImportFromVaultDialog.key", {defaultValue: "Key"})}</span>
                       <Input
                         value={draft.key}
                         onChange={(e) =>
@@ -1268,7 +1269,7 @@ function ReviewStep({ drafts, reviewErrors, updateDraft, removeDraft, importing 
                       />
                     </label>
                     <label className="flex flex-col gap-1 text-xs">
-                      <span className="text-muted-foreground">Description (optional)</span>
+                      <span className="text-muted-foreground">{t("ppages/secrets_ImportFromVaultDialog.description_optional", {defaultValue: "Description (optional)"})}</span>
                       <Input
                         value={draft.description}
                         onChange={(e) =>
@@ -1355,13 +1356,13 @@ function ResultStep({ result, draftList }: ResultStepProps) {
       </div>
       <div className="min-h-0 flex-1 overflow-y-auto">
         {grouped.created.length > 0 && (
-          <ResultGroup label="Created" rows={grouped.created} draftLookup={draftLookup} />
+          <ResultGroup label={t("ppages/secrets_ImportFromVaultDialog.created", {defaultValue: "Created"})} rows={grouped.created} draftLookup={draftLookup} />
         )}
         {grouped.skipped.length > 0 && (
-          <ResultGroup label="Skipped" rows={grouped.skipped} draftLookup={draftLookup} />
+          <ResultGroup label={t("ppages/secrets_ImportFromVaultDialog.skipped", {defaultValue: "Skipped"})} rows={grouped.skipped} draftLookup={draftLookup} />
         )}
         {grouped.failed.length > 0 && (
-          <ResultGroup label="Failed" rows={grouped.failed} draftLookup={draftLookup} />
+          <ResultGroup label={t("ppages/secrets_ImportFromVaultDialog.failed", {defaultValue: "Failed"})} rows={grouped.failed} draftLookup={draftLookup} />
         )}
       </div>
     </div>

@@ -11,6 +11,7 @@ import { orderReusableExecutionWorkspaces } from "../lib/reusable-execution-work
 import { cn, projectWorkspaceUrl } from "../lib/utils";
 import { Button } from "@/components/ui/button";
 import { Check, Copy, GitBranch, FolderOpen, Pencil, X } from "lucide-react";
+import { useTranslation } from "@/i18n";
 
 /* -------------------------------------------------------------------------- */
 /*  Utility helpers (mirrored from IssueProperties for self-containment)      */
@@ -380,8 +381,7 @@ export function IssueWorkspaceCard({
                 className="h-6 px-2 text-xs text-muted-foreground"
                 onClick={handleCancel}
               >
-                <X className="h-3 w-3 mr-1" />Cancel
-              </Button>
+                <X className="h-3 w-3 mr-1" />{t("pcomponents_IssueWorkspaceCard.cancel", {defaultValue: "Cancel"})}</Button>
               <Button
                 size="sm"
                 className="h-6 px-2 text-xs"
@@ -398,8 +398,7 @@ export function IssueWorkspaceCard({
               className="h-6 px-2 text-xs text-muted-foreground"
               onClick={() => setEditing(true)}
             >
-              <Pencil className="h-3 w-3 mr-1" />Edit
-            </Button>
+              <Pencil className="h-3 w-3 mr-1" />{t("pcomponents_IssueWorkspaceCard.edit", {defaultValue: "Edit"})}</Button>
           )}
         </div>
       </div>
@@ -421,7 +420,7 @@ export function IssueWorkspaceCard({
           )}
           {workspace?.repoUrl && (
             <div className="flex items-center gap-1.5 text-muted-foreground">
-              <span className="text-[11px]">Repo:</span>
+              <span className="text-[11px]">{t("pcomponents_IssueWorkspaceCard.repo", {defaultValue: "Repo:"})}</span>
               <CopyableInline value={workspace.repoUrl} mono />
             </div>
           )}
@@ -505,7 +504,7 @@ export function IssueWorkspaceCard({
                 setDraftExecutionWorkspaceId(e.target.value);
               }}
             >
-              <option value="">Choose an existing workspace</option>
+              <option value="">{t("pcomponents_IssueWorkspaceCard.choose_an_existing_workspace", {defaultValue: "Choose an existing workspace"})}</option>
               {deduplicatedReusableWorkspaces.map((w) => (
                 <option key={w.id} value={w.id}>
                   {w.name} · {w.status} · {w.branchName ?? w.cwd ?? w.id.slice(0, 8)}

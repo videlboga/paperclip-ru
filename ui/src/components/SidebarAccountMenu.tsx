@@ -19,6 +19,7 @@ import { useTheme } from "../context/ThemeContext";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { cn } from "../lib/utils";
+import { useTranslation } from "@/i18n";
 
 const PROFILE_SETTINGS_PATH = "/instance/settings/profile";
 const DOCS_URL = "https://docs.paperclip.ing/";
@@ -147,7 +148,7 @@ export function SidebarAccountMenu({
           <button
             type="button"
             className="flex w-full items-center gap-2.5 px-3 py-2 text-left text-[13px] font-medium text-foreground/80 transition-colors hover:bg-accent/50 hover:text-foreground"
-            aria-label="Open account menu"
+            aria-label={t("pcomponents_SidebarAccountMenu.open_account_menu", {defaultValue: "Open account menu"})}
           >
             <Avatar size="sm">
               {session?.user.image ? <AvatarImage src={session.user.image} alt={displayName} /> : null}
@@ -187,29 +188,29 @@ export function SidebarAccountMenu({
 
             <div className="mt-4 space-y-1">
               <MenuAction
-                label="View profile"
-                description="Open your activity, task, and usage ledger."
+                label={t("pcomponents_SidebarAccountMenu.view_profile", {defaultValue: "View profile"})}
+                description={t("pcomponents_SidebarAccountMenu.open_your_activity_task_and_usage_ledger", {defaultValue: "Open your activity, task, and usage ledger."})}
                 icon={UserRound}
                 href={profileHref}
                 onClick={closeNavigationChrome}
               />
               <MenuAction
-                label="Edit profile"
-                description="Update your display name and avatar."
+                label={t("pcomponents_SidebarAccountMenu.edit_profile", {defaultValue: "Edit profile"})}
+                description={t("pcomponents_SidebarAccountMenu.update_your_display_name_and_avatar", {defaultValue: "Update your display name and avatar."})}
                 icon={UserRoundPen}
                 href={PROFILE_SETTINGS_PATH}
                 onClick={closeNavigationChrome}
               />
               <MenuAction
-                label="Instance settings"
-                description="Jump back to the last settings page you opened."
+                label={t("pcomponents_SidebarAccountMenu.instance_settings", {defaultValue: "Instance settings"})}
+                description={t("pcomponents_SidebarAccountMenu.jump_back_to_the_last_settings_page_you_opened", {defaultValue: "Jump back to the last settings page you opened."})}
                 icon={Settings}
                 href={instanceSettingsTarget}
                 onClick={closeNavigationChrome}
               />
               <MenuAction
-                label="Documentation"
-                description="Open Paperclip docs in a new tab."
+                label={t("pcomponents_SidebarAccountMenu.documentation", {defaultValue: "Documentation"})}
+                description={t("pcomponents_SidebarAccountMenu.open_paperclip_docs_in_a_new_tab", {defaultValue: "Open Paperclip docs in a new tab."})}
                 icon={BookOpen}
                 href={DOCS_URL}
                 external
@@ -217,7 +218,7 @@ export function SidebarAccountMenu({
               />
               <MenuAction
                 label={theme === "dark" ? "Switch to light mode" : "Switch to dark mode"}
-                description="Toggle the app appearance."
+                description={t("pcomponents_SidebarAccountMenu.toggle_the_app_appearance", {defaultValue: "Toggle the app appearance."})}
                 icon={theme === "dark" ? Sun : Moon}
                 onClick={() => {
                   toggleTheme();

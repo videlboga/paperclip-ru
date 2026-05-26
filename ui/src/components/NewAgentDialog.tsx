@@ -27,6 +27,7 @@ import { isVisualAdapterChoice } from "../adapters/metadata";
 import { getAdapterDisplay } from "../adapters/adapter-display-registry";
 import { useDisabledAdaptersSync } from "../adapters/use-disabled-adapters";
 import { useToast } from "../context/ToastContext";
+import { useTranslation } from "@/i18n";
 
 /**
  * Adapter types that are suitable for agent creation (excludes internal
@@ -232,7 +233,7 @@ export function NewAgentDialog() {
       >
         {/* Header */}
         <div className="flex items-center justify-between px-4 py-2.5 border-b border-border">
-          <span className="text-sm text-muted-foreground">Add a new agent</span>
+          <span className="text-sm text-muted-foreground">{t("pcomponents_NewAgentDialog.add_a_new_agent", {defaultValue: "Add a new agent"})}</span>
           <Button
             variant="ghost"
             size="icon-xs"
@@ -335,7 +336,7 @@ export function NewAgentDialog() {
                   Back
                 </button>
                 <div className="space-y-1">
-                  <h2 className="text-sm font-semibold">Invite an external agent</h2>
+                  <h2 className="text-sm font-semibold">{t("pcomponents_NewAgentDialog.invite_an_external_agent", {defaultValue: "Invite an external agent"})}</h2>
                   <p className="text-sm text-muted-foreground">
                     Generate a one-time onboarding prompt that any compatible agent can use to request access, wait for approval, and claim its Paperclip API key.
                   </p>
@@ -343,12 +344,12 @@ export function NewAgentDialog() {
               </div>
 
               <label className="block space-y-2">
-                <span className="text-sm font-medium">Optional message for the agent</span>
+                <span className="text-sm font-medium">{t("pcomponents_NewAgentDialog.optional_message_for_the_agent", {defaultValue: "Optional message for the agent"})}</span>
                 <Textarea
                   value={agentMessage}
                   onChange={(event) => setAgentMessage(event.target.value)}
                   className="min-h-24 resize-y"
-                  placeholder="Add onboarding context, expected role, or first instructions."
+                  placeholder={t("pcomponents_NewAgentDialog.add_onboarding_context_expected_role_or_first_inst", {defaultValue: "Add onboarding context, expected role, or first instructions."})}
                   maxLength={4000}
                 />
               </label>
@@ -378,7 +379,7 @@ export function NewAgentDialog() {
                 </button>
                 <div className="space-y-1">
                   <div className="flex items-center justify-between gap-3">
-                    <h2 className="text-sm font-semibold">Agent onboarding prompt</h2>
+                    <h2 className="text-sm font-semibold">{t("pcomponents_NewAgentDialog.agent_onboarding_prompt", {defaultValue: "Agent onboarding prompt"})}</h2>
                     {latestAgentPromptCopied ? (
                       <div className="inline-flex items-center gap-1 text-xs font-medium text-foreground">
                         <Check className="h-3.5 w-3.5" />

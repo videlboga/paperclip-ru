@@ -29,6 +29,7 @@ import { Button } from "@/components/ui/button";
 import { PluginSlotOutlet } from "@/plugins/slots";
 import { PluginLauncherOutlet } from "@/plugins/launchers";
 import { SidebarCompanyMenu } from "./SidebarCompanyMenu";
+import { useTranslation } from "@/i18n";
 
 export function Sidebar() {
   const { openNewIssue } = useDialogActions();
@@ -62,8 +63,8 @@ export function Sidebar() {
           variant="ghost"
           size="icon-sm"
           className="text-muted-foreground shrink-0"
-          aria-label="Open search"
-          title="Open search"
+          aria-label={t("pcomponents_Sidebar.open_search", {defaultValue: "Open search"})}
+          title={t("pcomponents_Sidebar.open_search", {defaultValue: "Open search"})}
         >
           <NavLink to="/search">
             <Search className="h-4 w-4" />
@@ -80,12 +81,12 @@ export function Sidebar() {
             className="flex items-center gap-2.5 px-3 py-2 pointer-coarse:py-1.5 text-[13px] font-medium text-muted-foreground hover:bg-accent/50 hover:text-foreground transition-colors"
           >
             <SquarePen className="h-4 w-4 shrink-0" />
-            <span className="truncate">New Issue</span>
+            <span className="truncate">{t("pcomponents_Sidebar.new_issue", {defaultValue: "New Issue"})}</span>
           </button>
-          <SidebarNavItem to="/dashboard" label="Dashboard" icon={LayoutDashboard} liveCount={liveRunCount} />
+          <SidebarNavItem to="/dashboard" label={t("pcomponents_Sidebar.dashboard", {defaultValue: "Dashboard"})} icon={LayoutDashboard} liveCount={liveRunCount} />
           <SidebarNavItem
             to="/inbox"
-            label="Inbox"
+            label={t("pcomponents_Sidebar.inbox", {defaultValue: "Inbox"})}
             icon={Inbox}
             badge={inboxBadge.inbox}
             badgeTone={inboxBadge.failedRuns > 0 ? "danger" : "default"}
@@ -93,12 +94,12 @@ export function Sidebar() {
           />
         </div>
 
-        <SidebarSection label="Work">
-          <SidebarNavItem to="/issues" label="Issues" icon={CircleDot} />
-          <SidebarNavItem to="/routines" label="Routines" icon={Repeat} />
-          <SidebarNavItem to="/goals" label="Goals" icon={Target} />
+        <SidebarSection label={t("pcomponents_Sidebar.work", {defaultValue: "Work"})}>
+          <SidebarNavItem to="/issues" label={t("pcomponents_Sidebar.issues", {defaultValue: "Issues"})} icon={CircleDot} />
+          <SidebarNavItem to="/routines" label={t("pcomponents_Sidebar.routines", {defaultValue: "Routines"})} icon={Repeat} />
+          <SidebarNavItem to="/goals" label={t("pcomponents_Sidebar.goals", {defaultValue: "Goals"})} icon={Target} />
           {showWorkspacesLink ? (
-            <SidebarNavItem to="/workspaces" label="Workspaces" icon={GitBranch} />
+            <SidebarNavItem to="/workspaces" label={t("pcomponents_Sidebar.workspaces", {defaultValue: "Workspaces"})} icon={GitBranch} />
           ) : null}
           <PluginSlotOutlet
             slotTypes={["sidebar"]}
@@ -119,12 +120,12 @@ export function Sidebar() {
 
         <SidebarAgents />
 
-        <SidebarSection label="Company">
-          <SidebarNavItem to="/org" label="Org" icon={Network} />
-          <SidebarNavItem to="/skills" label="Skills" icon={Boxes} />
-          <SidebarNavItem to="/costs" label="Costs" icon={DollarSign} />
-          <SidebarNavItem to="/activity" label="Activity" icon={History} />
-          <SidebarNavItem to="/company/settings" label="Settings" icon={Settings} />
+        <SidebarSection label={t("pcomponents_Sidebar.company", {defaultValue: "Company"})}>
+          <SidebarNavItem to="/org" label={t("pcomponents_Sidebar.org", {defaultValue: "Org"})} icon={Network} />
+          <SidebarNavItem to="/skills" label={t("pcomponents_Sidebar.skills", {defaultValue: "Skills"})} icon={Boxes} />
+          <SidebarNavItem to="/costs" label={t("pcomponents_Sidebar.costs", {defaultValue: "Costs"})} icon={DollarSign} />
+          <SidebarNavItem to="/activity" label={t("pcomponents_Sidebar.activity", {defaultValue: "Activity"})} icon={History} />
+          <SidebarNavItem to="/company/settings" label={t("pcomponents_Sidebar.settings", {defaultValue: "Settings"})} icon={Settings} />
         </SidebarSection>
 
         <PluginSlotOutlet

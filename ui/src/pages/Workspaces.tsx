@@ -13,6 +13,7 @@ import { useCompany } from "../context/CompanyContext";
 import { buildProjectWorkspaceSummaries, type ProjectWorkspaceSummary } from "../lib/project-workspaces-tab";
 import { queryKeys } from "../lib/queryKeys";
 import { projectRouteRef } from "../lib/utils";
+import { useTranslation } from "@/i18n";
 
 type ProjectWorkspaceGroup = {
   project: Project;
@@ -121,11 +122,11 @@ export function Workspaces() {
   return (
     <div className="space-y-6">
       <div>
-        <h2 className="text-xl font-bold">Workspaces</h2>
+        <h2 className="text-xl font-bold">{t("ppages_Workspaces.workspaces", {defaultValue: "Workspaces"})}</h2>
       </div>
 
       {groups.length === 0 ? (
-        <p className="text-sm text-muted-foreground">No workspace activity yet.</p>
+        <p className="text-sm text-muted-foreground">{t("ppages_Workspaces.no_workspace_activity_yet", {defaultValue: "No workspace activity yet."})}</p>
       ) : (
         <div className="space-y-8">
           {groups.map((group) => (

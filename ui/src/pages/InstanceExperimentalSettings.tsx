@@ -11,6 +11,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { useTranslation } from "@/i18n";
 import {
   Dialog,
   DialogContent,
@@ -50,7 +51,7 @@ function RecoveryPreviewDialog({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-3xl">
         <DialogHeader>
-          <DialogTitle>Confirm auto-recovery</DialogTitle>
+          <DialogTitle>{t("ppages_InstanceExperimentalSettings.confirm_autorecovery", {defaultValue: "Confirm auto-recovery"})}</DialogTitle>
           <DialogDescription>
             {preview
               ? `${count} recovery ${count === 1 ? "task" : "tasks"} match the last ${preview.lookbackHours} hours.`
@@ -190,7 +191,7 @@ export function InstanceExperimentalSettings() {
   }, [experimentalQuery.data?.issueGraphLivenessAutoRecoveryLookbackHours]);
 
   if (experimentalQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading experimental settings...</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_InstanceExperimentalSettings.loading_experimental_settings", {defaultValue: "Loading experimental settings..."})}</div>;
   }
 
   if (experimentalQuery.error) {
@@ -250,7 +251,7 @@ export function InstanceExperimentalSettings() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <FlaskConical className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Experimental</h1>
+          <h1 className="text-lg font-semibold">{t("ppages_InstanceExperimentalSettings.experimental", {defaultValue: "Experimental"})}</h1>
         </div>
         <p className="text-sm text-muted-foreground">
           Opt into features that are still being evaluated before they become default behavior.
@@ -266,7 +267,7 @@ export function InstanceExperimentalSettings() {
       <section className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">Enable Environments</h2>
+            <h2 className="text-sm font-semibold">{t("ppages_InstanceExperimentalSettings.enable_environments", {defaultValue: "Enable Environments"})}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               Show environment management in company settings and allow project and agent environment assignment
               controls.
@@ -276,7 +277,7 @@ export function InstanceExperimentalSettings() {
             checked={enableEnvironments}
             onCheckedChange={() => toggleMutation.mutate({ enableEnvironments: !enableEnvironments })}
             disabled={toggleMutation.isPending}
-            aria-label="Toggle environments experimental setting"
+            aria-label={t("ppages_InstanceExperimentalSettings.toggle_environments_experimental_setting", {defaultValue: "Toggle environments experimental setting"})}
           />
         </div>
       </section>
@@ -284,7 +285,7 @@ export function InstanceExperimentalSettings() {
       <section className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">Enable Isolated Workspaces</h2>
+            <h2 className="text-sm font-semibold">{t("ppages_InstanceExperimentalSettings.enable_isolated_workspaces", {defaultValue: "Enable Isolated Workspaces"})}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               Show execution workspace controls in project configuration and allow isolated workspace behavior for new
               and existing issue runs.
@@ -294,7 +295,7 @@ export function InstanceExperimentalSettings() {
             checked={enableIsolatedWorkspaces}
             onCheckedChange={() => toggleMutation.mutate({ enableIsolatedWorkspaces: !enableIsolatedWorkspaces })}
             disabled={toggleMutation.isPending}
-            aria-label="Toggle isolated workspaces experimental setting"
+            aria-label={t("ppages_InstanceExperimentalSettings.toggle_isolated_workspaces_experimental_setting", {defaultValue: "Toggle isolated workspaces experimental setting"})}
           />
         </div>
       </section>
@@ -302,7 +303,7 @@ export function InstanceExperimentalSettings() {
       <section className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">Cloud Sync</h2>
+            <h2 className="text-sm font-semibold">{t("ppages_InstanceExperimentalSettings.cloud_sync", {defaultValue: "Cloud Sync"})}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               Show local Paperclip Cloud upstream connection, preview, push, retry, and activation review surfaces.
               Saved connections and run history are preserved when this is disabled.
@@ -312,7 +313,7 @@ export function InstanceExperimentalSettings() {
             checked={enableCloudSync}
             onCheckedChange={() => toggleMutation.mutate({ enableCloudSync: !enableCloudSync })}
             disabled={toggleMutation.isPending}
-            aria-label="Toggle cloud sync experimental setting"
+            aria-label={t("ppages_InstanceExperimentalSettings.toggle_cloud_sync_experimental_setting", {defaultValue: "Toggle cloud sync experimental setting"})}
           />
         </div>
       </section>
@@ -320,7 +321,7 @@ export function InstanceExperimentalSettings() {
       <section className="rounded-xl border border-border bg-card p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="space-y-1.5">
-            <h2 className="text-sm font-semibold">Auto-Restart Dev Server When Idle</h2>
+            <h2 className="text-sm font-semibold">{t("ppages_InstanceExperimentalSettings.autorestart_dev_server_when_idle", {defaultValue: "Auto-Restart Dev Server When Idle"})}</h2>
             <p className="max-w-2xl text-sm text-muted-foreground">
               In `pnpm dev:once`, wait for all queued and running local agent runs to finish, then restart the server
               automatically when backend changes or migrations make the current boot stale.
@@ -330,7 +331,7 @@ export function InstanceExperimentalSettings() {
             checked={autoRestartDevServerWhenIdle}
             onCheckedChange={() => toggleMutation.mutate({ autoRestartDevServerWhenIdle: !autoRestartDevServerWhenIdle })}
             disabled={toggleMutation.isPending}
-            aria-label="Toggle guarded dev-server auto-restart"
+            aria-label={t("ppages_InstanceExperimentalSettings.toggle_guarded_devserver_autorestart", {defaultValue: "Toggle guarded dev-server auto-restart"})}
           />
         </div>
       </section>
@@ -339,7 +340,7 @@ export function InstanceExperimentalSettings() {
         <div className="flex flex-col gap-5">
           <div className="flex items-start justify-between gap-4">
             <div className="space-y-1.5">
-              <h2 className="text-sm font-semibold">Auto-Create Issue Recovery Tasks</h2>
+              <h2 className="text-sm font-semibold">{t("ppages_InstanceExperimentalSettings.autocreate_issue_recovery_tasks", {defaultValue: "Auto-Create Issue Recovery Tasks"})}</h2>
               <p className="max-w-2xl text-sm text-muted-foreground">
                 Let the heartbeat scheduler create recovery issues for issue dependency chains found inside the
                 configured lookback window.
@@ -355,7 +356,7 @@ export function InstanceExperimentalSettings() {
                 previewForEnable();
               }}
               disabled={recoveryActionPending}
-              aria-label="Toggle issue graph liveness auto-recovery"
+              aria-label={t("ppages_InstanceExperimentalSettings.toggle_issue_graph_liveness_autorecovery", {defaultValue: "Toggle issue graph liveness auto-recovery"})}
             />
           </div>
 

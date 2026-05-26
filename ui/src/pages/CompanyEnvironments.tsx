@@ -17,6 +17,7 @@ import { useBreadcrumbs } from "@/context/BreadcrumbContext";
 import { useCompany } from "@/context/CompanyContext";
 import { useToast } from "@/context/ToastContext";
 import { queryKeys } from "@/lib/queryKeys";
+import { useTranslation } from "@/i18n";
 import {
   Field,
   ToggleField,
@@ -397,7 +398,7 @@ export function CompanyEnvironments() {
       Object.keys(sandboxConfigErrors).length === 0);
 
   if (!selectedCompanyId) {
-    return <div className="text-sm text-muted-foreground">Select a company to manage environments.</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_CompanyEnvironments.select_a_company_to_manage_environments", {defaultValue: "Select a company to manage environments."})}</div>;
   }
 
   if (!environmentsEnabled) {
@@ -405,7 +406,7 @@ export function CompanyEnvironments() {
       <div className="max-w-3xl space-y-4">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Company Environments</h1>
+          <h1 className="text-lg font-semibold">{t("ppages_CompanyEnvironments.company_environments", {defaultValue: "Company Environments"})}</h1>
         </div>
         <div className="rounded-md border border-border px-4 py-4 text-sm text-muted-foreground">
           Enable Environments in instance experimental settings to manage company execution targets.
@@ -419,7 +420,7 @@ export function CompanyEnvironments() {
       <div className="space-y-2">
         <div className="flex items-center gap-2">
           <Settings className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Company Environments</h1>
+          <h1 className="text-lg font-semibold">{t("ppages_CompanyEnvironments.company_environments", {defaultValue: "Company Environments"})}</h1>
         </div>
         <p className="max-w-3xl text-sm text-muted-foreground">
           Define reusable execution targets for projects, issue workspaces, and remote-capable adapters.
@@ -444,14 +445,14 @@ export function CompanyEnvironments() {
 
         <div className="overflow-x-auto">
           <table className="w-full min-w-[34rem] text-left text-xs">
-            <caption className="sr-only">Environment support by adapter</caption>
+            <caption className="sr-only">{t("ppages_CompanyEnvironments.environment_support_by_adapter", {defaultValue: "Environment support by adapter"})}</caption>
             <thead className="border-b border-border text-muted-foreground">
               <tr>
-                <th className="py-2 pr-3 font-medium">Adapter</th>
-                <th className="px-3 py-2 font-medium">Local</th>
-                <th className="px-3 py-2 font-medium">SSH</th>
+                <th className="py-2 pr-3 font-medium">{t("ppages_CompanyEnvironments.adapter", {defaultValue: "Adapter"})}</th>
+                <th className="px-3 py-2 font-medium">{t("ppages_CompanyEnvironments.local", {defaultValue: "Local"})}</th>
+                <th className="px-3 py-2 font-medium">{t("ppages_CompanyEnvironments.ssh", {defaultValue: "SSH"})}</th>
                 {sandboxSupportVisible ? (
-                  <th className="px-3 py-2 font-medium">Sandbox via plugin</th>
+                  <th className="px-3 py-2 font-medium">{t("ppages_CompanyEnvironments.sandbox_via_plugin", {defaultValue: "Sandbox via plugin"})}</th>
                 ) : null}
               </tr>
             </thead>
@@ -486,7 +487,7 @@ export function CompanyEnvironments() {
 
         <div className="space-y-3">
           {(environments ?? []).length === 0 ? (
-            <div className="text-sm text-muted-foreground">No environments saved for this company yet.</div>
+            <div className="text-sm text-muted-foreground">{t("ppages_CompanyEnvironments.no_environments_saved_for_this_company_yet", {defaultValue: "No environments saved for this company yet."})}</div>
           ) : (
             (environments ?? []).map((environment) => {
               const probe = probeResults[environment.id] ?? null;
@@ -521,7 +522,7 @@ export function CompanyEnvironments() {
                           })()}
                         </div>
                       ) : (
-                        <div className="text-xs text-muted-foreground">Runs on this Paperclip host.</div>
+                        <div className="text-xs text-muted-foreground">{t("ppages_CompanyEnvironments.runs_on_this_paperclip_host", {defaultValue: "Runs on this Paperclip host."})}</div>
                       )}
                     </div>
                     <div className="flex flex-wrap items-center gap-2">
@@ -573,7 +574,7 @@ export function CompanyEnvironments() {
             {editingEnvironmentId ? "Edit environment" : "Add environment"}
           </div>
           <div className="space-y-3">
-            <Field label="Name" hint="Operator-facing name for this execution target.">
+            <Field label={t("ppages_CompanyEnvironments.name", {defaultValue: "Name"})} hint="Operator-facing name for this execution target.">
               <input
                 className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                 type="text"
@@ -581,7 +582,7 @@ export function CompanyEnvironments() {
                 onChange={(e) => setEnvironmentForm((current) => ({ ...current, name: e.target.value }))}
               />
             </Field>
-            <Field label="Description" hint="Optional note about what this machine is for.">
+            <Field label={t("ppages_CompanyEnvironments.description", {defaultValue: "Description"})} hint="Optional note about what this machine is for.">
               <input
                 className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                 type="text"
@@ -589,7 +590,7 @@ export function CompanyEnvironments() {
                 onChange={(e) => setEnvironmentForm((current) => ({ ...current, description: e.target.value }))}
               />
             </Field>
-            <Field label="Driver" hint="Local runs on this host. SSH stores a remote machine target. Sandbox stores plugin-backed provider config on the shared environment seam.">
+            <Field label={t("ppages_CompanyEnvironments.driver", {defaultValue: "Driver"})} hint="Local runs on this host. SSH stores a remote machine target. Sandbox stores plugin-backed provider config on the shared environment seam.">
               <select
                 className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                 value={environmentForm.driver}
@@ -618,17 +619,17 @@ export function CompanyEnvironments() {
                           : "ssh",
                   }))}
               >
-                <option value="ssh">SSH</option>
+                <option value="ssh">{t("ppages_CompanyEnvironments.ssh", {defaultValue: "SSH"})}</option>
                 {sandboxCreationEnabled || environmentForm.driver === "sandbox" ? (
-                  <option value="sandbox">Sandbox</option>
+                  <option value="sandbox">{t("ppages_CompanyEnvironments.sandbox", {defaultValue: "Sandbox"})}</option>
                 ) : null}
-                <option value="local">Local</option>
+                <option value="local">{t("ppages_CompanyEnvironments.local", {defaultValue: "Local"})}</option>
               </select>
             </Field>
 
             {environmentForm.driver === "ssh" ? (
               <div className="grid gap-3 md:grid-cols-2">
-                <Field label="Host" hint="DNS name or IP address for the remote machine.">
+                <Field label={t("ppages_CompanyEnvironments.host", {defaultValue: "Host"})} hint="DNS name or IP address for the remote machine.">
                   <input
                     className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                     type="text"
@@ -636,7 +637,7 @@ export function CompanyEnvironments() {
                     onChange={(e) => setEnvironmentForm((current) => ({ ...current, sshHost: e.target.value }))}
                   />
                 </Field>
-                <Field label="Port" hint="Defaults to 22.">
+                <Field label={t("ppages_CompanyEnvironments.port", {defaultValue: "Port"})} hint="Defaults to 22.">
                   <input
                     className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                     type="number"
@@ -646,7 +647,7 @@ export function CompanyEnvironments() {
                     onChange={(e) => setEnvironmentForm((current) => ({ ...current, sshPort: e.target.value }))}
                   />
                 </Field>
-                <Field label="Username" hint="SSH login user.">
+                <Field label={t("ppages_CompanyEnvironments.username", {defaultValue: "Username"})} hint="SSH login user.">
                   <input
                     className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                     type="text"
@@ -654,17 +655,17 @@ export function CompanyEnvironments() {
                     onChange={(e) => setEnvironmentForm((current) => ({ ...current, sshUsername: e.target.value }))}
                   />
                 </Field>
-                <Field label="Remote workspace path" hint="Absolute path that Paperclip will verify during SSH connection tests.">
+                <Field label={t("ppages_CompanyEnvironments.remote_workspace_path", {defaultValue: "Remote workspace path"})} hint="Absolute path that Paperclip will verify during SSH connection tests.">
                   <input
                     className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                     type="text"
-                    placeholder="/Users/paperclip/workspace"
+                    placeholder={t("ppages_CompanyEnvironments.userspaperclipworkspace", {defaultValue: "/Users/paperclip/workspace"})}
                     value={environmentForm.sshRemoteWorkspacePath}
                     onChange={(e) =>
                       setEnvironmentForm((current) => ({ ...current, sshRemoteWorkspacePath: e.target.value }))}
                   />
                 </Field>
-                <Field label="Private key" hint="Optional PEM private key. Leave blank to rely on the server's SSH agent or default keychain.">
+                <Field label={t("ppages_CompanyEnvironments.private_key", {defaultValue: "Private key"})} hint="Optional PEM private key. Leave blank to rely on the server's SSH agent or default keychain.">
                   <div className="space-y-2">
                     <select
                       className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
@@ -676,7 +677,7 @@ export function CompanyEnvironments() {
                           sshPrivateKey: e.target.value ? "" : current.sshPrivateKey,
                         }))}
                     >
-                      <option value="">No saved secret</option>
+                      <option value="">{t("ppages_CompanyEnvironments.no_saved_secret", {defaultValue: "No saved secret"})}</option>
                       {(secrets ?? []).map((secret) => (
                         <option key={secret.id} value={secret.id}>{secret.name}</option>
                       ))}
@@ -689,7 +690,7 @@ export function CompanyEnvironments() {
                     />
                   </div>
                 </Field>
-                <Field label="Known hosts" hint="Optional known_hosts block used when strict host key checking is enabled.">
+                <Field label={t("ppages_CompanyEnvironments.known_hosts", {defaultValue: "Known hosts"})} hint="Optional known_hosts block used when strict host key checking is enabled.">
                   <textarea
                     className="h-32 w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-xs font-mono outline-none"
                     value={environmentForm.sshKnownHosts}
@@ -698,7 +699,7 @@ export function CompanyEnvironments() {
                 </Field>
                 <div className="md:col-span-2">
                   <ToggleField
-                    label="Strict host key checking"
+                    label={t("ppages_CompanyEnvironments.strict_host_key_checking", {defaultValue: "Strict host key checking"})}
                     hint="Keep this on unless you deliberately want probe-time host key acceptance disabled."
                     checked={environmentForm.sshStrictHostKeyChecking}
                     onChange={(checked) =>
@@ -710,7 +711,7 @@ export function CompanyEnvironments() {
 
             {environmentForm.driver === "sandbox" ? (
               <div className="grid gap-3 md:grid-cols-2">
-                <Field label="Provider" hint="Installed run-capable sandbox provider plugins appear here.">
+                <Field label={t("ppages_CompanyEnvironments.provider", {defaultValue: "Provider"})} hint="Installed run-capable sandbox provider plugins appear here.">
                   <select
                     className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                     value={environmentForm.sandboxProvider}

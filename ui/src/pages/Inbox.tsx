@@ -156,6 +156,7 @@ import {
   type InboxWorkItemGroupBy,
 } from "../lib/inbox";
 import { useDismissedInboxAlerts, useInboxDismissals, useReadInboxItems } from "../hooks/useInboxBadge";
+import { useTranslation } from "@/i18n";
 
 export { InboxIssueMetaLeading, InboxIssueTrailingColumns } from "../components/IssueColumns";
 export { IssueGroupHeader as InboxGroupHeader } from "../components/IssueGroupHeader";
@@ -286,7 +287,7 @@ export function FailedRunInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-blue-500/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={t("ppages_Inbox.mark_as_read", {defaultValue: "Mark as read"})}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -300,7 +301,7 @@ export function FailedRunInboxRow({
                 onClick={onArchive}
                 disabled={archiveDisabled}
                 className="inline-flex h-4 w-4 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100 disabled:pointer-events-none disabled:opacity-30"
-                aria-label="Dismiss from inbox"
+                aria-label={t("ppages_Inbox.dismiss_from_inbox", {defaultValue: "Dismiss from inbox"})}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -359,7 +360,7 @@ export function FailedRunInboxRow({
               type="button"
               onClick={onDismiss}
               className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover:opacity-100"
-              aria-label="Dismiss"
+              aria-label={t("ppages_Inbox.dismiss", {defaultValue: "Dismiss"})}
             >
               <X className="h-4 w-4" />
             </button>
@@ -383,7 +384,7 @@ export function FailedRunInboxRow({
             type="button"
             onClick={onDismiss}
             className="rounded-md p-1 text-muted-foreground hover:bg-accent hover:text-foreground"
-            aria-label="Dismiss"
+            aria-label={t("ppages_Inbox.dismiss", {defaultValue: "Dismiss"})}
           >
             <X className="h-4 w-4" />
           </button>
@@ -442,7 +443,7 @@ function ApprovalInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-blue-500/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={t("ppages_Inbox.mark_as_read", {defaultValue: "Mark as read"})}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -456,7 +457,7 @@ function ApprovalInboxRow({
                 onClick={onArchive}
                 disabled={archiveDisabled}
                 className="inline-flex h-4 w-4 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100 disabled:pointer-events-none disabled:opacity-30"
-                aria-label="Dismiss from inbox"
+                aria-label={t("ppages_Inbox.dismiss_from_inbox", {defaultValue: "Dismiss from inbox"})}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -578,7 +579,7 @@ function JoinRequestInboxRow({
                   "inline-flex h-4 w-4 items-center justify-center rounded-full transition-colors",
                   "hover:bg-blue-500/20",
                 )}
-                aria-label="Mark as read"
+                aria-label={t("ppages_Inbox.mark_as_read", {defaultValue: "Mark as read"})}
               >
                 <span className={cn(
                   "block h-2 w-2 rounded-full transition-opacity duration-300",
@@ -592,7 +593,7 @@ function JoinRequestInboxRow({
                 onClick={onArchive}
                 disabled={archiveDisabled}
                 className="inline-flex h-4 w-4 items-center justify-center rounded-md text-muted-foreground opacity-0 transition-opacity hover:text-foreground group-hover:opacity-100 disabled:pointer-events-none disabled:opacity-30"
-                aria-label="Dismiss from inbox"
+                aria-label={t("ppages_Inbox.dismiss_from_inbox", {defaultValue: "Dismiss from inbox"})}
               >
                 <X className="h-3.5 w-3.5" />
               </button>
@@ -1924,7 +1925,7 @@ export function Inbox() {
           <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
           <Input
             type="search"
-            placeholder="Search inbox…"
+            placeholder={t("ppages_Inbox.search_inbox", {defaultValue: "Search inbox…"})}
             value={searchQuery}
             onChange={(e) => setSearchQuery(e.target.value)}
             onKeyDown={(e) => {
@@ -1972,7 +1973,7 @@ export function Inbox() {
             <Search className="pointer-events-none absolute left-2.5 top-1/2 h-3.5 w-3.5 -translate-y-1/2 text-muted-foreground" />
             <Input
               type="search"
-              placeholder="Search inbox…"
+              placeholder={t("ppages_Inbox.search_inbox", {defaultValue: "Search inbox…"})}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               onKeyDown={(e) => {
@@ -2019,7 +2020,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", blockedGroupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={t("ppages_Inbox.group", {defaultValue: "Group"})}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2048,7 +2049,7 @@ export function Inbox() {
                 visibleColumnSet={visibleIssueColumnSet}
                 onToggleColumn={toggleIssueColumn}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which inbox columns stay visible"
+                title={t("ppages_Inbox.choose_which_inbox_columns_stay_visible", {defaultValue: "Choose which inbox columns stay visible"})}
                 iconOnly
               />
               <Popover>
@@ -2058,7 +2059,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className="h-8 w-8 shrink-0"
-                    title="Sort"
+                    title={t("ppages_Inbox.sort", {defaultValue: "Sort"})}
                   >
                     <ArrowUpDown className="h-3.5 w-3.5" />
                   </Button>
@@ -2116,7 +2117,7 @@ export function Inbox() {
                     variant="outline"
                     size="icon"
                     className={cn("h-8 w-8 shrink-0", groupBy !== "none" && "bg-accent")}
-                    title="Group"
+                    title={t("ppages_Inbox.group", {defaultValue: "Group"})}
                   >
                     <Layers className="h-3.5 w-3.5" />
                   </Button>
@@ -2151,7 +2152,7 @@ export function Inbox() {
                 visibleColumnSet={visibleIssueColumnSet}
                 onToggleColumn={toggleIssueColumn}
                 onResetColumns={() => setIssueColumns(DEFAULT_INBOX_ISSUE_COLUMNS)}
-                title="Choose which inbox columns stay visible"
+                title={t("ppages_Inbox.choose_which_inbox_columns_stay_visible", {defaultValue: "Choose which inbox columns stay visible"})}
                 iconOnly
               />
               {canMarkAllRead && (
@@ -2169,7 +2170,7 @@ export function Inbox() {
                   <Dialog open={showMarkAllReadConfirm} onOpenChange={setShowMarkAllReadConfirm}>
                     <DialogContent className="sm:max-w-md">
                       <DialogHeader>
-                        <DialogTitle>Mark all as read?</DialogTitle>
+                        <DialogTitle>{t("ppages_Inbox.mark_all_as_read", {defaultValue: "Mark all as read?"})}</DialogTitle>
                         <DialogDescription>
                           This will mark {unreadIssueIds.length} unread {unreadIssueIds.length === 1 ? "item" : "items"} as read.
                         </DialogDescription>
@@ -2204,15 +2205,15 @@ export function Inbox() {
             onValueChange={(value) => updateAllCategoryFilter(value as InboxCategoryFilter)}
           >
             <SelectTrigger className="h-8 w-[170px] text-xs">
-              <SelectValue placeholder="Category" />
+              <SelectValue placeholder={t("ppages_Inbox.category", {defaultValue: "Category"})} />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="everything">All categories</SelectItem>
-              <SelectItem value="issues_i_touched">My recent issues</SelectItem>
-              <SelectItem value="join_requests">Join requests</SelectItem>
-              <SelectItem value="approvals">Approvals</SelectItem>
-              <SelectItem value="failed_runs">Failed runs</SelectItem>
-              <SelectItem value="alerts">Alerts</SelectItem>
+              <SelectItem value="everything">{t("ppages_Inbox.all_categories", {defaultValue: "All categories"})}</SelectItem>
+              <SelectItem value="issues_i_touched">{t("ppages_Inbox.my_recent_issues", {defaultValue: "My recent issues"})}</SelectItem>
+              <SelectItem value="join_requests">{t("ppages_Inbox.join_requests", {defaultValue: "Join requests"})}</SelectItem>
+              <SelectItem value="approvals">{t("ppages_Inbox.approvals", {defaultValue: "Approvals"})}</SelectItem>
+              <SelectItem value="failed_runs">{t("ppages_Inbox.failed_runs", {defaultValue: "Failed runs"})}</SelectItem>
+              <SelectItem value="alerts">{t("ppages_Inbox.alerts", {defaultValue: "Alerts"})}</SelectItem>
             </SelectContent>
           </Select>
 
@@ -2222,12 +2223,12 @@ export function Inbox() {
               onValueChange={(value) => updateAllApprovalFilter(value as InboxApprovalFilter)}
             >
               <SelectTrigger className="h-8 w-[170px] text-xs">
-                <SelectValue placeholder="Approval status" />
+                <SelectValue placeholder={t("ppages_Inbox.approval_status", {defaultValue: "Approval status"})} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="all">All approval statuses</SelectItem>
-                <SelectItem value="actionable">Needs action</SelectItem>
-                <SelectItem value="resolved">Resolved</SelectItem>
+                <SelectItem value="all">{t("ppages_Inbox.all_approval_statuses", {defaultValue: "All approval statuses"})}</SelectItem>
+                <SelectItem value="actionable">{t("ppages_Inbox.needs_action", {defaultValue: "Needs action"})}</SelectItem>
+                <SelectItem value="resolved">{t("ppages_Inbox.resolved", {defaultValue: "Resolved"})}</SelectItem>
               </SelectContent>
             </Select>
           )}
@@ -2730,7 +2731,7 @@ export function Inbox() {
                     type="button"
                     onClick={() => dismissAlert("alert:agent-errors")}
                     className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover/alert:opacity-100"
-                    aria-label="Dismiss"
+                    aria-label={t("ppages_Inbox.dismiss", {defaultValue: "Dismiss"})}
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>
@@ -2753,7 +2754,7 @@ export function Inbox() {
                     type="button"
                     onClick={() => dismissAlert("alert:budget")}
                     className="rounded-md p-1 text-muted-foreground opacity-0 transition-opacity hover:bg-accent hover:text-foreground group-hover/alert:opacity-100"
-                    aria-label="Dismiss"
+                    aria-label={t("ppages_Inbox.dismiss", {defaultValue: "Dismiss"})}
                   >
                     <X className="h-3.5 w-3.5" />
                   </button>

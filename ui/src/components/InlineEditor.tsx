@@ -4,6 +4,7 @@ import { MarkdownBody } from "./MarkdownBody";
 import { MarkdownEditor, type MarkdownEditorRef, type MentionOption } from "./MarkdownEditor";
 import { useAutosaveIndicator } from "../hooks/useAutosaveIndicator";
 import { FoldCurtain } from "./FoldCurtain";
+import { useTranslation } from "@/i18n";
 
 interface InlineEditorProps {
   value: string;
@@ -48,7 +49,7 @@ export function InlineEditor({
   onSave,
   as: Tag = "span",
   className,
-  placeholder = "Click to edit...",
+  placeholder=t("pcomponents_InlineEditor.click_to_edit", {defaultValue: "Click to edit..."}),
   multiline = false,
   nullable = false,
   imageUploadHandler,

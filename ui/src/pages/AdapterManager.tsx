@@ -32,6 +32,7 @@ import { cn } from "@/lib/utils";
 import { ChoosePathButton } from "@/components/PathInstructionsModal";
 import { invalidateDynamicParser } from "@/adapters/dynamic-loader";
 import { invalidateConfigSchemaCache } from "@/adapters/schema-config-fields";
+import { useTranslation } from "@/i18n";
 
 function AdapterRow({
   adapter,
@@ -77,8 +78,8 @@ function AdapterRow({
             <Badge variant="outline">{adapter.source === "external" ? "External" : "Built-in"}</Badge>
             {adapter.source === "external" && (
               adapter.isLocalPath
-                ? <span title="Installed from local path"><FolderOpen className="h-4 w-4 text-amber-500" /></span>
-                : <span title="Installed from npm"><Package className="h-4 w-4 text-red-500" /></span>
+                ? <span title={t("ppages_AdapterManager.installed_from_local_path", {defaultValue: "Installed from local path"})}><FolderOpen className="h-4 w-4 text-amber-500" /></span>
+                : <span title={t("ppages_AdapterManager.installed_from_npm", {defaultValue: "Installed from npm"})}><Package className="h-4 w-4 text-red-500" /></span>
             )}
             {adapter.version && (
               <Badge variant="secondary" className="font-mono text-[10px]">
@@ -115,7 +116,7 @@ function AdapterRow({
               variant="outline"
               size="icon-sm"
               className="h-8 w-8"
-              title="Reinstall adapter (pull latest from npm)"
+              title={t("ppages_AdapterManager.reinstall_adapter_pull_latest_from_npm", {defaultValue: "Reinstall adapter (pull latest from npm)"})}
               disabled={isReinstalling}
               onClick={() => onReinstall(adapter.type)}
             >
@@ -127,7 +128,7 @@ function AdapterRow({
               variant="outline"
               size="icon-sm"
               className="h-8 w-8"
-              title="Reload adapter (hot-swap)"
+              title={t("ppages_AdapterManager.reload_adapter_hotswap", {defaultValue: "Reload adapter (hot-swap)"})}
               disabled={isReloading}
               onClick={() => onReload(adapter.type)}
             >
@@ -151,7 +152,7 @@ function AdapterRow({
               variant="outline"
               size="icon-sm"
               className="h-8 w-8 text-destructive hover:text-destructive"
-              title="Remove adapter"
+              title={t("ppages_AdapterManager.remove_adapter", {defaultValue: "Remove adapter"})}
               onClick={() => onRemove(adapter.type)}
             >
               <Trash2 className="h-4 w-4" />
@@ -201,7 +202,7 @@ function ReinstallDialog({
     <Dialog open={open} onOpenChange={(o) => { if (!o) onCancel(); }}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Reinstall Adapter</DialogTitle>
+          <DialogTitle>{t("ppages_AdapterManager.reinstall_adapter", {defaultValue: "Reinstall Adapter"})}</DialogTitle>
           <DialogDescription>
             This will pull the latest version of{" "}
             <strong>{adapter?.packageName}</strong> from npm and hot-swap
@@ -212,17 +213,17 @@ function ReinstallDialog({
 
         <div className="rounded-md border bg-muted/50 px-4 py-3 text-sm space-y-1">
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Package</span>
+            <span className="text-muted-foreground">{t("ppages_AdapterManager.package", {defaultValue: "Package"})}</span>
             <span className="font-mono">{adapter?.packageName}</span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Current</span>
+            <span className="text-muted-foreground">{t("ppages_AdapterManager.current", {defaultValue: "Current"})}</span>
             <span className="font-mono">
               {adapter?.version ? `v${adapter.version}` : "unknown"}
             </span>
           </div>
           <div className="flex items-center justify-between">
-            <span className="text-muted-foreground">Latest on npm</span>
+            <span className="text-muted-foreground">{t("ppages_AdapterManager.latest_on_npm", {defaultValue: "Latest on npm"})}</span>
             <span className="font-mono">
               {isFetchingVersion
                 ? "checking..."
@@ -388,7 +389,7 @@ export function AdapterManager() {
       menuDisabled: !!a.disabled,
     }));
 
-  if (isLoading) return <div className="p-4 text-sm text-muted-foreground">Loading adapters...</div>;
+  if (isLoading) return <div className="p-4 text-sm text-muted-foreground">{t("ppages_AdapterManager.loading_adapters", {defaultValue: "Loading adapters..."})}</div>;
 
   const isMutating = installMutation.isPending || removeMutation.isPending || toggleMutation.isPending || overrideMutation.isPending || reloadMutation.isPending || reinstallMutation.isPending;
 
@@ -398,7 +399,7 @@ export function AdapterManager() {
       <div className="flex items-center justify-between">
         <div className="flex items-center gap-2">
           <Cpu className="h-6 w-6 text-muted-foreground" />
-          <h1 className="text-xl font-semibold">Adapters</h1>
+          <h1 className="text-xl font-semibold">{t("ppages_AdapterManager.adapters", {defaultValue: "Adapters"})}</h1>
           <Badge variant="outline" className="text-amber-600 border-amber-400">
             Alpha
           </Badge>
@@ -413,7 +414,7 @@ export function AdapterManager() {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle>Install External Adapter</DialogTitle>
+              <DialogTitle>{t("ppages_AdapterManager.install_external_adapter", {defaultValue: "Install External Adapter"})}</DialogTitle>
               <DialogDescription>
                 Add an adapter from npm or a local path. The adapter package must export <code className="text-xs bg-muted px-1 py-0.5 rounded">createServerAdapter()</code>.
               </DialogDescription>
@@ -452,12 +453,12 @@ export function AdapterManager() {
               {isLocalPath ? (
                 /* Local path input */
                 <div className="grid gap-2">
-                  <Label htmlFor="adapterLocalPath">Path to adapter package</Label>
+                  <Label htmlFor="adapterLocalPath">{t("ppages_AdapterManager.path_to_adapter_package", {defaultValue: "Path to adapter package"})}</Label>
                   <div className="flex gap-2">
                     <Input
                       id="adapterLocalPath"
                       className="flex-1 font-mono text-xs"
-                      placeholder="/mnt/e/Projects/my-adapter  or  E:\Projects\my-adapter"
+                      placeholder={t("ppages_AdapterManager.mnteprojectsmyadapter_or_eprojectsmyadapter", {defaultValue: "/mnt/e/Projects/my-adapter  or  E:\\Projects\\my-adapter"})}
                       value={installPackage}
                       onChange={(e) => setInstallPackage(e.target.value)}
                     />
@@ -471,7 +472,7 @@ export function AdapterManager() {
                 /* npm package input */
                 <>
                   <div className="grid gap-2">
-                    <Label htmlFor="adapterPackageName">Package Name</Label>
+                    <Label htmlFor="adapterPackageName">{t("ppages_AdapterManager.package_name", {defaultValue: "Package Name"})}</Label>
                     <Input
                       id="adapterPackageName"
                       placeholder="my-paperclip-adapter"
@@ -480,7 +481,7 @@ export function AdapterManager() {
                     />
                   </div>
                   <div className="grid gap-2">
-                    <Label htmlFor="adapterVersion">Version (optional)</Label>
+                    <Label htmlFor="adapterVersion">{t("ppages_AdapterManager.version_optional", {defaultValue: "Version (optional)"})}</Label>
                     <Input
                       id="adapterVersion"
                       placeholder="latest"
@@ -492,7 +493,7 @@ export function AdapterManager() {
               )}
             </div>
             <DialogFooter>
-              <Button variant="outline" onClick={() => setInstallDialogOpen(false)}>Cancel</Button>
+              <Button variant="outline" onClick={() => setInstallDialogOpen(false)}>{t("ppages_AdapterManager.cancel", {defaultValue: "Cancel"})}</Button>
               <Button
                 onClick={() =>
                   installMutation.mutate({
@@ -515,7 +516,7 @@ export function AdapterManager() {
         <div className="flex items-start gap-3">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0 text-amber-700" />
           <div className="space-y-1 text-sm">
-            <p className="font-medium text-foreground">External adapters are alpha.</p>
+            <p className="font-medium text-foreground">{t("ppages_AdapterManager.external_adapters_are_alpha", {defaultValue: "External adapters are alpha."})}</p>
             <p className="text-muted-foreground">
               The adapter plugin system is under active development. APIs and storage format may change.
               Use the power icon to hide adapters from agent menus without removing them.
@@ -528,14 +529,14 @@ export function AdapterManager() {
       <section className="space-y-3">
         <div className="flex items-center gap-2">
           <Cpu className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-base font-semibold">External Adapters</h2>
+          <h2 className="text-base font-semibold">{t("ppages_AdapterManager.external_adapters", {defaultValue: "External Adapters"})}</h2>
         </div>
 
         {externalAdapters.length === 0 ? (
           <Card className="bg-muted/30">
             <CardContent className="flex flex-col items-center justify-center py-10">
               <Cpu className="h-10 w-10 text-muted-foreground mb-4" />
-              <p className="text-sm font-medium">No external adapters installed</p>
+              <p className="text-sm font-medium">{t("ppages_AdapterManager.no_external_adapters_installed", {defaultValue: "No external adapters installed"})}</p>
               <p className="text-xs text-muted-foreground mt-1">
                 Install an adapter package to extend model support.
               </p>
@@ -583,11 +584,11 @@ export function AdapterManager() {
       <section className="space-y-3">
         <div className="flex items-center gap-2">
           <Cpu className="h-5 w-5 text-muted-foreground" />
-          <h2 className="text-base font-semibold">Built-in Adapters</h2>
+          <h2 className="text-base font-semibold">{t("ppages_AdapterManager.builtin_adapters", {defaultValue: "Built-in Adapters"})}</h2>
         </div>
 
         {builtinAdapters.length === 0 && overriddenBuiltins.length === 0 ? (
-          <div className="text-sm text-muted-foreground">No built-in adapters found.</div>
+          <div className="text-sm text-muted-foreground">{t("ppages_AdapterManager.no_builtin_adapters_found", {defaultValue: "No built-in adapters found."})}</div>
         ) : (
           <ul className="divide-y rounded-md border bg-card">
             {builtinAdapters.map((adapter) => (
@@ -636,7 +637,7 @@ export function AdapterManager() {
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Remove Adapter</DialogTitle>
+            <DialogTitle>{t("ppages_AdapterManager.remove_adapter", {defaultValue: "Remove Adapter"})}</DialogTitle>
             <DialogDescription>
               Are you sure you want to remove the <strong>{removeType}</strong> adapter?
               It will be unregistered and removed from the adapter store.
@@ -647,7 +648,7 @@ export function AdapterManager() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter>
-            <Button variant="outline" onClick={() => setRemoveType(null)}>Cancel</Button>
+            <Button variant="outline" onClick={() => setRemoveType(null)}>{t("ppages_AdapterManager.cancel", {defaultValue: "Cancel"})}</Button>
             <Button
               variant="destructive"
               disabled={removeMutation.isPending}

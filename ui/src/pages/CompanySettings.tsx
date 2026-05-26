@@ -13,6 +13,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { Button } from "@/components/ui/button";
 import { Settings, CloudUpload, Download, Upload } from "lucide-react";
 import { CompanyPatternIcon } from "../components/CompanyPatternIcon";
+import { useTranslation } from "@/i18n";
 import {
   Field,
   ToggleField,
@@ -173,7 +174,7 @@ export function CompanySettings() {
     <div className="max-w-2xl space-y-6">
       <div className="flex items-center gap-2">
         <Settings className="h-5 w-5 text-muted-foreground" />
-        <h1 className="text-lg font-semibold">Company Settings</h1>
+        <h1 className="text-lg font-semibold">{t("ppages_CompanySettings.company_settings", {defaultValue: "Company Settings"})}</h1>
       </div>
 
       {/* General */}
@@ -182,7 +183,7 @@ export function CompanySettings() {
           General
         </div>
         <div className="space-y-3 rounded-md border border-border px-4 py-4">
-          <Field label="Company name" hint="The display name for your company.">
+          <Field label={t("ppages_CompanySettings.company_name", {defaultValue: "Company name"})} hint="The display name for your company.">
             <input
               className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
               type="text"
@@ -191,14 +192,14 @@ export function CompanySettings() {
             />
           </Field>
           <Field
-            label="Description"
+            label={t("ppages_CompanySettings.description", {defaultValue: "Description"})}
             hint="Optional description shown in the company profile."
           >
             <input
               className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
               type="text"
               value={description}
-              placeholder="Optional company description"
+              placeholder={t("ppages_CompanySettings.optional_company_description", {defaultValue: "Optional company description"})}
               onChange={(e) => setDescription(e.target.value)}
             />
           </Field>
@@ -222,7 +223,7 @@ export function CompanySettings() {
             </div>
             <div className="flex-1 space-y-3">
               <Field
-                label="Logo"
+                label={t("ppages_CompanySettings.logo", {defaultValue: "Logo"})}
                 hint="Upload a PNG, JPEG, WEBP, GIF, or SVG logo image."
               >
                 <div className="space-y-2">
@@ -258,12 +259,12 @@ export function CompanySettings() {
                     </span>
                   )}
                   {logoUploadMutation.isPending && (
-                    <span className="text-xs text-muted-foreground">Uploading logo...</span>
+                    <span className="text-xs text-muted-foreground">{t("ppages_CompanySettings.uploading_logo", {defaultValue: "Uploading logo..."})}</span>
                   )}
                 </div>
               </Field>
               <Field
-                label="Brand color"
+                label={t("ppages_CompanySettings.brand_color", {defaultValue: "Brand color"})}
                 hint="Sets the hue for the company icon. Leave empty for auto-generated color."
               >
                 <div className="flex items-center gap-2">
@@ -282,7 +283,7 @@ export function CompanySettings() {
                         setBrandColor(v);
                       }
                     }}
-                    placeholder="Auto"
+                    placeholder={t("ppages_CompanySettings.auto", {defaultValue: "Auto"})}
                     className="w-28 rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm font-mono outline-none"
                   />
                   {brandColor && (
@@ -298,7 +299,7 @@ export function CompanySettings() {
                 </div>
               </Field>
               <Field
-                label="Attachment size limit"
+                label={t("ppages_CompanySettings.attachment_size_limit", {defaultValue: "Attachment size limit"})}
                 hint={`Accepted range: 1-${MAX_COMPANY_ATTACHMENT_MAX_MIB} MiB.`}
               >
                 <div className="flex flex-col gap-1.5">
@@ -312,7 +313,7 @@ export function CompanySettings() {
                       onChange={(e) => setAttachmentMaxMiB(e.target.value)}
                       className="w-28 rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
                     />
-                    <span className="text-xs text-muted-foreground">MiB</span>
+                    <span className="text-xs text-muted-foreground">{t("ppages_CompanySettings.mib", {defaultValue: "MiB"})}</span>
                   </div>
                   {!attachmentMaxValid && (
                     <span className="text-xs text-destructive">
@@ -337,7 +338,7 @@ export function CompanySettings() {
             {generalMutation.isPending ? "Saving..." : "Save changes"}
           </Button>
           {generalMutation.isSuccess && (
-            <span className="text-xs text-muted-foreground">Saved</span>
+            <span className="text-xs text-muted-foreground">{t("ppages_CompanySettings.saved", {defaultValue: "Saved"})}</span>
           )}
           {generalMutation.isError && (
             <span className="text-xs text-destructive">
@@ -356,7 +357,7 @@ export function CompanySettings() {
         </div>
         <div className="rounded-md border border-border px-4 py-3">
           <ToggleField
-            label="Require board approval for new hires"
+            label={t("ppages_CompanySettings.require_board_approval_for_new_hires", {defaultValue: "Require board approval for new hires"})}
             hint="New agent hires stay pending until approved by board."
             checked={!!selectedCompany.requireBoardApprovalForNewAgents}
             onChange={(v) => settingsMutation.mutate(v)}
@@ -373,7 +374,7 @@ export function CompanySettings() {
         <div className="rounded-md border border-border px-4 py-4">
           <p className="text-sm text-muted-foreground">
             Import and export have moved to dedicated pages accessible from the{" "}
-            <a href="/org" className="underline hover:text-foreground">Org Chart</a> header.
+            <a href="/org" className="underline hover:text-foreground">{t("ppages_CompanySettings.org_chart", {defaultValue: "Org Chart"})}</a> header.
           </p>
           <div className="mt-3 flex flex-wrap items-center gap-2">
             {cloudSyncEnabled ? (

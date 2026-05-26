@@ -7,6 +7,7 @@ import {
 } from "../../components/agent-config-primitives";
 import { ChoosePathButton } from "../../components/PathInstructionsModal";
 import { LocalWorkspaceRuntimeFields } from "../local-workspace-runtime-fields";
+import { useTranslation } from "@/i18n";
 import {
   CODEX_LOCAL_FAST_MODE_SUPPORTED_MODELS,
   isCodexLocalFastModeSupported,
@@ -50,7 +51,7 @@ export function CodexLocalConfigFields({
   return (
     <>
       {!hideInstructionsFile && (
-        <Field label="Agent instructions file" hint={instructionsFileHint}>
+        <Field label={t("padapters/codex-local_config-fields.agent_instructions_file", {defaultValue: "Agent instructions file"})} hint={instructionsFileHint}>
           <div className="flex items-center gap-2">
             <DraftInput
               value={
@@ -69,14 +70,14 @@ export function CodexLocalConfigFields({
               }
               immediate
               className={inputClass}
-              placeholder="/absolute/path/to/AGENTS.md"
+              placeholder={t("padapters/codex-local_config-fields.absolutepathtoagentsmd", {defaultValue: "/absolute/path/to/AGENTS.md"})}
             />
             <ChoosePathButton />
           </div>
         </Field>
       )}
       <ToggleField
-        label="Bypass sandbox"
+        label={t("padapters/codex-local_config-fields.bypass_sandbox", {defaultValue: "Bypass sandbox"})}
         hint={help.dangerouslyBypassSandbox}
         checked={
           isCreate
@@ -94,7 +95,7 @@ export function CodexLocalConfigFields({
         }
       />
       <ToggleField
-        label="Enable search"
+        label={t("padapters/codex-local_config-fields.enable_search", {defaultValue: "Enable search"})}
         hint={help.search}
         checked={
           isCreate
@@ -108,7 +109,7 @@ export function CodexLocalConfigFields({
         }
       />
       <ToggleField
-        label="Fast mode"
+        label={t("padapters/codex-local_config-fields.fast_mode", {defaultValue: "Fast mode"})}
         hint={help.fastMode}
         checked={fastModeEnabled}
         onChange={(v) =>

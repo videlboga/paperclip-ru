@@ -137,6 +137,7 @@ import { AlertTriangle, ArrowRight, Brain, Check, ChevronDown, ClipboardList, Co
 import { IssueBlockedNotice } from "./IssueBlockedNotice";
 import { IssueAssignedBacklogNotice } from "./IssueAssignedBacklogNotice";
 import { IssueRecoveryActionCard, type RecoveryResolveOutcome } from "./IssueRecoveryActionCard";
+import { useTranslation } from "@/i18n";
 
 interface IssueChatMessageContext {
   feedbackDataSharingPreference: FeedbackDataSharingPreference;
@@ -495,7 +496,7 @@ function IssueChatFallbackThread({
         <div className="flex items-start gap-2">
           <AlertTriangle className="mt-0.5 h-4 w-4 shrink-0" />
           <div className="space-y-1">
-            <p className="font-medium">Chat renderer hit an internal state error.</p>
+            <p className="font-medium">{t("pcomponents_IssueChatThread.chat_renderer_hit_an_internal_state_error", {defaultValue: "Chat renderer hit an internal state error."})}</p>
             <p className="text-xs opacity-80">
               Showing a safe fallback transcript instead of crashing the issues page.
             </p>
@@ -530,7 +531,7 @@ function IssueChatFallbackThread({
                   {lines.length > 0 ? lines.map((line, index) => (
                     <MarkdownBody key={`${message.id}:fallback:${index}`}>{line}</MarkdownBody>
                   )) : (
-                    <p className="text-sm text-muted-foreground">No message content.</p>
+                    <p className="text-sm text-muted-foreground">{t("pcomponents_IssueChatThread.no_message_content", {defaultValue: "No message content."})}</p>
                   )}
                 </div>
               </div>
@@ -1039,8 +1040,8 @@ function CopyablePreBlock({ children, className }: { children: string; className
           "absolute right-1.5 top-1.5 inline-flex h-6 w-6 items-center justify-center rounded-md bg-background/80 text-muted-foreground opacity-0 backdrop-blur-sm transition-opacity hover:text-foreground group-hover/pre:opacity-100",
           copied && "opacity-100",
         )}
-        title="Copy"
-        aria-label="Copy"
+        title={t("pcomponents_IssueChatThread.copy", {defaultValue: "Copy"})}
+        aria-label={t("pcomponents_IssueChatThread.copy", {defaultValue: "Copy"})}
         onClick={() => {
           void navigator.clipboard.writeText(children).then(() => {
             setCopied(true);
@@ -1381,8 +1382,8 @@ function IssueChatUserMessage({
           <button
             type="button"
             className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-            title="Copy message"
-            aria-label="Copy message"
+            title={t("pcomponents_IssueChatThread.copy_message", {defaultValue: "Copy message"})}
+            aria-label={t("pcomponents_IssueChatThread.copy_message", {defaultValue: "Copy message"})}
             onClick={() => {
               const text = message.content
                 .filter((p): p is { type: "text"; text: string } => p.type === "text")
@@ -1577,8 +1578,8 @@ function IssueChatAssistantMessage({
                 <button
                   type="button"
                   className="inline-flex h-7 w-7 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
-                  title="Copy message"
-                  aria-label="Copy message"
+                  title={t("pcomponents_IssueChatThread.copy_message", {defaultValue: "Copy message"})}
+                  aria-label={t("pcomponents_IssueChatThread.copy_message", {defaultValue: "Copy message"})}
                   onClick={() => {
                     void navigator.clipboard.writeText(copyText).then(() => {
                       setCopied(true);
@@ -1615,8 +1616,8 @@ function IssueChatAssistantMessage({
                       variant="ghost"
                       size="icon-xs"
                       className="text-muted-foreground hover:text-foreground"
-                      title="More actions"
-                      aria-label="More actions"
+                      title={t("pcomponents_IssueChatThread.more_actions", {defaultValue: "More actions"})}
+                      aria-label={t("pcomponents_IssueChatThread.more_actions", {defaultValue: "More actions"})}
                     >
                       <MoreHorizontal className="h-3.5 w-3.5" />
                     </Button>
@@ -1759,8 +1760,8 @@ function IssueChatFeedbackButtons({
             ? "text-green-600 dark:text-green-400"
             : "text-muted-foreground hover:bg-accent hover:text-foreground",
         )}
-        title="Helpful"
-        aria-label="Helpful"
+        title={t("pcomponents_IssueChatThread.helpful", {defaultValue: "Helpful"})}
+        aria-label={t("pcomponents_IssueChatThread.helpful", {defaultValue: "Helpful"})}
         onClick={handleThumbsUp}
       >
         <ThumbsUp className="h-3.5 w-3.5" />
@@ -1776,19 +1777,19 @@ function IssueChatFeedbackButtons({
                 ? "text-amber-600 dark:text-amber-400"
                 : "text-muted-foreground hover:bg-accent hover:text-foreground",
             )}
-            title="Needs work"
-            aria-label="Needs work"
+            title={t("pcomponents_IssueChatThread.needs_work", {defaultValue: "Needs work"})}
+            aria-label={t("pcomponents_IssueChatThread.needs_work", {defaultValue: "Needs work"})}
             onClick={handleThumbsDown}
           >
             <ThumbsDown className="h-3.5 w-3.5" />
           </button>
         </PopoverTrigger>
         <PopoverContent side="top" align="start" className="w-80 p-3">
-          <div className="mb-2 text-sm font-medium">What could have been better?</div>
+          <div className="mb-2 text-sm font-medium">{t("pcomponents_IssueChatThread.what_could_have_been_better", {defaultValue: "What could have been better?"})}</div>
           <Textarea
             value={downvoteReason}
             onChange={(event) => setDownvoteReason(event.target.value)}
-            placeholder="Add a short note"
+            placeholder={t("pcomponents_IssueChatThread.add_a_short_note", {defaultValue: "Add a short note"})}
             className="min-h-20 resize-y bg-background text-sm"
             disabled={isSaving}
           />
@@ -1828,21 +1829,21 @@ function IssueChatFeedbackButtons({
       >
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Save your feedback sharing preference</DialogTitle>
+            <DialogTitle>{t("pcomponents_IssueChatThread.save_your_feedback_sharing_preference", {defaultValue: "Save your feedback sharing preference"})}</DialogTitle>
             <DialogDescription>
               Choose whether voted AI outputs can be shared with Paperclip Labs. This
               answer becomes the default for future thumbs up and thumbs down votes.
             </DialogDescription>
           </DialogHeader>
           <div className="space-y-3 text-sm text-muted-foreground">
-            <p>This vote is always saved locally.</p>
+            <p>{t("pcomponents_IssueChatThread.this_vote_is_always_saved_locally", {defaultValue: "This vote is always saved locally."})}</p>
             <p>
-              Choose <span className="font-medium text-foreground">Always allow</span> to share
+              Choose <span className="font-medium text-foreground">{t("pcomponents_IssueChatThread.always_allow", {defaultValue: "Always allow"})}</span> to share
               this vote and future voted AI outputs. Choose{" "}
-              <span className="font-medium text-foreground">Don't allow</span> to keep this vote
+              <span className="font-medium text-foreground">{t("pcomponents_IssueChatThread.dont_allow", {defaultValue: "Don't allow"})}</span> to keep this vote
               and future votes local.
             </p>
-            <p>You can change this later in Instance Settings &gt; General.</p>
+            <p>{t("pcomponents_IssueChatThread.you_can_change_this_later_in_instance_settings_gt", {defaultValue: "You can change this later in Instance Settings &gt; General."})}</p>
             {termsUrl ? (
               <a
                 href={termsUrl}
@@ -2153,7 +2154,7 @@ function StaleDispositionWarningDetails({
   sections: SystemNoticeMetadataSection[];
 }) {
   if (sections.length === 0) {
-    return <div className="text-xs leading-5 text-muted-foreground">No additional details.</div>;
+    return <div className="text-xs leading-5 text-muted-foreground">{t("pcomponents_IssueChatThread.no_additional_details", {defaultValue: "No additional details."})}</div>;
   }
 
   return (
@@ -2329,8 +2330,8 @@ function SystemNoticeCommentRow({
             <button
               type="button"
               className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-              title="Copy link"
-              aria-label="Copy link to system notice"
+              title={t("pcomponents_IssueChatThread.copy_link", {defaultValue: "Copy link"})}
+              aria-label={t("pcomponents_IssueChatThread.copy_link_to_system_notice", {defaultValue: "Copy link to system notice"})}
               onClick={handleCopyLink}
             >
               {copiedLink ? <Check className="h-3.5 w-3.5" /> : <Paperclip className="h-3.5 w-3.5" />}
@@ -2339,8 +2340,8 @@ function SystemNoticeCommentRow({
           <button
             type="button"
             className="inline-flex h-6 w-6 items-center justify-center text-muted-foreground transition-colors hover:text-foreground"
-            title="Copy notice text"
-            aria-label="Copy system notice"
+            title={t("pcomponents_IssueChatThread.copy_notice_text", {defaultValue: "Copy notice text"})}
+            aria-label={t("pcomponents_IssueChatThread.copy_system_notice", {defaultValue: "Copy system notice"})}
             onClick={handleCopy}
           >
             {copied ? <Check className="h-3.5 w-3.5" /> : <Copy className="h-3.5 w-3.5" />}
@@ -3417,7 +3418,7 @@ const IssueChatComposer = forwardRef<IssueChatComposerHandle, IssueChatComposerP
               <Paperclip className="h-4 w-4" />
             </span>
             <div className="min-w-0">
-              <div className="text-sm font-medium text-foreground">Drop to upload</div>
+              <div className="text-sm font-medium text-foreground">{t("pcomponents_IssueChatThread.drop_to_upload", {defaultValue: "Drop to upload"})}</div>
               <div className="mt-0.5 text-xs leading-5 text-muted-foreground">
                 Images insert into the reply. Other files are added to this issue.
               </div>
@@ -3430,7 +3431,7 @@ const IssueChatComposer = forwardRef<IssueChatComposerHandle, IssueChatComposerP
         ref={editorRef}
         value={body}
         onChange={setBody}
-        placeholder="Reply"
+        placeholder={t("pcomponents_IssueChatThread.reply", {defaultValue: "Reply"})}
         mentions={mentions}
         onSubmit={handleSubmit}
         imageUploadHandler={onImageUpload}
@@ -3505,7 +3506,7 @@ const IssueChatComposer = forwardRef<IssueChatComposerHandle, IssueChatComposerP
                 size="icon-sm"
                 onClick={() => attachInputRef.current?.click()}
                 disabled={attaching}
-                title="Attach file"
+                title={t("pcomponents_IssueChatThread.attach_file", {defaultValue: "Attach file"})}
               >
                 <Paperclip className="h-4 w-4" />
               </Button>
@@ -3518,7 +3519,7 @@ const IssueChatComposer = forwardRef<IssueChatComposerHandle, IssueChatComposerP
                   variant="ghost"
                   size="icon-sm"
                   data-testid="issue-chat-composer-work-mode-menu"
-                  title="More composer options"
+                  title={t("pcomponents_IssueChatThread.more_composer_options", {defaultValue: "More composer options"})}
                 >
                   <MoreHorizontal className="h-4 w-4" />
                 </Button>
@@ -3553,12 +3554,12 @@ const IssueChatComposer = forwardRef<IssueChatComposerHandle, IssueChatComposerP
               data-testid="issue-chat-composer-work-mode-toggle"
               data-pending-work-mode={pendingWorkMode}
               aria-pressed
-              title="Planning mode is on for this submission. Click to switch to Standard."
+              title={t("pcomponents_IssueChatThread.planning_mode_is_on_for_this_submission_click_to_s", {defaultValue: "Planning mode is on for this submission. Click to switch to Standard."})}
               onClick={() => setPendingWorkMode("standard")}
               className="inline-flex items-center gap-1.5 rounded-md border border-amber-500/60 bg-amber-500/15 px-2 py-1 text-xs text-amber-800 transition-colors hover:bg-amber-500/25 dark:border-amber-500/50 dark:bg-amber-500/15 dark:text-amber-200 dark:hover:bg-amber-500/25"
             >
               <ClipboardList className="h-3.5 w-3.5" aria-hidden />
-              <span>Planning</span>
+              <span>{t("pcomponents_IssueChatThread.planning", {defaultValue: "Planning"})}</span>
             </button>
           ) : null}
         </div>
@@ -3567,14 +3568,14 @@ const IssueChatComposer = forwardRef<IssueChatComposerHandle, IssueChatComposerP
           <InlineEntitySelector
             value={reassignTarget}
             options={reassignOptions}
-            placeholder="Assignee"
+            placeholder={t("pcomponents_IssueChatThread.assignee", {defaultValue: "Assignee"})}
             noneLabel="No assignee"
             searchPlaceholder="Search assignees..."
             emptyMessage="No assignees found."
             onChange={setReassignTarget}
             className="h-8 text-xs"
             renderTriggerValue={(option) => {
-              if (!option) return <span className="text-muted-foreground">Assignee</span>;
+              if (!option) return <span className="text-muted-foreground">{t("pcomponents_IssueChatThread.assignee", {defaultValue: "Assignee"})}</span>;
               const agentId = option.id.startsWith("agent:") ? option.id.slice("agent:".length) : null;
               const agent = agentId ? agentMap?.get(agentId) : null;
               return (
@@ -4276,7 +4277,7 @@ export function IssueChatThread({
                   {legacyRecoverySourceIssue ? (
                     <SystemNotice
                       tone="info"
-                      label="Legacy recovery issue"
+                      label={t("pcomponents_IssueChatThread.legacy_recovery_issue", {defaultValue: "Legacy recovery issue"})}
                       body={
                         <span>
                           Legacy recovery issue. Newer recovery actions live on the source issue

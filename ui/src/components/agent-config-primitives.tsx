@@ -63,6 +63,7 @@ export const help: Record<string, string> = {
 };
 
 import { getAdapterLabels } from "../adapters/adapter-display-registry";
+import { useTranslation } from "@/i18n";
 
 export const adapterLabels = getAdapterLabels();
 
@@ -399,7 +400,7 @@ export function ChoosePathButton() {
       <Dialog open={open} onOpenChange={setOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Specify path manually</DialogTitle>
+            <DialogTitle>{t("pcomponents_agent-config-primitives.specify_path_manually", {defaultValue: "Specify path manually"})}</DialogTitle>
             <DialogDescription>
               Browser security blocks apps from reading full local paths via a file picker.
               Copy the absolute path and paste it into the input.
@@ -409,33 +410,33 @@ export function ChoosePathButton() {
             <section className="space-y-1.5">
               <p className="font-medium">macOS (Finder)</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
-                <li>Find the folder in Finder.</li>
-                <li>Hold <kbd>Option</kbd> and right-click the folder.</li>
-                <li>Click "Copy &lt;folder name&gt; as Pathname".</li>
-                <li>Paste the result into the path input.</li>
+                <li>{t("pcomponents_agent-config-primitives.find_the_folder_in_finder", {defaultValue: "Find the folder in Finder."})}</li>
+                <li>Hold <kbd>{t("pcomponents_agent-config-primitives.option", {defaultValue: "Option"})}</kbd> and right-click the folder.</li>
+                <li>{t("pcomponents_agent-config-primitives.click_copy_ltfolder_namegt_as_pathname", {defaultValue: "Click \"Copy &lt;folder name&gt; as Pathname\"."})}</li>
+                <li>{t("pcomponents_agent-config-primitives.paste_the_result_into_the_path_input", {defaultValue: "Paste the result into the path input."})}</li>
               </ol>
               <p className="rounded-md bg-muted px-2 py-1 font-mono text-xs">
                 /Users/yourname/Documents/project
               </p>
             </section>
             <section className="space-y-1.5">
-              <p className="font-medium">Windows (File Explorer)</p>
+              <p className="font-medium">{t("pcomponents_agent-config-primitives.windows_file_explorer", {defaultValue: "Windows (File Explorer)"})}</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
-                <li>Find the folder in File Explorer.</li>
-                <li>Hold <kbd>Shift</kbd> and right-click the folder.</li>
-                <li>Click "Copy as path".</li>
-                <li>Paste the result into the path input.</li>
+                <li>{t("pcomponents_agent-config-primitives.find_the_folder_in_file_explorer", {defaultValue: "Find the folder in File Explorer."})}</li>
+                <li>Hold <kbd>{t("pcomponents_agent-config-primitives.shift", {defaultValue: "Shift"})}</kbd> and right-click the folder.</li>
+                <li>{t("pcomponents_agent-config-primitives.click_copy_as_path", {defaultValue: "Click \"Copy as path\"."})}</li>
+                <li>{t("pcomponents_agent-config-primitives.paste_the_result_into_the_path_input", {defaultValue: "Paste the result into the path input."})}</li>
               </ol>
               <p className="rounded-md bg-muted px-2 py-1 font-mono text-xs">
                 C:\Users\yourname\Documents\project
               </p>
             </section>
             <section className="space-y-1.5">
-              <p className="font-medium">Terminal fallback (macOS/Linux)</p>
+              <p className="font-medium">{t("pcomponents_agent-config-primitives.terminal_fallback_macoslinux", {defaultValue: "Terminal fallback (macOS/Linux)"})}</p>
               <ol className="list-decimal space-y-1 pl-5 text-muted-foreground">
                 <li>Run <code>cd /path/to/folder</code>.</li>
                 <li>Run <code>pwd</code>.</li>
-                <li>Copy the output and paste it into the path input.</li>
+                <li>{t("pcomponents_agent-config-primitives.copy_the_output_and_paste_it_into_the_path_input", {defaultValue: "Copy the output and paste it into the path input."})}</li>
               </ol>
             </section>
           </div>

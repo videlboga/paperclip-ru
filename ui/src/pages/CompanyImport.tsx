@@ -47,6 +47,7 @@ import {
 } from "../components/FileTree";
 import { readZipArchive } from "../lib/zip";
 import { getPortableFileDataUrl, getPortableFileText, isPortableImageFile } from "../lib/portable-files";
+import { useTranslation } from "@/i18n";
 
 // ── Import-specific helpers ───────────────────────────────────────────
 
@@ -549,7 +550,7 @@ function AdapterPickerList({
     <div className="mx-5 mt-3">
       <div className="rounded-md border border-border">
         <div className="flex items-center gap-2 border-b border-border px-4 py-2.5">
-          <h3 className="text-sm font-medium">Adapters</h3>
+          <h3 className="text-sm font-medium">{t("ppages_CompanyImport.adapters", {defaultValue: "Adapters"})}</h3>
           <span className="text-xs text-muted-foreground">
             {agents.length} agent{agents.length === 1 ? "" : "s"}
           </span>
@@ -1094,7 +1095,7 @@ export function CompanyImport() {
       {/* Source form section */}
       <div className="border-b border-border px-5 py-5 space-y-4">
         <div>
-          <h2 className="text-base font-semibold">Import source</h2>
+          <h2 className="text-base font-semibold">{t("ppages_CompanyImport.import_source", {defaultValue: "Import source"})}</h2>
           <p className="text-xs text-muted-foreground mt-1">
             Choose a GitHub repo or upload a local Paperclip zip package.
           </p>
@@ -1162,14 +1163,14 @@ export function CompanyImport() {
           </div>
         ) : (
           <Field
-            label="GitHub URL"
+            label={t("ppages_CompanyImport.github_url", {defaultValue: "GitHub URL"})}
             hint="Repo tree path or blob URL to COMPANY.md (e.g. github.com/owner/repo/tree/main/company)."
           >
             <input
               className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
               type="text"
               value={importUrl}
-              placeholder="https://github.com/owner/repo/tree/main/company"
+              placeholder={t("ppages_CompanyImport.httpsgithubcomownerrepotreemaincompany", {defaultValue: "https://github.com/owner/repo/tree/main/company"})}
               onChange={(e) => {
                 setImportUrl(e.target.value);
                 setImportPreview(null);
@@ -1178,7 +1179,7 @@ export function CompanyImport() {
           </Field>
         )}
 
-        <Field label="Target" hint="Import into this company or create a new one.">
+        <Field label={t("ppages_CompanyImport.target", {defaultValue: "Target"})} hint="Import into this company or create a new one.">
           <select
             className="w-full rounded-md border border-border bg-transparent px-2.5 py-1.5 text-sm outline-none"
             value={targetMode}
@@ -1187,7 +1188,7 @@ export function CompanyImport() {
               setImportPreview(null);
             }}
           >
-            <option value="new">Create new company</option>
+            <option value="new">{t("ppages_CompanyImport.create_new_company", {defaultValue: "Create new company"})}</option>
             <option value="existing">
               Existing company: {selectedCompany?.name}
             </option>
@@ -1196,7 +1197,7 @@ export function CompanyImport() {
 
         {targetMode === "new" && (
           <Field
-            label="New company name"
+            label={t("ppages_CompanyImport.new_company_name", {defaultValue: "New company name"})}
             hint="Optional override. Leave blank to use the package name."
           >
             <input
@@ -1204,13 +1205,13 @@ export function CompanyImport() {
               type="text"
               value={newCompanyName}
               onChange={(e) => setNewCompanyName(e.target.value)}
-              placeholder="Imported Company"
+              placeholder={t("ppages_CompanyImport.imported_company", {defaultValue: "Imported Company"})}
             />
           </Field>
         )}
 
         <Field
-          label="Collision strategy"
+          label={t("ppages_CompanyImport.collision_strategy", {defaultValue: "Collision strategy"})}
           hint="Board imports can rename, skip, or replace matching company content."
         >
           <select
@@ -1221,9 +1222,9 @@ export function CompanyImport() {
               setImportPreview(null);
             }}
           >
-            <option value="rename">Rename on conflict</option>
-            <option value="skip">Skip on conflict</option>
-            <option value="replace">Replace existing</option>
+            <option value="rename">{t("ppages_CompanyImport.rename_on_conflict", {defaultValue: "Rename on conflict"})}</option>
+            <option value="skip">{t("ppages_CompanyImport.skip_on_conflict", {defaultValue: "Skip on conflict"})}</option>
+            <option value="replace">{t("ppages_CompanyImport.replace_existing", {defaultValue: "Replace existing"})}</option>
           </select>
         </Field>
 
@@ -1322,7 +1323,7 @@ export function CompanyImport() {
           <div className="grid gap-4 xl:h-[calc(100vh-16rem)] xl:grid-cols-[19rem_minmax(0,1fr)] xl:gap-0">
             <aside className="flex max-h-[24rem] flex-col overflow-hidden border-b border-border xl:max-h-none xl:border-b-0 xl:border-r">
               <div className="border-b border-border px-4 py-3 shrink-0">
-                <h2 className="text-base font-semibold">Package files</h2>
+                <h2 className="text-base font-semibold">{t("ppages_CompanyImport.package_files", {defaultValue: "Package files"})}</h2>
               </div>
               <div className="flex-1 overflow-y-auto">
                 <FileTree

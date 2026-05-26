@@ -35,6 +35,7 @@ import { Label } from "@/components/ui/label";
 import { Skeleton } from "@/components/ui/skeleton";
 import { EmptyState } from "./EmptyState";
 import { MarkdownBody } from "./MarkdownBody";
+import { useTranslation } from "@/i18n";
 
 type AgentLookup = Map<string, { id: string; name: string }>;
 type ProjectLookup = Map<string, { id: string; name: string }>;
@@ -199,7 +200,7 @@ export function RoutineHistoryTab({
     return (
       <div className="rounded-md border border-l-2 border-l-destructive border-border p-4 space-y-3">
         <div>
-          <p className="text-sm font-medium">Could not load revisions</p>
+          <p className="text-sm font-medium">{t("pcomponents_RoutineHistoryTab.could_not_load_revisions", {defaultValue: "Could not load revisions"})}</p>
           <p className="text-xs text-muted-foreground">
             {revisionsQuery.error instanceof Error
               ? revisionsQuery.error.message
@@ -374,7 +375,7 @@ function ConflictBanner({
     <div className="rounded-md border border-amber-500/30 bg-amber-500/5 px-4 py-3">
       <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
         <div className="space-y-1">
-          <p className="text-sm font-medium text-amber-200">Unsaved routine edits</p>
+          <p className="text-sm font-medium text-amber-200">{t("pcomponents_RoutineHistoryTab.unsaved_routine_edits", {defaultValue: "Unsaved routine edits"})}</p>
           <p className="text-xs text-muted-foreground">
             You changed {fieldsText} but haven&apos;t saved yet. Save or discard before previewing or
             restoring an older revision.
@@ -629,7 +630,7 @@ function RevisionPreview({
           {snapshot.description ? (
             <MarkdownBody>{snapshot.description}</MarkdownBody>
           ) : (
-            <span className="text-muted-foreground">No description</span>
+            <span className="text-muted-foreground">{t("pcomponents_RoutineHistoryTab.no_description", {defaultValue: "No description"})}</span>
           )}
         </div>
       </div>
@@ -639,7 +640,7 @@ function RevisionPreview({
           Triggers ({triggers.length})
         </p>
         {triggers.length === 0 ? (
-          <p className="text-sm text-muted-foreground">No triggers in this revision.</p>
+          <p className="text-sm text-muted-foreground">{t("pcomponents_RoutineHistoryTab.no_triggers_in_this_revision", {defaultValue: "No triggers in this revision."})}</p>
         ) : (
           <ul className="divide-y divide-border">
             {triggers.map((trigger) => (
@@ -752,7 +753,7 @@ function RestoreConfirmDialog({
           <Input
             id="restore-change-summary"
             value={changeSummary}
-            placeholder="Why are you restoring? Visible in history."
+            placeholder={t("pcomponents_RoutineHistoryTab.why_are_you_restoring_visible_in_history", {defaultValue: "Why are you restoring? Visible in history."})}
             onChange={(event) => onChangeSummaryChange(event.target.value)}
           />
         </div>
@@ -820,18 +821,18 @@ function RoutineRevisionDiffModal({
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="!max-w-[90%] w-full max-h-[85vh] overflow-hidden flex flex-col">
         <DialogHeader>
-          <DialogTitle>Compare routine revisions</DialogTitle>
+          <DialogTitle>{t("pcomponents_RoutineHistoryTab.compare_routine_revisions", {defaultValue: "Compare routine revisions"})}</DialogTitle>
         </DialogHeader>
         <div className="flex flex-wrap items-center gap-3">
           <RevisionPicker
-            label="Old"
+            label={t("pcomponents_RoutineHistoryTab.old", {defaultValue: "Old"})}
             value={leftId}
             onChange={setLeftId}
             revisions={revisions}
             tone="red"
           />
           <RevisionPicker
-            label="New"
+            label={t("pcomponents_RoutineHistoryTab.new", {defaultValue: "New"})}
             value={rightId}
             onChange={setRightId}
             revisions={revisions}
@@ -844,14 +845,14 @@ function RoutineRevisionDiffModal({
               Field changes
             </p>
             {fieldChanges.length === 0 ? (
-              <p className="text-sm text-muted-foreground">No structural field changes.</p>
+              <p className="text-sm text-muted-foreground">{t("pcomponents_RoutineHistoryTab.no_structural_field_changes", {defaultValue: "No structural field changes."})}</p>
             ) : (
               <table className="w-full text-sm border border-border rounded-md overflow-hidden">
                 <thead>
                   <tr className="text-xs uppercase tracking-wide bg-muted/30 text-muted-foreground">
-                    <th className="px-3 py-2 text-left">Field</th>
-                    <th className="px-3 py-2 text-left">Old value</th>
-                    <th className="px-3 py-2 text-left">New value</th>
+                    <th className="px-3 py-2 text-left">{t("pcomponents_RoutineHistoryTab.field", {defaultValue: "Field"})}</th>
+                    <th className="px-3 py-2 text-left">{t("pcomponents_RoutineHistoryTab.old_value", {defaultValue: "Old value"})}</th>
+                    <th className="px-3 py-2 text-left">{t("pcomponents_RoutineHistoryTab.new_value", {defaultValue: "New value"})}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -934,10 +935,10 @@ function RevisionPicker({
 
 function DiffTable({ rows }: { rows: DiffRow[] }) {
   if (rows.length === 0) {
-    return <p className="text-sm text-muted-foreground">No description on either revision.</p>;
+    return <p className="text-sm text-muted-foreground">{t("pcomponents_RoutineHistoryTab.no_description_on_either_revision", {defaultValue: "No description on either revision."})}</p>;
   }
   if (rows.every((row) => row.kind === "context")) {
-    return <p className="text-sm text-muted-foreground">Descriptions are identical.</p>;
+    return <p className="text-sm text-muted-foreground">{t("pcomponents_RoutineHistoryTab.descriptions_are_identical", {defaultValue: "Descriptions are identical."})}</p>;
   }
   const lineClassesByKind: Record<DiffRow["kind"], string> = {
     context: "bg-transparent",
@@ -952,10 +953,10 @@ function DiffTable({ rows }: { rows: DiffRow[] }) {
   return (
     <div className="rounded-md border border-border text-xs font-mono leading-6 overflow-hidden">
       <div className="grid grid-cols-[56px_56px_24px_minmax(0,1fr)] border-b border-border/60 bg-muted/30 px-3 py-2 text-[11px] uppercase tracking-wide text-muted-foreground">
-        <span>Old</span>
-        <span>New</span>
+        <span>{t("pcomponents_RoutineHistoryTab.old", {defaultValue: "Old"})}</span>
+        <span>{t("pcomponents_RoutineHistoryTab.new", {defaultValue: "New"})}</span>
         <span />
-        <span>Content</span>
+        <span>{t("pcomponents_RoutineHistoryTab.content", {defaultValue: "Content"})}</span>
       </div>
       {rows.map((row, index) => (
         <div

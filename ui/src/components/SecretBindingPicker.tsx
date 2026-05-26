@@ -10,6 +10,7 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { cn } from "../lib/utils";
+import { useTranslation } from "@/i18n";
 
 export interface SecretBindingValue {
   secretId: string;
@@ -60,8 +61,8 @@ function statusTone(status: CompanySecret["status"]): string {
 export function SecretBindingPicker({
   value,
   onChange,
-  label = "Secret",
-  placeholder = "Select secret",
+  label=t("pcomponents_SecretBindingPicker.secret", {defaultValue: "Secret"}),
+  placeholder=t("pcomponents_SecretBindingPicker.select_secret", {defaultValue: "Select secret"}),
   allowVersionSelector = true,
   emptyHint = "No matching secrets. Create one to bind it here.",
   className,
@@ -181,7 +182,7 @@ export function SecretBindingPicker({
               onChange({ ...value, version: next });
             }}
             disabled={disabled || !value || !selectedSecret}
-            aria-label="Version"
+            aria-label={t("pcomponents_SecretBindingPicker.version", {defaultValue: "Version"})}
           >
             <option value={VERSION_LATEST}>latest</option>
             {selectedSecret
@@ -203,7 +204,7 @@ export function SecretBindingPicker({
           size="sm"
           onClick={() => setCreateOpen(true)}
           disabled={disabled || !selectedCompanyId}
-          aria-label="Create secret"
+          aria-label={t("pcomponents_SecretBindingPicker.create_secret", {defaultValue: "Create secret"})}
         >
           <Plus className="h-3.5 w-3.5" />
         </Button>
@@ -226,27 +227,27 @@ export function SecretBindingPicker({
       <Dialog open={createOpen} onOpenChange={setCreateOpen}>
         <DialogContent className="sm:max-w-md">
           <DialogHeader>
-            <DialogTitle>Create new secret</DialogTitle>
+            <DialogTitle>{t("pcomponents_SecretBindingPicker.create_new_secret", {defaultValue: "Create new secret"})}</DialogTitle>
           </DialogHeader>
           <div className="space-y-3">
             <div>
-              <label className="text-xs font-medium text-foreground/80" htmlFor="secret-name">Name</label>
+              <label className="text-xs font-medium text-foreground/80" htmlFor="secret-name">{t("pcomponents_SecretBindingPicker.name", {defaultValue: "Name"})}</label>
               <Input
                 id="secret-name"
                 value={createName}
                 onChange={(event) => setCreateName(event.target.value)}
-                placeholder="OPENAI_API_KEY"
+                placeholder={t("pcomponents_SecretBindingPicker.openaiapikey", {defaultValue: "OPENAI_API_KEY"})}
                 autoFocus
               />
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground/80" htmlFor="secret-value">Value</label>
+              <label className="text-xs font-medium text-foreground/80" htmlFor="secret-value">{t("pcomponents_SecretBindingPicker.value", {defaultValue: "Value"})}</label>
               <Textarea
                 id="secret-value"
                 value={createValue}
                 onChange={(event) => setCreateValue(event.target.value)}
                 rows={3}
-                placeholder="Paste the secret value"
+                placeholder={t("pcomponents_SecretBindingPicker.paste_the_secret_value", {defaultValue: "Paste the secret value"})}
                 className="font-mono text-xs"
               />
               <p className="text-[11px] text-muted-foreground mt-1">
@@ -254,18 +255,18 @@ export function SecretBindingPicker({
               </p>
             </div>
             <div>
-              <label className="text-xs font-medium text-foreground/80" htmlFor="secret-description">Description</label>
+              <label className="text-xs font-medium text-foreground/80" htmlFor="secret-description">{t("pcomponents_SecretBindingPicker.description", {defaultValue: "Description"})}</label>
               <Input
                 id="secret-description"
                 value={createDescription}
                 onChange={(event) => setCreateDescription(event.target.value)}
-                placeholder="Optional notes (no values)"
+                placeholder={t("pcomponents_SecretBindingPicker.optional_notes_no_values", {defaultValue: "Optional notes (no values)"})}
               />
             </div>
             {createError ? <p className="text-xs text-destructive">{createError}</p> : null}
           </div>
           <DialogFooter>
-            <Button type="button" variant="outline" onClick={() => setCreateOpen(false)}>Cancel</Button>
+            <Button type="button" variant="outline" onClick={() => setCreateOpen(false)}>{t("pcomponents_SecretBindingPicker.cancel", {defaultValue: "Cancel"})}</Button>
             <Button
               type="button"
               onClick={() => createMutation.mutate()}

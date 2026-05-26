@@ -12,6 +12,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { ShieldCheck } from "lucide-react";
 import { ApprovalCard } from "../components/ApprovalCard";
 import { PageSkeleton } from "../components/PageSkeleton";
+import { useTranslation } from "@/i18n";
 
 type StatusFilter = "pending" | "all";
 
@@ -75,7 +76,7 @@ export function Approvals() {
   ).length;
 
   if (!selectedCompanyId) {
-    return <p className="text-sm text-muted-foreground">Select a company first.</p>;
+    return <p className="text-sm text-muted-foreground">{t("ppages_Approvals.select_a_company_first", {defaultValue: "Select a company first."})}</p>;
   }
 
   if (isLoading) {

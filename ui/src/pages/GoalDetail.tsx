@@ -20,6 +20,7 @@ import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Plus, SlidersHorizontal } from "lucide-react";
 import type { Goal, Project } from "@paperclipai/shared";
+import { useTranslation } from "@/i18n";
 
 interface GoalPropertiesToggleButtonProps {
   panelVisible: boolean;
@@ -39,7 +40,7 @@ export function GoalPropertiesToggleButton({
         panelVisible ? "opacity-0 pointer-events-none w-0 overflow-hidden" : "opacity-100",
       )}
       onClick={onShowProperties}
-      title="Show properties"
+      title={t("ppages_GoalDetail.show_properties", {defaultValue: "Show properties"})}
     >
       <SlidersHorizontal className="h-4 w-4" />
     </Button>
@@ -167,7 +168,7 @@ export function GoalDetail() {
           onSave={(description) => updateGoal.mutate({ description })}
           as="p"
           className="text-sm text-muted-foreground"
-          placeholder="Add a description..."
+          placeholder={t("ppages_GoalDetail.add_a_description", {defaultValue: "Add a description..."})}
           multiline
           imageUploadHandler={async (file) => {
             const asset = await uploadImage.mutateAsync(file);
@@ -198,7 +199,7 @@ export function GoalDetail() {
             </Button>
           </div>
           {childGoals.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No sub-goals.</p>
+            <p className="text-sm text-muted-foreground">{t("ppages_GoalDetail.no_subgoals", {defaultValue: "No sub-goals."})}</p>
           ) : (
             <GoalTree goals={childGoals} goalLink={(g) => `/goals/${g.id}`} />
           )}
@@ -206,7 +207,7 @@ export function GoalDetail() {
 
         <TabsContent value="projects" className="mt-4">
           {linkedProjects.length === 0 ? (
-            <p className="text-sm text-muted-foreground">No linked projects.</p>
+            <p className="text-sm text-muted-foreground">{t("ppages_GoalDetail.no_linked_projects", {defaultValue: "No linked projects."})}</p>
           ) : (
             <div className="border border-border">
               {linkedProjects.map((project) => (

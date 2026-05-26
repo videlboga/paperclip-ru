@@ -9,6 +9,7 @@ import { useCompany } from "@/context/CompanyContext";
 import { useToast } from "@/context/ToastContext";
 import { Link } from "@/lib/router";
 import { queryKeys } from "@/lib/queryKeys";
+import { useTranslation } from "@/i18n";
 
 const inviteRoleOptions = [
   {
@@ -188,11 +189,11 @@ export function CompanyInvites() {
   });
 
   if (!selectedCompanyId) {
-    return <div className="text-sm text-muted-foreground">Select a company to manage invites.</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_CompanyInvites.select_a_company_to_manage_invites", {defaultValue: "Select a company to manage invites."})}</div>;
   }
 
   if (invitesQuery.isLoading) {
-    return <div className="text-sm text-muted-foreground">Loading invites…</div>;
+    return <div className="text-sm text-muted-foreground">{t("ppages_CompanyInvites.loading_invites", {defaultValue: "Loading invites…"})}</div>;
   }
 
   if (invitesQuery.error) {
@@ -210,7 +211,7 @@ export function CompanyInvites() {
       <div className="space-y-3">
         <div className="flex items-center gap-2">
           <MailPlus className="h-5 w-5 text-muted-foreground" />
-          <h1 className="text-lg font-semibold">Company Invites</h1>
+          <h1 className="text-lg font-semibold">{t("ppages_CompanyInvites.company_invites", {defaultValue: "Company Invites"})}</h1>
         </div>
         <p className="max-w-3xl text-sm text-muted-foreground">
           Invite people to request access to this company. New invite links are copied to your clipboard when they are generated.
@@ -219,14 +220,14 @@ export function CompanyInvites() {
 
       <section className="space-y-4 rounded-xl border border-border p-5">
         <div className="space-y-1">
-          <h2 className="text-sm font-semibold">Invite a person</h2>
+          <h2 className="text-sm font-semibold">{t("ppages_CompanyInvites.invite_a_person", {defaultValue: "Invite a person"})}</h2>
           <p className="text-sm text-muted-foreground">
             Generate a human invite link and choose the default access it should request.
           </p>
         </div>
 
         <fieldset className="space-y-3">
-          <legend className="text-sm font-medium">Choose a role</legend>
+          <legend className="text-sm font-medium">{t("ppages_CompanyInvites.choose_a_role", {defaultValue: "Choose a role"})}</legend>
           <div className="rounded-xl border border-border">
             {inviteRoleOptions.map((option, index) => {
               const checked = humanRole === option.value;
@@ -269,14 +270,14 @@ export function CompanyInvites() {
           <Button onClick={() => createInviteMutation.mutate()} disabled={createInviteMutation.isPending}>
             {createInviteMutation.isPending ? "Creating…" : "Create invite"}
           </Button>
-          <span className="text-sm text-muted-foreground">Invite history below keeps the audit trail.</span>
+          <span className="text-sm text-muted-foreground">{t("ppages_CompanyInvites.invite_history_below_keeps_the_audit_trail", {defaultValue: "Invite history below keeps the audit trail."})}</span>
         </div>
 
         {latestInviteUrl ? (
           <div className="space-y-3 rounded-lg border border-border px-4 py-4">
             <div className="space-y-1">
               <div className="flex items-center justify-between gap-3">
-                <div className="text-sm font-medium">Latest invite link</div>
+                <div className="text-sm font-medium">{t("ppages_CompanyInvites.latest_invite_link", {defaultValue: "Latest invite link"})}</div>
                 {latestInviteCopied ? (
                   <div className="inline-flex items-center gap-1 text-xs font-medium text-foreground">
                     <Check className="h-3.5 w-3.5" />
@@ -289,7 +290,7 @@ export function CompanyInvites() {
               </div>
             </div>
             <label className="block space-y-1">
-              <span className="sr-only">Latest invite URL</span>
+              <span className="sr-only">{t("ppages_CompanyInvites.latest_invite_url", {defaultValue: "Latest invite URL"})}</span>
               <input
                 ref={latestInviteInputRef}
                 readOnly
@@ -297,7 +298,7 @@ export function CompanyInvites() {
                 onFocus={(event) => event.currentTarget.select()}
                 onClick={(event) => event.currentTarget.select()}
                 className="w-full rounded-md border border-border bg-muted/60 px-3 py-2 text-sm text-foreground outline-none transition-colors selection:bg-primary selection:text-primary-foreground focus:border-ring"
-                aria-label="Latest invite URL"
+                aria-label={t("ppages_CompanyInvites.latest_invite_url", {defaultValue: "Latest invite URL"})}
               />
             </label>
             <div className="flex flex-wrap gap-2">
@@ -327,7 +328,7 @@ export function CompanyInvites() {
       <section className="rounded-xl border border-border">
         <div className="flex flex-wrap items-center justify-between gap-4 px-5 py-4">
           <div className="space-y-1">
-            <h2 className="text-sm font-semibold">Invite history</h2>
+            <h2 className="text-sm font-semibold">{t("ppages_CompanyInvites.invite_history", {defaultValue: "Invite history"})}</h2>
             <p className="text-sm text-muted-foreground">
               Review invite status, audience, inviter, and any linked join request.
             </p>
@@ -347,12 +348,12 @@ export function CompanyInvites() {
               <table className="min-w-full text-left text-sm">
                 <thead>
                   <tr className="border-b border-border">
-                    <th className="px-5 py-3 font-medium text-muted-foreground">State</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">For</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Invited by</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Created</th>
-                    <th className="px-5 py-3 font-medium text-muted-foreground">Join request</th>
-                    <th className="px-5 py-3 text-right font-medium text-muted-foreground">Action</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_CompanyInvites.state", {defaultValue: "State"})}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_CompanyInvites.for", {defaultValue: "For"})}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_CompanyInvites.invited_by", {defaultValue: "Invited by"})}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_CompanyInvites.created", {defaultValue: "Created"})}</th>
+                    <th className="px-5 py-3 font-medium text-muted-foreground">{t("ppages_CompanyInvites.join_request", {defaultValue: "Join request"})}</th>
+                    <th className="px-5 py-3 text-right font-medium text-muted-foreground">{t("ppages_CompanyInvites.action", {defaultValue: "Action"})}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -393,7 +394,7 @@ export function CompanyInvites() {
                             Revoke
                           </Button>
                         ) : (
-                          <span className="text-xs text-muted-foreground">Inactive</span>
+                          <span className="text-xs text-muted-foreground">{t("ppages_CompanyInvites.inactive", {defaultValue: "Inactive"})}</span>
                         )}
                       </td>
                     </tr>

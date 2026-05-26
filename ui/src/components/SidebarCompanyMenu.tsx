@@ -39,6 +39,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "../context/SidebarContext";
 import { CompanyPatternIcon } from "./CompanyPatternIcon";
+import { useTranslation } from "@/i18n";
 
 interface SidebarCompanyMenuProps {
   open?: boolean;
@@ -275,7 +276,7 @@ export function SidebarCompanyMenu({ open: controlledOpen, onOpenChange }: Sideb
             </SortableContext>
           </DndContext>
           {orderedCompanies.length === 0 ? (
-            <DropdownMenuItem disabled>No workspaces</DropdownMenuItem>
+            <DropdownMenuItem disabled>{t("pcomponents_SidebarCompanyMenu.no_workspaces", {defaultValue: "No workspaces"})}</DropdownMenuItem>
           ) : null}
         </div>
         <DropdownMenuSeparator />
@@ -285,7 +286,7 @@ export function SidebarCompanyMenu({ open: controlledOpen, onOpenChange }: Sideb
           disabled={isEditingOrder}
         >
           <Plus className="size-4" />
-          <span>Add company...</span>
+          <span>{t("pcomponents_SidebarCompanyMenu.add_company", {defaultValue: "Add company..."})}</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuItem asChild disabled={isEditingOrder}>
@@ -317,7 +318,7 @@ export function SidebarCompanyMenu({ open: controlledOpen, onOpenChange }: Sideb
             }}
           >
             <Settings className="size-4" />
-            <span>Company settings</span>
+            <span>{t("pcomponents_SidebarCompanyMenu.company_settings", {defaultValue: "Company settings"})}</span>
           </Link>
         </DropdownMenuItem>
         {session?.session ? (

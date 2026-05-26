@@ -20,6 +20,7 @@ import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useCompany } from "../context/CompanyContext";
 import { queryKeys } from "../lib/queryKeys";
 import { projectRouteRef, projectWorkspaceUrl } from "../lib/utils";
+import { useTranslation } from "@/i18n";
 
 type WorkspaceFormState = {
   name: string;
@@ -388,7 +389,7 @@ export function ProjectWorkspaceDetail() {
     },
   });
 
-  if (projectQuery.isLoading) return <p className="text-sm text-muted-foreground">Loading workspace…</p>;
+  if (projectQuery.isLoading) return <p className="text-sm text-muted-foreground">{t("ppages_ProjectWorkspaceDetail.loading_workspace", {defaultValue: "Loading workspace…"})}</p>;
   if (projectQuery.error) {
     return (
       <p className="text-sm text-destructive">
@@ -397,7 +398,7 @@ export function ProjectWorkspaceDetail() {
     );
   }
   if (!project || !workspace || !form || !initialState) {
-    return <p className="text-sm text-muted-foreground">Workspace not found for this project.</p>;
+    return <p className="text-sm text-muted-foreground">{t("ppages_ProjectWorkspaceDetail.workspace_not_found_for_this_project", {defaultValue: "Workspace not found for this project."})}</p>;
   }
 
   const canRunWorkspaceCommands = Boolean(workspace.cwd);
@@ -492,16 +493,16 @@ export function ProjectWorkspaceDetail() {
             <Separator className="my-5" />
 
             <div className="grid gap-4 md:grid-cols-2">
-              <Field label="Workspace name">
+              <Field label={t("ppages_ProjectWorkspaceDetail.workspace_name", {defaultValue: "Workspace name"})}>
                 <input
                   className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none"
                   value={form.name}
                   onChange={(event) => setForm((current) => current ? { ...current, name: event.target.value } : current)}
-                  placeholder="Workspace name"
+                  placeholder={t("ppages_ProjectWorkspaceDetail.workspace_name", {defaultValue: "Workspace name"})}
                 />
               </Field>
 
-              <Field label="Visibility">
+              <Field label={t("ppages_ProjectWorkspaceDetail.visibility", {defaultValue: "Visibility"})}>
                 <select
                   className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none"
                   value={form.visibility}
@@ -517,7 +518,7 @@ export function ProjectWorkspaceDetail() {
             </div>
 
             <div className="mt-4 grid gap-4">
-              <Field label="Source type" hint={sourceTypeDescription ?? undefined}>
+              <Field label={t("ppages_ProjectWorkspaceDetail.source_type", {defaultValue: "Source type"})} hint={sourceTypeDescription ?? undefined}>
                 <select
                   className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none"
                   value={form.sourceType}
@@ -532,12 +533,12 @@ export function ProjectWorkspaceDetail() {
               </Field>
 
               <div className="grid gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
-                <Field label="Local path">
+                <Field label={t("ppages_ProjectWorkspaceDetail.local_path", {defaultValue: "Local path"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.cwd}
                     onChange={(event) => setForm((current) => current ? { ...current, cwd: event.target.value } : current)}
-                    placeholder="/absolute/path/to/workspace"
+                    placeholder={t("ppages_ProjectWorkspaceDetail.absolutepathtoworkspace", {defaultValue: "/absolute/path/to/workspace"})}
                   />
                 </Field>
                 <div className="flex items-end">
@@ -546,34 +547,34 @@ export function ProjectWorkspaceDetail() {
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
-                <Field label="Repo URL">
+                <Field label={t("ppages_ProjectWorkspaceDetail.repo_url", {defaultValue: "Repo URL"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none"
                     value={form.repoUrl}
                     onChange={(event) => setForm((current) => current ? { ...current, repoUrl: event.target.value } : current)}
-                    placeholder="https://github.com/org/repo"
+                    placeholder={t("ppages_ProjectWorkspaceDetail.httpsgithubcomorgrepo", {defaultValue: "https://github.com/org/repo"})}
                   />
                 </Field>
-                <Field label="Repo ref">
+                <Field label={t("ppages_ProjectWorkspaceDetail.repo_ref", {defaultValue: "Repo ref"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.repoRef}
                     onChange={(event) => setForm((current) => current ? { ...current, repoRef: event.target.value } : current)}
-                    placeholder="origin/main"
+                    placeholder={t("ppages_ProjectWorkspaceDetail.originmain", {defaultValue: "origin/main"})}
                   />
                 </Field>
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
-                <Field label="Default ref">
+                <Field label={t("ppages_ProjectWorkspaceDetail.default_ref", {defaultValue: "Default ref"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.defaultRef}
                     onChange={(event) => setForm((current) => current ? { ...current, defaultRef: event.target.value } : current)}
-                    placeholder="origin/main"
+                    placeholder={t("ppages_ProjectWorkspaceDetail.originmain", {defaultValue: "origin/main"})}
                   />
                 </Field>
-                <Field label="Shared workspace key">
+                <Field label={t("ppages_ProjectWorkspaceDetail.shared_workspace_key", {defaultValue: "Shared workspace key"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.sharedWorkspaceKey}
@@ -584,7 +585,7 @@ export function ProjectWorkspaceDetail() {
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
-                <Field label="Remote provider">
+                <Field label={t("ppages_ProjectWorkspaceDetail.remote_provider", {defaultValue: "Remote provider"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 text-sm outline-none"
                     value={form.remoteProvider}
@@ -592,7 +593,7 @@ export function ProjectWorkspaceDetail() {
                     placeholder="codespaces"
                   />
                 </Field>
-                <Field label="Remote workspace ref">
+                <Field label={t("ppages_ProjectWorkspaceDetail.remote_workspace_ref", {defaultValue: "Remote workspace ref"})}>
                   <input
                     className="w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.remoteWorkspaceRef}
@@ -603,31 +604,31 @@ export function ProjectWorkspaceDetail() {
               </div>
 
               <div className="grid gap-4 md:grid-cols-2">
-                <Field label="Setup command" hint="Runs when this workspace needs custom bootstrap">
+                <Field label={t("ppages_ProjectWorkspaceDetail.setup_command", {defaultValue: "Setup command"})} hint="Runs when this workspace needs custom bootstrap">
                   <textarea
                     className="min-h-28 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.setupCommand}
                     onChange={(event) => setForm((current) => current ? { ...current, setupCommand: event.target.value } : current)}
-                    placeholder="pnpm install && pnpm dev"
+                    placeholder={t("ppages_ProjectWorkspaceDetail.pnpm_install_pnpm_dev", {defaultValue: "pnpm install && pnpm dev"})}
                   />
                 </Field>
-                <Field label="Cleanup command" hint="Runs before project-level execution workspace teardown">
+                <Field label={t("ppages_ProjectWorkspaceDetail.cleanup_command", {defaultValue: "Cleanup command"})} hint="Runs before project-level execution workspace teardown">
                   <textarea
                     className="min-h-28 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                     value={form.cleanupCommand}
                     onChange={(event) => setForm((current) => current ? { ...current, cleanupCommand: event.target.value } : current)}
-                    placeholder="pkill -f vite || true"
+                    placeholder={t("ppages_ProjectWorkspaceDetail.pkill_f_vite_true", {defaultValue: "pkill -f vite || true"})}
                   />
                 </Field>
               </div>
 
               <details className="rounded-xl border border-dashed border-border/70 bg-background px-3 py-3">
-                <summary className="cursor-pointer text-sm font-medium">Advanced runtime JSON</summary>
+                <summary className="cursor-pointer text-sm font-medium">{t("ppages_ProjectWorkspaceDetail.advanced_runtime_json", {defaultValue: "Advanced runtime JSON"})}</summary>
                 <p className="mt-2 text-sm text-muted-foreground">
                   Paperclip derives Services and Jobs from this JSON. Prefer editing named commands first; use raw JSON for advanced lifecycle, port, readiness, or environment settings.
                 </p>
                 <div className="mt-3">
-                  <Field label="Workspace commands JSON" hint="Execution workspaces inherit this config unless they override it. Legacy `services` arrays still work, but `commands` supports both services and jobs.">
+                  <Field label={t("ppages_ProjectWorkspaceDetail.workspace_commands_json", {defaultValue: "Workspace commands JSON"})} hint="Execution workspaces inherit this config unless they override it. Legacy `services` arrays still work, but `commands` supports both services and jobs.">
                     <textarea
                       className="min-h-96 w-full rounded-lg border border-border bg-background px-3 py-2 font-mono text-sm outline-none"
                       value={form.runtimeConfig}
@@ -657,7 +658,7 @@ export function ProjectWorkspaceDetail() {
               </Button>
               {errorMessage ? <p className="text-sm text-destructive">{errorMessage}</p> : null}
               {!errorMessage && runtimeActionMessage ? <p className="text-sm text-muted-foreground">{runtimeActionMessage}</p> : null}
-              {!errorMessage && !isDirty ? <p className="text-sm text-muted-foreground">No unsaved changes.</p> : null}
+              {!errorMessage && !isDirty ? <p className="text-sm text-muted-foreground">{t("ppages_ProjectWorkspaceDetail.no_unsaved_changes", {defaultValue: "No unsaved changes."})}</p> : null}
             </div>
           </div>
         </div>
@@ -665,20 +666,20 @@ export function ProjectWorkspaceDetail() {
         <div className="space-y-6">
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="space-y-1">
-              <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Workspace facts</div>
-              <h2 className="text-lg font-semibold">Current state</h2>
+              <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{t("ppages_ProjectWorkspaceDetail.workspace_facts", {defaultValue: "Workspace facts"})}</div>
+              <h2 className="text-lg font-semibold">{t("ppages_ProjectWorkspaceDetail.current_state", {defaultValue: "Current state"})}</h2>
             </div>
             <Separator className="my-4" />
-            <DetailRow label="Project">
+            <DetailRow label={t("ppages_ProjectWorkspaceDetail.project", {defaultValue: "Project"})}>
               <Link to={`/projects/${canonicalProjectRef}`} className="hover:underline">{project.name}</Link>
             </DetailRow>
-            <DetailRow label="Workspace ID">
+            <DetailRow label={t("ppages_ProjectWorkspaceDetail.workspace_id", {defaultValue: "Workspace ID"})}>
               <span className="break-all font-mono text-xs">{workspace.id}</span>
             </DetailRow>
-            <DetailRow label="Local path">
+            <DetailRow label={t("ppages_ProjectWorkspaceDetail.local_path", {defaultValue: "Local path"})}>
               <span className="break-all font-mono text-xs">{workspace.cwd ?? "None"}</span>
             </DetailRow>
-            <DetailRow label="Repo">
+            <DetailRow label={t("ppages_ProjectWorkspaceDetail.repo", {defaultValue: "Repo"})}>
               {workspace.repoUrl && isSafeExternalUrl(workspace.repoUrl) ? (
                 <a href={workspace.repoUrl} target="_blank" rel="noreferrer" className="inline-flex items-center gap-1 hover:underline">
                   {workspace.repoUrl}
@@ -688,15 +689,15 @@ export function ProjectWorkspaceDetail() {
                 <span className="break-all font-mono text-xs">{workspace.repoUrl}</span>
               ) : "None"}
             </DetailRow>
-            <DetailRow label="Default ref">{workspace.defaultRef ?? "None"}</DetailRow>
-            <DetailRow label="Updated">{new Date(workspace.updatedAt).toLocaleString()}</DetailRow>
+            <DetailRow label={t("ppages_ProjectWorkspaceDetail.default_ref", {defaultValue: "Default ref"})}>{workspace.defaultRef ?? "None"}</DetailRow>
+            <DetailRow label={t("ppages_ProjectWorkspaceDetail.updated", {defaultValue: "Updated"})}>{new Date(workspace.updatedAt).toLocaleString()}</DetailRow>
           </div>
 
           <div className="rounded-2xl border border-border bg-card p-5">
             <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
               <div className="space-y-1">
-                <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">Workspace commands</div>
-                <h2 className="text-lg font-semibold">Services and jobs</h2>
+                <div className="text-xs font-medium uppercase tracking-[0.16em] text-muted-foreground">{t("ppages_ProjectWorkspaceDetail.workspace_commands", {defaultValue: "Workspace commands"})}</div>
+                <h2 className="text-lg font-semibold">{t("ppages_ProjectWorkspaceDetail.services_and_jobs", {defaultValue: "Services and jobs"})}</h2>
                 <p className="text-sm text-muted-foreground">
                   Long-running services stay supervised here, while one-shot jobs run on demand against this workspace. Execution workspaces inherit this config unless they override it.
                 </p>
