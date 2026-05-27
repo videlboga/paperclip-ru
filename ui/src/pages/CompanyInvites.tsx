@@ -9,7 +9,7 @@ import { useCompany } from "@/context/CompanyContext";
 import { useToast } from "@/context/ToastContext";
 import { Link } from "@/lib/router";
 import { queryKeys } from "@/lib/queryKeys";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const inviteRoleOptions = [
   {

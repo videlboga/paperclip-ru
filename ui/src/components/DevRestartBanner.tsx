@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { AlertTriangle, RotateCcw, TimerReset } from "lucide-react";
 import { healthApi, type DevServerHealthStatus } from "../api/health";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const RESTART_PENDING_RESET_MS = 30_000;
 

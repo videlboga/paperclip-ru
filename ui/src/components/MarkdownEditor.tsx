@@ -47,7 +47,7 @@ import { normalizeMarkdown } from "../lib/normalize-markdown";
 import { pasteNormalizationPlugin } from "../lib/paste-normalization";
 import { cn } from "../lib/utils";
 import { useEditorAutocomplete, type SlashCommandOption } from "../context/EditorAutocompleteContext";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /* ---- Mention types ---- */
 

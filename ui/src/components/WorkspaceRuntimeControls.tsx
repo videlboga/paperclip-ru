@@ -10,7 +10,7 @@ import {
 import { Activity, ExternalLink, Loader2, Play, RotateCcw, Square } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export type WorkspaceRuntimeAction = "start" | "stop" | "restart" | "run";
 

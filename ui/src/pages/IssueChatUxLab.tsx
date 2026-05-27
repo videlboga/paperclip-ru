@@ -19,7 +19,7 @@ import {
 } from "../fixtures/issueChatUxFixtures";
 import { cn } from "../lib/utils";
 import { Bot, Brain, FlaskConical, Loader2, MessagesSquare, Route, Sparkles, WandSparkles } from "lucide-react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const noop = async () => {};
 

@@ -12,7 +12,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { ShieldCheck } from "lucide-react";
 import { ApprovalCard } from "../components/ApprovalCard";
 import { PageSkeleton } from "../components/PageSkeleton";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type StatusFilter = "pending" | "all";
 

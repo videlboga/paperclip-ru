@@ -1,5 +1,5 @@
 import type { DashboardRunActivityDay, HeartbeatRun } from "@paperclipai/shared";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /* ---- Utilities ---- */
 

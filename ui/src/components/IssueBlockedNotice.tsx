@@ -14,7 +14,7 @@ import { useRetryNowMutation } from "../hooks/useRetryNowMutation";
 import { IssueLinkQuicklook } from "./IssueLinkQuicklook";
 import { RetryErrorBand } from "./IssueScheduledRetryCard";
 import { isAssignedBacklogBlocker } from "../lib/issue-blockers";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   deriveActiveRecoveryDisplayState,
   RECOVERY_CHIP_DEFAULT_TONE,

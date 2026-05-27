@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { Dialog as DialogPrimitive } from "radix-ui";
 import { ChevronLeft, ChevronRight, Download, X } from "lucide-react";
 import type { IssueAttachment } from "@paperclipai/shared";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface ImageGalleryModalProps {
   images: IssueAttachment[];

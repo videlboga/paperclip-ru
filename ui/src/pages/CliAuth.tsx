@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button";
 import { accessApi } from "../api/access";
 import { authApi } from "../api/auth";
 import { queryKeys } from "../lib/queryKeys";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export function CliAuthPage() {
   const queryClient = useQueryClient();

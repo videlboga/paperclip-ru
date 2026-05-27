@@ -12,7 +12,7 @@ import {
 } from "@/components/ui/dialog";
 import { ThumbsDown, ThumbsUp } from "lucide-react";
 import { cn } from "../lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export function OutputFeedbackButtons({
   activeVote,

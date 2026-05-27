@@ -157,7 +157,7 @@ function touchCenter(a: React.Touch, b: React.Touch, container: HTMLDivElement):
 // ── Status dot colors (raw hex for SVG) ─────────────────────────────────
 
 import { getAdapterLabel } from "../adapters/adapter-display-registry";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const statusDotColor: Record<string, string> = {
   running: "#22d3ee",

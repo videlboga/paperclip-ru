@@ -4,7 +4,7 @@ import { StatusBadge } from "./StatusBadge";
 import { ChevronRight } from "lucide-react";
 import { cn } from "../lib/utils";
 import { useState } from "react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface GoalTreeProps {
   goals: Goal[];

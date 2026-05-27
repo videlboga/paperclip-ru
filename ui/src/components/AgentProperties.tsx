@@ -9,7 +9,7 @@ import { StatusBadge } from "./StatusBadge";
 import { Identity } from "./Identity";
 import { formatDate, agentUrl } from "../lib/utils";
 import { Separator } from "@/components/ui/separator";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface AgentPropertiesProps {
   agent: Agent;

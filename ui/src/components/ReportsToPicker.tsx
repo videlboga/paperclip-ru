@@ -9,7 +9,7 @@ import { User } from "lucide-react";
 import { cn } from "../lib/utils";
 import { roleLabels } from "./agent-config-primitives";
 import { AgentIcon } from "./AgentIconPicker";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export function ReportsToPicker({
   agents,

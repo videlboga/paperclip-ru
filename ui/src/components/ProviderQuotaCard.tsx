@@ -5,7 +5,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { QuotaBar } from "./QuotaBar";
 import { ClaudeSubscriptionPanel } from "./ClaudeSubscriptionPanel";
 import { CodexSubscriptionPanel } from "./CodexSubscriptionPanel";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   billingTypeDisplayName,
   formatCents,

@@ -12,7 +12,7 @@ import { deriveActiveRecoveryDisplayState, RECOVERY_CHIP_DEFAULT_TONE } from "..
 import { StatusIcon } from "./StatusIcon";
 import { productivityReviewTriggerLabel } from "./ProductivityReviewBadge";
 import { hasAssignedBacklogBlocker } from "../lib/issue-blockers";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type UnreadState = "hidden" | "visible" | "fading";
 

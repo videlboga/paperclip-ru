@@ -65,7 +65,7 @@ import { filterAcpxModelsByAgent } from "../lib/acpx-model-filter";
 // so existing imports from this file keep working.
 export type { CreateConfigValues } from "@paperclipai/adapter-utils";
 import type { CreateConfigValues } from "@paperclipai/adapter-utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /* ---- Props ---- */
 

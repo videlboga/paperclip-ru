@@ -125,7 +125,7 @@ import { PageSkeleton } from "@/components/PageSkeleton";
 import { Identity } from "@/components/Identity";
 import { IssueReferencePill } from "@/components/IssueReferencePill";
 import { MembershipAction } from "@/components/MembershipAction";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /* ------------------------------------------------------------------ */
 /*  Section wrapper                                                    */

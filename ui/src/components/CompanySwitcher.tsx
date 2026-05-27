@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
 import { useState } from "react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function statusDotColor(status?: string): string {
   switch (status) {

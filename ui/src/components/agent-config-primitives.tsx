@@ -63,7 +63,7 @@ export const help: Record<string, string> = {
 };
 
 import { getAdapterLabels } from "../adapters/adapter-display-registry";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export const adapterLabels = getAdapterLabels();
 

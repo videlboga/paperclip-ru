@@ -39,7 +39,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { useSidebar } from "../context/SidebarContext";
 import { CompanyPatternIcon } from "./CompanyPatternIcon";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface SidebarCompanyMenuProps {
   open?: boolean;

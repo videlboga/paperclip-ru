@@ -7,7 +7,7 @@ import { StatusBadge } from "../components/StatusBadge";
 import { RunTranscriptView, type TranscriptDensity, type TranscriptMode } from "../components/transcript/RunTranscriptView";
 import { runTranscriptFixtureEntries, runTranscriptFixtureMeta } from "../fixtures/runTranscriptFixtures";
 import { ExternalLink, FlaskConical, LayoutPanelLeft, MonitorCog, PanelsTopLeft, RadioTower } from "lucide-react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type SurfaceId = "detail" | "live" | "dashboard";
 

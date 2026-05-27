@@ -47,7 +47,7 @@ import {
 } from "../components/FileTree";
 import { readZipArchive } from "../lib/zip";
 import { getPortableFileDataUrl, getPortableFileText, isPortableImageFile } from "../lib/portable-files";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 // ── Import-specific helpers ───────────────────────────────────────────
 

@@ -1,7 +1,7 @@
 import type { ActivityEvent } from "@paperclipai/shared";
 import { Plus, Minus } from "lucide-react";
 import { IssueReferencePill } from "./IssueReferencePill";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type ActivityIssueReference = {
   id: string;

@@ -6,7 +6,7 @@ import { formatMonitorOffset } from "@/lib/issue-monitor";
 import { formatRetryReason } from "@/lib/runRetryState";
 import type { IssueScheduledRetry } from "@paperclipai/shared";
 import { useRetryNowMutation, type RetryNowError } from "../hooks/useRetryNowMutation";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const MAX_TURN_CONTINUATION = "max_turns_continuation";
 

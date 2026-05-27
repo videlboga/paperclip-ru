@@ -51,7 +51,7 @@ import {
 } from "@/components/ui/select";
 import { EmptyState } from "../../components/EmptyState";
 import { cn } from "../../lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type Step = "select" | "review" | "result";
 

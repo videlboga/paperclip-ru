@@ -27,7 +27,7 @@ import { isVisualAdapterChoice } from "../adapters/metadata";
 import { getAdapterDisplay } from "../adapters/adapter-display-registry";
 import { useDisabledAdaptersSync } from "../adapters/use-disabled-adapters";
 import { useToast } from "../context/ToastContext";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /**
  * Adapter types that are suitable for agent creation (excludes internal

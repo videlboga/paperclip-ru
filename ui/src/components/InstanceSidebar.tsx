@@ -6,7 +6,7 @@ import { pluginsApi } from "@/api/plugins";
 import { queryKeys } from "@/lib/queryKeys";
 import { SIDEBAR_SCROLL_RESET_STATE } from "@/lib/navigation-scroll";
 import { SidebarNavItem } from "./SidebarNavItem";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /**
  * Sandbox-provider-only plugins (e.g. E2B, exe.dev, Modal) have no per-plugin

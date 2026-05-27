@@ -13,7 +13,7 @@ import { queryKeys } from "../lib/queryKeys";
 import { Button } from "@/components/ui/button";
 import { Settings, CloudUpload, Download, Upload } from "lucide-react";
 import { CompanyPatternIcon } from "../components/CompanyPatternIcon";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   Field,
   ToggleField,

@@ -34,7 +34,7 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Check, ChevronDown, ChevronRight, Copy, Diff, Download, FilePenLine, FileText, Lock, MoreHorizontal, Plus, Trash2, Unlock, X } from "lucide-react";
 import { DocumentDiffModal } from "./DocumentDiffModal";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type DraftState = {
   key: string;

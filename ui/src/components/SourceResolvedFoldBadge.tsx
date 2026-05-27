@@ -1,6 +1,6 @@
 import { Sparkles } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export interface SourceResolvedFoldBadgeProps {
   className?: string;

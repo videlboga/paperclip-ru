@@ -1,6 +1,6 @@
 import type { IssueRelatedWorkItem, IssueRelatedWorkSummary } from "@paperclipai/shared";
 import { IssueReferencePill } from "./IssueReferencePill";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type GroupedSource = {
   label: string;

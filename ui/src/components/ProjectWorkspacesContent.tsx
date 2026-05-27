@@ -7,7 +7,7 @@ import { queryKeys } from "../lib/queryKeys";
 import type { ProjectWorkspaceSummary } from "../lib/project-workspaces-tab";
 import { ExecutionWorkspaceCloseDialog } from "./ExecutionWorkspaceCloseDialog";
 import { ProjectWorkspaceSummaryCard } from "./ProjectWorkspaceSummaryCard";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 export function ProjectWorkspacesContent({
   companyId,

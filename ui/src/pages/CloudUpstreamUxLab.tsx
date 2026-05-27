@@ -24,7 +24,7 @@ import type {
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useLocation } from "@/lib/router";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type FixtureStateKey =
   | "settings-pane"

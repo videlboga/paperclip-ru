@@ -1,7 +1,7 @@
 import type { FinanceEvent } from "@paperclipai/shared";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   financeDirectionDisplayName,
   financeEventKindDisplayName,

@@ -1,6 +1,6 @@
 import { Link } from "@/lib/router";
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface MissingPluginTabPlaceholderProps {
   defaultTabHref: string;

@@ -11,7 +11,7 @@ import {
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 import { AGENT_ICONS, getAgentIcon } from "../lib/agent-icons";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const DEFAULT_ICON: AgentIconName = "bot";
 

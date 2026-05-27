@@ -13,7 +13,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ArrowLeft } from "lucide-react";
 import { NotFoundPage } from "./NotFound";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /**
  * Company-context plugin page. Renders a plugin's `page` slot at

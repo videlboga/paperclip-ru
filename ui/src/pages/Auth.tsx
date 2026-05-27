@@ -7,7 +7,7 @@ import { getRememberedInvitePath } from "../lib/invite-memory";
 import { Button } from "@/components/ui/button";
 import { AsciiArtAnimation } from "@/components/AsciiArtAnimation";
 import { Sparkles } from "lucide-react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type AuthMode = "sign_in" | "sign_up";
 

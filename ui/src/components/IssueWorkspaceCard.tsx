@@ -11,7 +11,7 @@ import { orderReusableExecutionWorkspaces } from "../lib/reusable-execution-work
 import { cn, projectWorkspaceUrl } from "../lib/utils";
 import { Button } from "@/components/ui/button";
 import { Check, Copy, GitBranch, FolderOpen, Pencil, X } from "lucide-react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 /* -------------------------------------------------------------------------- */
 /*  Utility helpers (mirrored from IssueProperties for self-containment)      */

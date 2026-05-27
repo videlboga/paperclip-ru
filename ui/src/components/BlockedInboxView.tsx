@@ -22,7 +22,7 @@ import { IssueRow } from "./IssueRow";
 import { Identity } from "./Identity";
 import { StatusIcon } from "./StatusIcon";
 import { Button } from "@/components/ui/button";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface BlockedInboxViewProps {
   companyId: string;

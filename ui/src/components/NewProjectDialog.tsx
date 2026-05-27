@@ -38,7 +38,7 @@ import { cn } from "../lib/utils";
 import { MarkdownEditor, type MarkdownEditorRef, type MentionOption } from "./MarkdownEditor";
 import { StatusBadge } from "./StatusBadge";
 import { ChoosePathButton } from "./PathInstructionsModal";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const projectStatuses = [
   { value: "backlog", label: "Backlog" },

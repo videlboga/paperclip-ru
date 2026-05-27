@@ -26,7 +26,7 @@ import { PageTabBar, type PageTabItem } from "../components/PageTabBar";
 import { IssueGroupHeader } from "../components/IssueGroupHeader";
 import { SearchResultRow } from "../components/search/SearchResultRow";
 import type { Agent } from "@paperclipai/shared";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const SEARCH_DEBOUNCE_MS = 250;
 const IDENTIFIER_PATTERN = /^[A-Z]+-\d+$/;

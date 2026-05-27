@@ -22,7 +22,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { SecretBindingPicker, type SecretBindingValue } from "./SecretBindingPicker";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 // ---------------------------------------------------------------------------
 // Constants

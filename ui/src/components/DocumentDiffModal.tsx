@@ -5,7 +5,7 @@ import { issuesApi } from "../api/issues";
 import { queryKeys } from "../lib/queryKeys";
 import { buildLineDiff, type DiffRow } from "../lib/line-diff";
 import { relativeTime } from "../lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   Dialog,
   DialogContent,

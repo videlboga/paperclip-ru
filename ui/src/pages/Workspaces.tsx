@@ -13,7 +13,7 @@ import { useCompany } from "../context/CompanyContext";
 import { buildProjectWorkspaceSummaries, type ProjectWorkspaceSummary } from "../lib/project-workspaces-tab";
 import { queryKeys } from "../lib/queryKeys";
 import { projectRouteRef } from "../lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type ProjectWorkspaceGroup = {
   project: Project;

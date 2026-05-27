@@ -18,7 +18,7 @@ import {
   type IssueFilterState,
 } from "../lib/issue-filters";
 import { formatAssigneeUserLabel } from "../lib/assignees";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type AgentOption = {
   id: string;

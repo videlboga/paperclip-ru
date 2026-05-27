@@ -27,7 +27,7 @@ import { useCompany } from "@/context/CompanyContext";
 import { applyCompanyPrefix, extractCompanyPrefixFromPath } from "@/lib/company-routes";
 import { Link, useLocation } from "@/lib/router";
 import { queryKeys } from "@/lib/queryKeys";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const PENDING_CONNECTION_KEY = "paperclip-cloud-upstream-pending-connection";
 const STEPS: Array<{ key: CloudUpstreamStep; label: string }> = [

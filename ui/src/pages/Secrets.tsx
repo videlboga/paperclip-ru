@@ -76,7 +76,7 @@ import { Badge } from "@/components/ui/badge";
 import { cn } from "../lib/utils";
 import { PageTabBar } from "../components/PageTabBar";
 import { ImportFromVaultDialog } from "./secrets/ImportFromVaultDialog";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type CreateMode = "managed" | "external";
 type SecretsTab = "secrets" | "vaults";

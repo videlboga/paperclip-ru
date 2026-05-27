@@ -25,7 +25,7 @@ import {
 import { cn } from "../lib/utils";
 import { MarkdownEditor, type MarkdownEditorRef } from "./MarkdownEditor";
 import { StatusBadge } from "./StatusBadge";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const levelLabels: Record<string, string> = {
   company: "Company",

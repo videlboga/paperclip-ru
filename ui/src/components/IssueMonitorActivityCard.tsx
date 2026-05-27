@@ -2,7 +2,7 @@ import type { Issue } from "@paperclipai/shared";
 import { Button } from "@/components/ui/button";
 import { formatMonitorOffset } from "@/lib/issue-monitor";
 import { formatDateTime } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function resolveScheduledMonitor(issue: Issue) {
   const nextCheckAt =

@@ -1,7 +1,7 @@
 import { Sparkles } from "lucide-react";
 import { Link } from "@/lib/router";
 import { cn, relativeTime } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   type SourceResolvedWatchdogFold,
   formatCleanupOutcome,

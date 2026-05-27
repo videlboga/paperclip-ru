@@ -41,7 +41,7 @@ import {
   writeProjectSortMode,
 } from "../lib/project-order";
 import type { Project } from "@paperclipai/shared";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type ProjectSidebarSlot = ReturnType<typeof usePluginSlots>["slots"][number];
 

@@ -7,7 +7,7 @@ import { useToastActions } from "../context/ToastContext";
 import { queryKeys } from "../lib/queryKeys";
 import { formatDateTime, issueUrl } from "../lib/utils";
 import { Button } from "./ui/button";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   Dialog,
   DialogContent,

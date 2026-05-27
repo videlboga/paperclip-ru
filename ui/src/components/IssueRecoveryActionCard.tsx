@@ -16,7 +16,7 @@ import {
 } from "@/components/ui/popover";
 import { agentUrl } from "@/lib/utils";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   deriveRecoveryDisplayState,
   type RecoveryDisplayState,

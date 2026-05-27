@@ -22,7 +22,7 @@ import { ToggleSwitch } from "@/components/ui/toggle-switch";
 import { DraftInput } from "./agent-config-primitives";
 import { InlineEditor } from "./InlineEditor";
 import { EnvVarEditor } from "./EnvVarEditor";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const PROJECT_STATUSES = [
   { value: "backlog", label: "Backlog" },

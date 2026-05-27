@@ -2,7 +2,7 @@ import { Profiler, useEffect, useLayoutEffect, useMemo, useRef, useState, type P
 import { Badge } from "@/components/ui/badge";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { IssueChatThread } from "../components/IssueChatThread";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   issueChatLongThreadAgentMap,
   issueChatLongThreadComments,

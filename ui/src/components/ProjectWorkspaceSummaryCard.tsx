@@ -7,7 +7,7 @@ import type { ProjectWorkspaceSummary } from "../lib/project-workspaces-tab";
 import { cn, projectWorkspaceUrl } from "../lib/utils";
 import { timeAgo } from "../lib/timeAgo";
 import { Copy, ExternalLink, FolderOpen, GitBranch, Loader2, Play, Square } from "lucide-react";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function workspaceKindLabel(kind: ProjectWorkspaceSummary["kind"]) {
   return kind === "execution_workspace" ? "Execution workspace" : "Project workspace";

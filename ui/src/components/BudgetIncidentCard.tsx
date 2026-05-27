@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function centsInputValue(value: number) {
   return (value / 100).toFixed(2);

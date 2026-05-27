@@ -32,7 +32,7 @@ import {
 } from "lucide-react";
 import { Identity } from "./Identity";
 import { agentUrl, projectUrl } from "../lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const SEARCH_ALL_VALUE = "__paperclip-search-all__";
 

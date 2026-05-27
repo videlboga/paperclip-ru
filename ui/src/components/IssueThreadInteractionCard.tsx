@@ -25,7 +25,7 @@ import { Checkbox } from "./ui/checkbox";
 import { PriorityIcon } from "./PriorityIcon";
 import { Textarea } from "./ui/textarea";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 interface IssueThreadInteractionCardProps {
   interaction: IssueThreadInteraction;

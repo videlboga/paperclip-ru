@@ -5,7 +5,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { SystemNotice } from "@/components/SystemNotice";
 import { systemNoticeFixtures } from "@/fixtures/systemNoticeFixtures";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   CircleDashed,
   FlaskConical,

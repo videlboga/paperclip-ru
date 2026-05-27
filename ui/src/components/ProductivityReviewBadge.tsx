@@ -4,7 +4,7 @@ import { Link } from "../lib/router";
 import { cn } from "../lib/utils";
 import { createIssueDetailPath } from "../lib/issueDetailBreadcrumb";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const TRIGGER_LABELS: Record<string, string> = {
   no_comment_streak: "No-comment streak",

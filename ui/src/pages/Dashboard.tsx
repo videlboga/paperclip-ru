@@ -26,7 +26,7 @@ import { ChartCard, RunActivityChart, PriorityChart, IssueStatusChart, SuccessRa
 import { PageSkeleton } from "../components/PageSkeleton";
 import type { Agent, Issue } from "@paperclipai/shared";
 import { PluginSlotOutlet } from "@/plugins/slots";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const DASHBOARD_ACTIVITY_LIMIT = 10;
 

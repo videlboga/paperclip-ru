@@ -112,7 +112,7 @@ import {
   successfulRunHandoffActivityTone,
 } from "../lib/successful-run-handoff";
 import { hasAssignedBacklogBlocker } from "../lib/issue-blockers";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import {
   Activity as ActivityIcon,
   AlertTriangle,

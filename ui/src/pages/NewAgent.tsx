@@ -35,7 +35,7 @@ import {
 import { DEFAULT_CURSOR_LOCAL_MODEL } from "@paperclipai/adapter-cursor-local";
 import { DEFAULT_GEMINI_LOCAL_MODEL } from "@paperclipai/adapter-gemini-local";
 import { DEFAULT_OPENCODE_LOCAL_MODEL, isValidOpenCodeModelId } from "@paperclipai/adapter-opencode-local";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function createValuesForAdapterType(
   adapterType: CreateConfigValues["adapterType"],

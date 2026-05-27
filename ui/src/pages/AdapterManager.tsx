@@ -32,7 +32,7 @@ import { cn } from "@/lib/utils";
 import { ChoosePathButton } from "@/components/PathInstructionsModal";
 import { invalidateDynamicParser } from "@/adapters/dynamic-loader";
 import { invalidateConfigSchemaCache } from "@/adapters/schema-config-fields";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function AdapterRow({
   adapter,

@@ -14,7 +14,7 @@ import { queryKeys } from "@/lib/queryKeys";
 import { cn } from "@/lib/utils";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { StatusIcon } from "@/components/StatusIcon";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function summarizeIssueDescription(description: string | null | undefined) {
   if (!description) return null;

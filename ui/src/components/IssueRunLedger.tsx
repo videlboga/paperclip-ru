@@ -18,7 +18,7 @@ import { keepPreviousDataForSameQueryTail } from "../lib/query-placeholder-data"
 import { describeRunRetryState } from "../lib/runRetryState";
 import { readSourceResolvedWatchdogFold } from "../lib/source-resolved-watchdog-fold";
 import { SourceResolvedFoldBadge } from "./SourceResolvedFoldBadge";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 type IssueRunLedgerProps = {
   issueId: string;

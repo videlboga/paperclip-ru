@@ -66,7 +66,7 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 import type {
   EnvBinding,
   RoutineDetail as RoutineDetailType,

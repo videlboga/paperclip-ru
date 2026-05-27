@@ -5,7 +5,7 @@ import { ActiveAgentsPanel } from "../components/ActiveAgentsPanel";
 import { EmptyState } from "../components/EmptyState";
 import { useBreadcrumbs } from "../context/BreadcrumbContext";
 import { useCompany } from "../context/CompanyContext";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 const DASHBOARD_LIVE_RUN_LIMIT = 50;
 

@@ -29,7 +29,7 @@ import {
 } from "@/components/ui/dialog";
 import { useToastActions } from "@/context/ToastContext";
 import { cn } from "@/lib/utils";
-import { useTranslation } from "@/i18n";
+import { useTranslation, t } from "@/i18n";
 
 function firstNonEmptyLine(value: string | null | undefined): string | null {
   if (!value) return null;
