@@ -3,7 +3,10 @@ import { i18n } from "@/i18n";
 // Force English locale for deterministic test results.
 // Without this, DEFAULT_LOCALE="ru" makes t() return Russian strings
 // while tests assert English text.
-i18n.changeLanguage("en");
+// Must await i18n.init() first because it's called with `void` in i18n/index.ts
+// (fire-and-forget), so changeLanguage might race with init completion.
+await i18n.init();
+await i18n.changeLanguage("en");
 (i18n.options as Record<string, unknown>).fallbackLng = false;
 
 const storageEntries = new Map<string, string>();
