@@ -282,7 +282,7 @@ jobs:
 
       - name: Install Playwright
         if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: npx playwright install chromium
+        run: pnpm exec playwright install chromium
 
       - name: Generate Paperclip config
         run: |
