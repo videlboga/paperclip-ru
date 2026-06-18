@@ -38,6 +38,8 @@ jobs:
         env:
           DEBIAN_FRONTEND: noninteractive
         run: |
+          # GitHub-hosted ubuntu-latest runners already ship Chromium system deps,
+          # but keep an explicit install with a hard timeout for self-hosted/custom images.
           timeout 120 bash -c '
             sudo apt-get update -qq
             sudo apt-get install -y -qq --no-install-recommends \
@@ -47,7 +49,13 @@ jobs:
               libgbm1 libpango-1.0-0 libcairo2 libasound2t64 \
               libatspi2.0-0 libwayland-client0
           ' || echo "WARNING: system-deps install timed out; continuing"
+          # Ensure the system Chrome / Chromium build used by the chrome channel is available.
+          # When PLAYWRIGHT_CHROMIUM_CHANNEL=chrome and PLAYWRIGHT_BROWSERS_PATH=0 are set below,
+          # Playwright skips its own CDN download and uses the system Chrome. This call only
+          # validates/prints the resolved channel and exits quickly; it does NOT download Chrome.
+          pnpm exec playwright install chromium || echo "WARNING: playwright install returned $?; continuing"
         shell: bash
+        timeout-minutes: 5
 
       - run: pnpm build
       - run: pnpm run test:e2e
