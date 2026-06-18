@@ -297,10 +297,6 @@ jobs:
           ' || echo "WARNING: system-deps install timed out; continuing"
         shell: bash
 
-      - name: Install Playwright
-        if: steps.playwright-cache.outputs.cache-hit != 'true'
-        run: pnpm exec playwright install chromium
-
       - name: Generate Paperclip config
         run: |
           mkdir -p ~/.paperclip/instances/default
