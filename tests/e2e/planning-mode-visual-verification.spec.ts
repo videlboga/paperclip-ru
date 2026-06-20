@@ -11,8 +11,16 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
   const screenshotDir = "test-results/planning-mode";
 
   await page.goto("/onboarding");
-  await page.getByRole("button", { name: "Start Onboarding" }).click();
-  await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 5_000 });
+
+  // On /onboarding the OnboardingWizard is opened automatically by the route.
+  // Only click the fallback button if the wizard did not open on its own.
+  const startButton = page.getByRole("button", { name: "Start Onboarding" });
+  const wizardHeading = page.getByTestId("onboarding-step-heading");
+  if (!(await wizardHeading.isVisible())) {
+    await startButton.click();
+  }
+
+  await expect(wizardHeading).toBeVisible({ timeout: 5_000 });
 
   await page.locator('input[placeholder="Acme Corp"]').fill(companyName);
   await page.getByTestId("onboarding-next-button").click();

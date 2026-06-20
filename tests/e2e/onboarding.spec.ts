@@ -24,9 +24,15 @@ test.describe("Onboarding wizard", () => {
   test("completes full wizard flow", async ({ page }) => {
     await page.goto("/onboarding");
 
-    await page.getByRole("button", { name: "Start Onboarding" }).click();
+    // On /onboarding the OnboardingWizard is opened automatically by the route.
+    // Only click the fallback button if the wizard did not open on its own.
+    const startButton = page.getByRole("button", { name: "Start Onboarding" });
+    const wizardHeading = page.getByTestId("onboarding-step-heading");
+    if (!(await wizardHeading.isVisible())) {
+      await startButton.click();
+    }
 
-    await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 5_000 });
+    await expect(wizardHeading).toBeVisible({ timeout: 5_000 });
 
     const companyNameInput = page.locator('input[placeholder="Acme Corp"]');
     await companyNameInput.fill(COMPANY_NAME);
