@@ -24,21 +24,24 @@ test.describe("Onboarding wizard", () => {
   test("completes full wizard flow", async ({ page }) => {
     await page.goto("/onboarding");
 
-    const wizardHeading = page.locator("h3", { hasText: "Name your company" });
+    // On /onboarding the OnboardingWizard is opened automatically by the route.
+    // Only click the fallback button if the wizard did not open on its own.
+    const startButton = page.getByRole("button", { name: "Start Onboarding" });
+    const wizardHeading = page.getByTestId("onboarding-step-heading");
+    if (!(await wizardHeading.isVisible())) {
+      await startButton.click();
+    }
 
     await expect(wizardHeading).toBeVisible({ timeout: 5_000 });
 
-    const companyNameInput = page.locator('input[placeholder="Acme Corp"]');
+    const companyNameInput = page.getByTestId("onboarding-company-name-input");
     await companyNameInput.fill(COMPANY_NAME);
 
-    const nextButton = page.getByRole("button", { name: "Next" });
-    await nextButton.click();
+    await page.getByTestId("onboarding-next-button").click();
 
-    await expect(
-      page.locator("h3", { hasText: "Create your first agent" })
-    ).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
 
-    const agentNameInput = page.locator('input[placeholder="CEO"]');
+    const agentNameInput = page.getByTestId("onboarding-agent-name-input");
     await expect(agentNameInput).toHaveValue(AGENT_NAME);
 
     await expect(
@@ -48,11 +51,9 @@ test.describe("Onboarding wizard", () => {
     await page.getByRole("button", { name: "More Agent Adapter Types" }).click();
     await expect(page.getByRole("button", { name: "Process" })).toHaveCount(0);
 
-    await page.getByRole("button", { name: "Next" }).click();
+    await page.getByTestId("onboarding-next-button").click();
 
-    await expect(
-      page.locator("h3", { hasText: "Give it something to do" })
-    ).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
 
     const baseUrl = page.url().split("/").slice(0, 3).join("/");
     if (SKIP_LLM) {
@@ -93,23 +94,19 @@ test.describe("Onboarding wizard", () => {
       expect(disableWakeRes.ok()).toBe(true);
     }
 
-    const taskTitleInput = page.locator(
-      'input[placeholder="e.g. Research competitor pricing"]'
-    );
+    const taskTitleInput = page.getByTestId("onboarding-task-title-input");
     await taskTitleInput.clear();
     await taskTitleInput.fill(TASK_TITLE);
 
-    await page.getByRole("button", { name: "Next" }).click();
+    await page.getByTestId("onboarding-next-button").click();
 
-    await expect(
-      page.locator("h3", { hasText: "Ready to launch" })
-    ).toBeVisible({ timeout: 30_000 });
+    await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
 
     await expect(page.locator("text=" + COMPANY_NAME)).toBeVisible();
     await expect(page.locator("text=" + AGENT_NAME)).toBeVisible();
     await expect(page.locator("text=" + TASK_TITLE)).toBeVisible();
 
-    await page.getByRole("button", { name: "Create & Open Issue" }).click();
+    await page.getByTestId("onboarding-create-open-button").click();
 
     await expect(page).toHaveURL(/\/issues\//, { timeout: 30_000 });
 

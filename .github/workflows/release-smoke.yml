@@ -65,24 +65,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Install Chromium system dependencies
-        env:
-          DEBIAN_FRONTEND: noninteractive
-        run: |
-          # GitHub-hosted ubuntu-latest runners already ship Chromium system deps,
-          # but keep an explicit install with a hard timeout for self-hosted/custom images.
-          timeout 120 bash -c '
-            sudo apt-get update -qq
-            sudo apt-get install -y -qq --no-install-recommends \
-              libnss3 libnspr4 libatk1.0-0t64 libatk-bridge2.0-0 \
-              libcups2t64 libdrm2 libdbus-1-3 libxkbcommon0 \
-              libxcomposite1 libxdamage1 libxfixes3 libxrandr2 \
-              libgbm1 libpango-1.0-0 libcairo2 libasound2t64 \
-              libatspi2.0-0 libwayland-client0
-          ' || echo "WARNING: system-deps install timed out; continuing"
-        shell: bash
+      # Playwright uses the Google Chrome already installed on ubuntu-latest runners.
+      # Skip downloading Chromium from the Playwright CDN, which hangs on extraction.
 
       - name: Launch Docker smoke harness
+        env:
+          PLAYWRIGHT_CHROMIUM_CHANNEL: chrome
+          PLAYWRIGHT_BROWSERS_PATH: 0
+          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: 1
         run: |
           metadata_file="$RUNNER_TEMP/release-smoke.env"
           HOST_PORT="${{ inputs.host_port }}" \
@@ -110,6 +100,9 @@ jobs:
           PAPERCLIP_RELEASE_SMOKE_BASE_URL: ${{ env.SMOKE_BASE_URL }}
           PAPERCLIP_RELEASE_SMOKE_EMAIL: ${{ env.SMOKE_ADMIN_EMAIL }}
           PAPERCLIP_RELEASE_SMOKE_PASSWORD: ${{ env.SMOKE_ADMIN_PASSWORD }}
+          PLAYWRIGHT_CHROMIUM_CHANNEL: chrome
+          PLAYWRIGHT_BROWSERS_PATH: 0
+          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: 1
         run: pnpm run test:release-smoke
 
       - name: Capture Docker logs

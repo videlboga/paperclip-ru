@@ -664,7 +664,7 @@ export function OnboardingWizard() {
                       <Building2 className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <h3 className="font-medium">{t("pcomponents_OnboardingWizard.name_your_company", {defaultValue: "Name your company"})}</h3>
+                      <h3 className="font-medium" data-testid="onboarding-step-heading">{t("pcomponents_OnboardingWizard.name_your_company", {defaultValue: "Name your company"})}</h3>
                       <p className="text-xs text-muted-foreground">
                         This is the organization your agents will work for.
                       </p>
@@ -683,6 +683,7 @@ export function OnboardingWizard() {
                     </label>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
+                      data-testid="onboarding-company-name-input"
                       placeholder={t("pcomponents_OnboardingWizard.acme_corp", {defaultValue: "Acme Corp"})}
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
@@ -717,7 +718,7 @@ export function OnboardingWizard() {
                       <Bot className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <h3 className="font-medium">{t("pcomponents_OnboardingWizard.create_your_first_agent", {defaultValue: "Create your first agent"})}</h3>
+                      <h3 className="font-medium" data-testid="onboarding-step-heading">{t("pcomponents_OnboardingWizard.create_your_first_agent", {defaultValue: "Create your first agent"})}</h3>
                       <p className="text-xs text-muted-foreground">
                         Choose how this agent will run tasks.
                       </p>
@@ -729,6 +730,7 @@ export function OnboardingWizard() {
                     </label>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
+                      data-testid="onboarding-agent-name-input"
                       placeholder={t("pcomponents_OnboardingWizard.ceo", {defaultValue: "CEO"})}
                       value={agentName}
                       onChange={(e) => setAgentName(e.target.value)}
@@ -1091,7 +1093,7 @@ export function OnboardingWizard() {
                       <ListTodo className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <h3 className="font-medium">{t("pcomponents_OnboardingWizard.give_it_something_to_do", {defaultValue: "Give it something to do"})}</h3>
+                      <h3 className="font-medium" data-testid="onboarding-step-heading">{t("pcomponents_OnboardingWizard.give_it_something_to_do", {defaultValue: "Give it something to do"})}</h3>
                       <p className="text-xs text-muted-foreground">
                         Give your agent a small task to start with — a bug fix,
                         a research question, writing a script.
@@ -1104,6 +1106,7 @@ export function OnboardingWizard() {
                     </label>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
+                      data-testid="onboarding-task-title-input"
                       placeholder={t("pcomponents_OnboardingWizard.eg_research_competitor_pricing", {defaultValue: "e.g. Research competitor pricing"})}
                       value={taskTitle}
                       onChange={(e) => setTaskTitle(e.target.value)}
@@ -1132,7 +1135,7 @@ export function OnboardingWizard() {
                       <Rocket className="h-5 w-5 text-muted-foreground" />
                     </div>
                     <div>
-                      <h3 className="font-medium">{t("pcomponents_OnboardingWizard.ready_to_launch", {defaultValue: "Ready to launch"})}</h3>
+                      <h3 className="font-medium" data-testid="onboarding-step-heading">{t("pcomponents_OnboardingWizard.ready_to_launch", {defaultValue: "Ready to launch"})}</h3>
                       <p className="text-xs text-muted-foreground">
                         Everything is set up. Launching now will create the
                         starter task, wake the agent, and open the issue.
@@ -1204,6 +1207,7 @@ export function OnboardingWizard() {
                       size="sm"
                       disabled={!companyName.trim() || loading}
                       onClick={handleStep1Next}
+                      data-testid="onboarding-next-button"
                     >
                       {loading ? (
                         <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
@@ -1220,6 +1224,7 @@ export function OnboardingWizard() {
                         !agentName.trim() || loading || adapterEnvLoading
                       }
                       onClick={handleStep2Next}
+                      data-testid="onboarding-next-button"
                     >
                       {loading ? (
                         <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
@@ -1234,6 +1239,7 @@ export function OnboardingWizard() {
                       size="sm"
                       disabled={!taskTitle.trim() || loading}
                       onClick={handleStep3Next}
+                      data-testid="onboarding-next-button"
                     >
                       {loading ? (
                         <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
@@ -1244,7 +1250,12 @@ export function OnboardingWizard() {
                     </Button>
                   )}
                   {step === 4 && (
-                    <Button size="sm" disabled={loading} onClick={handleLaunch}>
+                    <Button
+                      size="sm"
+                      disabled={loading}
+                      onClick={handleLaunch}
+                      data-testid="onboarding-create-open-button"
+                    >
                       {loading ? (
                         <Loader2 className="h-3.5 w-3.5 mr-1 animate-spin" />
                       ) : (
