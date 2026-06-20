@@ -65,11 +65,14 @@ jobs:
       - name: Install dependencies
         run: pnpm install --no-frozen-lockfile
 
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install chromium
-        timeout-minutes: 5
+      # Playwright uses the Google Chrome already installed on ubuntu-latest runners.
+      # Skip downloading Chromium from the Playwright CDN, which hangs on extraction.
 
       - name: Launch Docker smoke harness
+        env:
+          PLAYWRIGHT_CHROMIUM_CHANNEL: chrome
+          PLAYWRIGHT_BROWSERS_PATH: 0
+          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: 1
         run: |
           metadata_file="$RUNNER_TEMP/release-smoke.env"
           HOST_PORT="${{ inputs.host_port }}" \
@@ -97,6 +100,9 @@ jobs:
           PAPERCLIP_RELEASE_SMOKE_BASE_URL: ${{ env.SMOKE_BASE_URL }}
           PAPERCLIP_RELEASE_SMOKE_EMAIL: ${{ env.SMOKE_ADMIN_EMAIL }}
           PAPERCLIP_RELEASE_SMOKE_PASSWORD: ${{ env.SMOKE_ADMIN_PASSWORD }}
+          PLAYWRIGHT_CHROMIUM_CHANNEL: chrome
+          PLAYWRIGHT_BROWSERS_PATH: 0
+          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: 1
         run: pnpm run test:release-smoke
 
       - name: Capture Docker logs

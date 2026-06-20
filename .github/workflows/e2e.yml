@@ -34,12 +34,15 @@ jobs:
           node-version: 24
           cache: pnpm
 
-      - name: Install Playwright Chromium
-        run: pnpm exec playwright install chromium
-        timeout-minutes: 5
+      # Playwright uses the Google Chrome already installed on ubuntu-latest runners.
+      # Skip downloading Chromium from the Playwright CDN, which hangs on extraction.
 
       - run: pnpm build
       - run: pnpm run test:e2e
+        env:
+          PLAYWRIGHT_CHROMIUM_CHANNEL: chrome
+          PLAYWRIGHT_BROWSERS_PATH: 0
+          PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS: 1
 
       - uses: actions/upload-artifact@v4
         if: always()
