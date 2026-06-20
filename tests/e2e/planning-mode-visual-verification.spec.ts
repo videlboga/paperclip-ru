@@ -12,16 +12,16 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
 
   await page.goto("/onboarding");
   await page.getByRole("button", { name: "Start Onboarding" }).click();
-  await expect(page.locator("h3", { hasText: "Name your company" })).toBeVisible({ timeout: 5_000 });
+  await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 5_000 });
 
   await page.locator('input[placeholder="Acme Corp"]').fill(companyName);
-  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByTestId("onboarding-next-button").click();
 
-  await expect(page.locator("h3", { hasText: "Create your first agent" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
   await expect(page.locator('input[placeholder="CEO"]')).toHaveValue(AGENT_NAME);
-  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByTestId("onboarding-next-button").click();
 
-  await expect(page.locator("h3", { hasText: "Give it something to do" })).toBeVisible({ timeout: 30_000 });
+  await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
   const baseUrl = page.url().split("/").slice(0, 3).join("/");
 
   if (SKIP_LLM) {
@@ -59,10 +59,10 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
   const taskTitleInput = page.locator('input[placeholder="e.g. Research competitor pricing"]');
   await taskTitleInput.clear();
   await taskTitleInput.fill(TASK_TITLE);
-  await page.getByRole("button", { name: "Next" }).click();
+  await page.getByTestId("onboarding-next-button").click();
 
-  await expect(page.locator("h3", { hasText: "Ready to launch" })).toBeVisible({ timeout: 30_000 });
-  await page.getByRole("button", { name: "Create & Open Issue" }).click();
+  await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
+  await page.getByTestId("onboarding-create-open-button").click();
   await expect(page).toHaveURL(/\/issues\//, { timeout: 30_000 });
 
   const openedIssueUrl = page.url();
