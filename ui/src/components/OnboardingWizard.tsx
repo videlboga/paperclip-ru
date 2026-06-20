@@ -683,6 +683,7 @@ export function OnboardingWizard() {
                     </label>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
+                      data-testid="onboarding-company-name-input"
                       placeholder={t("pcomponents_OnboardingWizard.acme_corp", {defaultValue: "Acme Corp"})}
                       value={companyName}
                       onChange={(e) => setCompanyName(e.target.value)}
@@ -729,6 +730,7 @@ export function OnboardingWizard() {
                     </label>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
+                      data-testid="onboarding-agent-name-input"
                       placeholder={t("pcomponents_OnboardingWizard.ceo", {defaultValue: "CEO"})}
                       value={agentName}
                       onChange={(e) => setAgentName(e.target.value)}
@@ -1104,6 +1106,7 @@ export function OnboardingWizard() {
                     </label>
                     <input
                       className="w-full rounded-md border border-border bg-transparent px-3 py-2 text-sm outline-none focus:ring-1 focus:ring-ring placeholder:text-muted-foreground/50"
+                      data-testid="onboarding-task-title-input"
                       placeholder={t("pcomponents_OnboardingWizard.eg_research_competitor_pricing", {defaultValue: "e.g. Research competitor pricing"})}
                       value={taskTitle}
                       onChange={(e) => setTaskTitle(e.target.value)}

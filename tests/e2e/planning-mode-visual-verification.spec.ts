@@ -22,11 +22,11 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
 
   await expect(wizardHeading).toBeVisible({ timeout: 5_000 });
 
-  await page.locator('input[placeholder="Acme Corp"]').fill(companyName);
+  await page.getByTestId("onboarding-company-name-input").fill(companyName);
   await page.getByTestId("onboarding-next-button").click();
 
   await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
-  await expect(page.locator('input[placeholder="CEO"]')).toHaveValue(AGENT_NAME);
+  await expect(page.getByTestId("onboarding-agent-name-input")).toHaveValue(AGENT_NAME);
   await page.getByTestId("onboarding-next-button").click();
 
   await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
@@ -64,7 +64,7 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
     expect(disableWakeRes.ok()).toBe(true);
   }
 
-  const taskTitleInput = page.locator('input[placeholder="e.g. Research competitor pricing"]');
+  const taskTitleInput = page.getByTestId("onboarding-task-title-input");
   await taskTitleInput.clear();
   await taskTitleInput.fill(TASK_TITLE);
   await page.getByTestId("onboarding-next-button").click();

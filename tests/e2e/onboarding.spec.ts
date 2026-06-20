@@ -34,14 +34,14 @@ test.describe("Onboarding wizard", () => {
 
     await expect(wizardHeading).toBeVisible({ timeout: 5_000 });
 
-    const companyNameInput = page.locator('input[placeholder="Acme Corp"]');
+    const companyNameInput = page.getByTestId("onboarding-company-name-input");
     await companyNameInput.fill(COMPANY_NAME);
 
     await page.getByTestId("onboarding-next-button").click();
 
     await expect(page.getByTestId("onboarding-step-heading")).toBeVisible({ timeout: 30_000 });
 
-    const agentNameInput = page.locator('input[placeholder="CEO"]');
+    const agentNameInput = page.getByTestId("onboarding-agent-name-input");
     await expect(agentNameInput).toHaveValue(AGENT_NAME);
 
     await expect(
@@ -94,9 +94,7 @@ test.describe("Onboarding wizard", () => {
       expect(disableWakeRes.ok()).toBe(true);
     }
 
-    const taskTitleInput = page.locator(
-      'input[placeholder="e.g. Research competitor pricing"]'
-    );
+    const taskTitleInput = page.getByTestId("onboarding-task-title-input");
     await taskTitleInput.clear();
     await taskTitleInput.fill(TASK_TITLE);
 
