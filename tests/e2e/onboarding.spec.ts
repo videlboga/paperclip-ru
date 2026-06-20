@@ -24,6 +24,8 @@ test.describe("Onboarding wizard", () => {
   test("completes full wizard flow", async ({ page }) => {
     await page.goto("/onboarding");
 
+    await page.getByRole("button", { name: "Start Onboarding" }).click();
+
     const wizardHeading = page.locator("h3", { hasText: "Name your company" });
 
     await expect(wizardHeading).toBeVisible({ timeout: 5_000 });

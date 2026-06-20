@@ -11,6 +11,7 @@ test("captures planning mode UI for desktop and mobile", async ({ page }) => {
   const screenshotDir = "test-results/planning-mode";
 
   await page.goto("/onboarding");
+  await page.getByRole("button", { name: "Start Onboarding" }).click();
   await expect(page.locator("h3", { hasText: "Name your company" })).toBeVisible({ timeout: 5_000 });
 
   await page.locator('input[placeholder="Acme Corp"]').fill(companyName);
